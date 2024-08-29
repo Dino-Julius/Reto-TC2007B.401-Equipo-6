@@ -1,10 +1,10 @@
 package mx.equipo6.proyectoapp.view
 
+import AboutUsView
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CornerSize
@@ -76,12 +76,12 @@ fun AppTopBar(
     Surface(
         color = MaterialTheme.colorScheme.primary, // Color de fondo
         shape = MaterialTheme.shapes.medium.copy(bottomEnd = CornerSize(16.dp), bottomStart = CornerSize(16.dp)), // Esquinas inferiores redondeadas
-        modifier = Modifier.fillMaxWidth().height(105.dp)
+        modifier = Modifier.fillMaxWidth() //.height(105.dp)
     ) {
         TopAppBar(
             title = {
                 Box(
-                    modifier = Modifier.fillMaxWidth().padding(top = 25.dp),
+                    modifier = Modifier.fillMaxWidth(), //.padding(top = 25.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -95,7 +95,7 @@ fun AppTopBar(
             navigationIcon = {
                 IconButton(
                     onClick = onLeftButtonClick,
-                    modifier = Modifier.padding(top = 25.dp)
+                    // modifier = Modifier.padding(top = 25.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Home, // Puedes cambiar el ícono
@@ -108,7 +108,7 @@ fun AppTopBar(
             actions = {
                 IconButton(
                     onClick = onRightButtonClick,
-                    modifier = Modifier.padding(top = 25.dp)
+                    // modifier = Modifier.padding(top = 25.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.AccountCircle, // Puedes cambiar el ícono
