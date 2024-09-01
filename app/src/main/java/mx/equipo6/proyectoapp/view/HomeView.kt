@@ -28,7 +28,6 @@ fun HomeView(modifier: Modifier = Modifier, homeVM: HomeVM = HomeVM()) {
     // val estado = homeVM.estado.collectAsState() // Subscripción al estado de la app
     Column(
         modifier = modifier
-            .padding(16.dp)
             .fillMaxSize()
     ) {
         Title("Página de Inicio desde el HomeView")

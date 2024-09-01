@@ -25,11 +25,14 @@ val bellefair = FontFamily(Font(R.font.bellefair_regular))
 fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM()) {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Color(0xFFF4D0CB) // Color de fondo más moderno
+        color = Color(0xFFF4D0CB)
     ) {
         Column(
-            modifier = modifier
-                .padding(16.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(0.dp), // Eliminar padding superior
+            verticalArrangement = Arrangement.Top, // Alinear la columna al tope de la pantalla
+            horizontalAlignment = Alignment.CenterHorizontally // Centrar el contenido horizontalmente
         ) {
             // Título con estilo moderno
             Text(
@@ -41,8 +44,10 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp)
+                    .padding(0.dp) // Asegurar que no haya padding adicional
             )
+
+            Spacer(modifier = Modifier.height(10.dp)) // Un espacio pequeño si es necesario
 
             // Primera tarjeta con la primera imagen
             Row {
@@ -60,7 +65,7 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                     Column(
                         modifier = Modifier
                             .padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally // Centra la imagen horizontalmente
+                        horizontalAlignment = Alignment.CenterHorizontally // Centrar la imagen horizontalmente
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.zazil),
@@ -95,18 +100,6 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                         )
                     }
                 }
-            }
-
-            // Botón moderno
-            Button(
-                onClick = { /* Acción del botón */ },
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EE)),
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 16.dp)
-            ) {
-                Text(text = "Conócenos más", fontWeight = FontWeight.Bold, color = Color.White)
             }
         }
     }
