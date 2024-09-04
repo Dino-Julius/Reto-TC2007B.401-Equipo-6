@@ -50,6 +50,7 @@ import mx.equipo6.proyectoapp.R
 import mx.equipo6.proyectoapp.ui.theme.RetoAppTheme
 import mx.equipo6.proyectoapp.viewmodel.AboutUsVM
 import mx.equipo6.proyectoapp.viewmodel.HomeVM
+import mx.equipo6.proyectoapp.view.NavigationBars
 
 val bellefair = FontFamily(Font(R.font.bellefair_regular))
 
@@ -64,11 +65,11 @@ fun AppPrincipal(homeVM: HomeVM, aboutUsVM: AboutUsVM, modifier: Modifier = Modi
     val navController = rememberNavController()
     RetoAppTheme {
         Scaffold(
-            topBar = { AppTopBar(
+            topBar = { NavigationBars().AppTopBar(
                 onLeftButtonClick = { Log.d("check", "Botón del lado izquierdo") },
                 onRightButtonClick = { Log.d("check", "Botón del lado derecho") }
             ) },
-            bottomBar = { AppBottomBar(navController) }
+            bottomBar = { NavigationBars().AppBottomBar(navController) }
         ) { innerPadding ->
             AppNavHost(
                 modifier.padding(innerPadding),
@@ -79,125 +80,6 @@ fun AppPrincipal(homeVM: HomeVM, aboutUsVM: AboutUsVM, modifier: Modifier = Modi
         }
     }
 }
-
-@Composable
-fun AppBottomBar(navController: NavHostController) {
-    Surface(
-        color = MaterialTheme.colorScheme.primary, // Color de fondo
-        shape = MaterialTheme.shapes.medium.copy(topEnd = CornerSize(16.dp), topStart = CornerSize(16.dp)), // Esquinas superiores redondeadas
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        BottomAppBar(
-            containerColor = Color(0xFFD5507C) // Hacer transparente el color de fondo del BottomAppBar
-
-        ) {
-            val navigationPile by navController.currentBackStackEntryAsState()
-            val actualScreen = navigationPile?.destination
-
-            // Generar el menú inferior
-            Windows.listaPantallas.forEach { pantalla ->
-                NavigationBarItem(
-                    selected = pantalla.route == actualScreen?.route,
-                    onClick = {
-                        navController.navigate(pantalla.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    },
-                    label = { Text(text = pantalla.etiqueta) },
-                    icon = {
-                        Icon(
-                            imageVector = pantalla.icono,
-                            contentDescription = pantalla.etiqueta,
-                            modifier = Modifier.size(35.dp)
-                        )
-                    },
-                    alwaysShowLabel = true,
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color.Black, // Color del ícono seleccionado
-                        selectedTextColor = Color.White, // Color del texto seleccionado
-                        indicatorColor = Color.White, // Color del indicador
-                        unselectedIconColor = Color.White, // Color del ícono no seleccionado
-                        unselectedTextColor = Color.White // Color del texto no seleccionado
-
-                    )
-                )
-            }
-        }
-    }
-}
-
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AppTopBar(
-    onLeftButtonClick: () -> Unit,  // Acción para el botón izquierdo
-    onRightButtonClick: () -> Unit  // Acción para el botón derecho
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                border = BorderStroke(2.dp, Color(0xFFF4D0CB)), // Border with specified hex color
-                shape = RoundedCornerShape(12.dp) // Rounded corners for the border
-            )
-            .background(Color(0xFFF4D0CB)) // Background color
-    ) {
-        TopAppBar(
-            title = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "ZAZIL",
-                        fontFamily = bellefair,
-                        textAlign = TextAlign.Center,
-                        color = Color.White,
-                        fontWeight = FontWeight.Thin,
-                        fontSize = 40.sp,
-                    )
-                }
-            },
-            navigationIcon = {
-                IconButton(
-                    onClick = onLeftButtonClick,
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Home, // TODO CHANGE UGLY ASS ICON
-                        contentDescription = "Menú",
-                        tint = Color.White,
-                        modifier = Modifier.size(40.dp)
-                    )
-                }
-            },
-            actions = {
-                IconButton(
-                    onClick = onRightButtonClick,
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.AccountCircle, // TODO CHANGE UGLY ASS ICON
-                        contentDescription = "Configuración",
-                        tint = Color.White,
-                        modifier = Modifier.size(40.dp)
-                    )
-                }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color(0xFFD5507C) // Keep TopAppBar color unchanged
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(0.dp) // Ensure no extra padding
-        )
-    }
-}
-
 
 @Composable
 fun AppNavHost(
@@ -229,14 +111,4 @@ fun AppNavHost(
 //            CalendarView(modifier)
 //        }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-@Preview(showBackground = true)
-fun AppTopBarPreview() {
-    AppTopBar(
-        onLeftButtonClick = { /* Acción cuando se haga clic en el botón izquierdo */ },
-        onRightButtonClick = { /* Acción cuando se haga clic en el botón derecho */ }
-    )
 }
