@@ -44,10 +44,10 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(0.dp) // Asegurar que no haya padding adicional
+                    .padding(top = 8.dp) // Asegurar que no haya padding adicional
             )
 
-            Spacer(modifier = Modifier.height(10.dp)) // Un espacio pequeño si es necesario
+            Spacer(modifier = Modifier.height(2.dp)) // Un espacio pequeño si es necesario
 
             // Primera tarjeta con la primera imagen
             Row {
@@ -100,6 +100,19 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                         )
                     }
                 }
+            }
+            Column{
+                Text(
+                    text = "Zazil es una marca comprometida con el bienestar de las mujeres y el cuidado del medio ambiente. Su misión es proporcionar soluciones innovadoras y sostenibles para el período menstrual. ¿Cómo lo hacen? A través de la creación de toallas femeninas reutilizables.",
+                    fontFamily = bellefair,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Thin,
+                    color = Color(0xFF333333),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
+                )
             }
         }
     }
