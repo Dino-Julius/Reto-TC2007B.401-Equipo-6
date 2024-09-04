@@ -41,11 +41,10 @@ class NavigationBars {
     fun AppBottomBar(navController: NavHostController) {
         Surface(
             color = MaterialTheme.colorScheme.primary, // Color de fondo
-            shape = MaterialTheme.shapes.medium.copy(topEnd = CornerSize(16.dp), topStart = CornerSize(16.dp)), // Esquinas superiores redondeadas
             modifier = Modifier.fillMaxWidth()
         ) {
             BottomAppBar(
-                containerColor = Color(0xFFD5507C) // Hacer transparente el color de fondo del BottomAppBar
+                containerColor = Color(0xFFC7A8BC) // Hacer transparente el color de fondo del BottomAppBar
 
             ) {
                 val navigationPile by navController.currentBackStackEntryAsState()
@@ -99,10 +98,10 @@ class NavigationBars {
             modifier = Modifier
                 .fillMaxWidth()
                 .border(
-                    border = BorderStroke(2.dp, Color(0xFFF4D0CB)), // Border with specified hex color
+                    border = BorderStroke(2.dp, Color(0xFFFFFFFF)), // Border with specified hex color
                     shape = RoundedCornerShape(12.dp) // Rounded corners for the border
                 )
-                .background(Color(0xFFF4D0CB)) // Background color
+                .background(Color(0xFFC7A8BC)) // Background color
         ) {
             TopAppBar(
                 title = {
@@ -146,7 +145,7 @@ class NavigationBars {
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFD5507C) // Keep TopAppBar color unchanged
+                    containerColor = Color(0xFFC7A8BC)
                 ),
                 modifier = Modifier
                     .fillMaxWidth()

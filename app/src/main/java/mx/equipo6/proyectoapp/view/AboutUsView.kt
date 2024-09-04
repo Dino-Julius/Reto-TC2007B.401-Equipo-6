@@ -25,7 +25,7 @@ val bellefair = FontFamily(Font(R.font.bellefair_regular))
 fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM()) {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Color(0xFFF4D0CB)
+        color = Color(0xFFC7A8BC)
     ) {
         Column(
             modifier = Modifier
@@ -55,7 +55,7 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                     shape = RoundedCornerShape(15.dp),
                     elevation = CardDefaults.cardElevation(20.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFD5507C),
+                        containerColor = Color(0xFFF4D0CB),
                         contentColor = Color.White
                     ),
                     modifier = Modifier
@@ -81,7 +81,7 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                     shape = RoundedCornerShape(15.dp),
                     elevation = CardDefaults.cardElevation(20.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFD5507C), // Diferente color para esta tarjeta
+                        containerColor = Color(0xFFF4D0CB), // Diferente color para esta tarjeta
                         contentColor = Color.White
                     ),
                     modifier = Modifier
