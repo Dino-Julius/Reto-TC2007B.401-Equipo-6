@@ -3,6 +3,7 @@ package mx.equipo6.proyectoapp.view
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -16,7 +17,7 @@ sealed class Windows(
 ) {
     // Definir miembros de clase estáticos
     companion object {
-        var listaPantallas = listOf(AboutUsView, ComunityView, HomeView)
+        var listaPantallas = listOf(HomeView, AboutUsView, ComunityView)
         // Constante en tiempo de compilación (#Define)
         const val ROUTE_HOME = "Inicio"
         const val ROUTE_ABOUTUS = "¿Quiénes Somos?"
@@ -26,6 +27,12 @@ sealed class Windows(
         const val ROUTE_CALENDAR = "Calendario"
         const val ROUTE_STORE = "Tienda"
     }
+
+    private data object HomeView : Windows(
+        ROUTE_HOME,
+        "HOME",
+        Icons.Default.Home
+    )
 
     private data object AboutUsView : Windows(
         ROUTE_ABOUTUS,
@@ -39,9 +46,27 @@ sealed class Windows(
         Icons.Default.Person
     )
 
-    private data object HomeView : Windows(
-        ROUTE_HOME,
-        "HOME",
-        Icons.Default.Home
+    private data object ConfigView : Windows(
+        ROUTE_CONFIG,
+        "Configuración",
+        Icons.Default.Person
+    )
+
+    private data object ChatBotView : Windows(
+        ROUTE_CHATBOT,
+        "ChatBot",
+        Icons.Default.Person
+    )
+
+    private data object CalendarView : Windows(
+        ROUTE_CALENDAR,
+        "Calendario",
+        Icons.Default.Person
+    )
+
+    private data object StoreView : Windows(
+        ROUTE_STORE,
+        "Tienda",
+        Icons.Default.Star
     )
 }
