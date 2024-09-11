@@ -1,9 +1,11 @@
 package mx.equipo6.proyectoapp.view
 
 import AboutUsView
-import android.util.Log
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,8 +17,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import mx.equipo6.proyectoapp.R
 import mx.equipo6.proyectoapp.ui.theme.RetoAppTheme
+import mx.equipo6.proyectoapp.view.sampledata.SimpleLightTopAppBar
 import mx.equipo6.proyectoapp.viewmodel.AboutUsVM
 import mx.equipo6.proyectoapp.viewmodel.HomeVM
+import mx.equipo6.proyectoapp.viewmodel.ProductVM
 
 val bellefair = FontFamily(Font(R.font.bellefair_regular))
 
@@ -27,20 +31,24 @@ val bellefair = FontFamily(Font(R.font.bellefair_regular))
  * @param modifier Modificador de diseño.
  */
 @Composable
-fun AppPrincipal(homeVM: HomeVM, aboutUsVM: AboutUsVM, modifier: Modifier = Modifier) {
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+fun AppPrincipal(homeVM: HomeVM, aboutUsVM: AboutUsVM, productVM: ProductVM, modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     RetoAppTheme {
         Scaffold(
-            topBar = { NavigationBars().AppTopBar(
-                onLeftButtonClick = { Log.d("check", "Botón del lado izquierdo") },
-                onRightButtonClick = { Log.d("check", "Botón del lado derecho") }
-            ) },
+//            topBar = { NavigationBars().AppTopBar(
+//                onLeftButtonClick = { Log.d("check", "Botón del lado izquierdo") },
+//                onRightButtonClick = { Log.d("check", "Botón del lado derecho") }
+//            ) },
+            topBar = { SimpleLightTopAppBar("ZAZIL")},
             bottomBar = { NavigationBars().AppBottomBar(navController) }
         ) { innerPadding ->
             AppNavHost(
+                innerPadding,
                 modifier.padding(innerPadding),
                 homeVM,
                 aboutUsVM,
+                productVM,
                 navController
             )
         }
@@ -49,32 +57,29 @@ fun AppPrincipal(homeVM: HomeVM, aboutUsVM: AboutUsVM, modifier: Modifier = Modi
 
 @Composable
 fun AppNavHost(
+    innerPadding: PaddingValues,
     modifier: Modifier = Modifier,
     homeVM: HomeVM,
     aboutUsVM: AboutUsVM,
+    productVM: ProductVM,
     navController: NavHostController
 ) {
     NavHost(
         navController = navController,
         startDestination = Windows.ROUTE_HOME,
-        modifier = modifier.fillMaxSize()) {
-        // Lista de pantallas de la aplicación
+        modifier = modifier.fillMaxSize()
+    ) {
         composable(Windows.ROUTE_ABOUTUS) {
             AboutUsView(modifier, aboutUsVM)
         }
-//        composable(Pantallas.RUTA_CHATBOT) {
-//            ChatBotView(modifier, chatBotVM)
-//        }
         composable(Windows.ROUTE_HOME) {
             HomeView(modifier, homeVM)
         }
-        // Botón Comunidad
         composable(Windows.ROUTE_COMUNITY) {
             ComunityView(modifier)
         }
-        // Botón Calendario
-//        composable(Pantallas.RUTA_CALENDAR) {
-//            CalendarView(modifier)
-//        }
+        composable(Windows.ROUTE_STORE) {
+            ShopView(innerPadding, productVM)
+        }
     }
 }
