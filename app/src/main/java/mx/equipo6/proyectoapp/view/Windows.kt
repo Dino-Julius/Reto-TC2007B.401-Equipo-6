@@ -9,6 +9,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 /**
  * Clase sellada que contiene las pantallas de la aplicación.
+ * @author Equipo 6
+ * @property route Ruta de la pantalla.
+ * @property etiqueta Etiqueta de la pantalla.
+ * @property icono Icono de la pantalla.
  */
 sealed class Windows(
     val route: String,
@@ -20,9 +24,9 @@ sealed class Windows(
         var listaPantallas = listOf(HomeView, AboutUsView, ComunityView, StoreView)
         // Constante en tiempo de compilación (#Define)
         const val ROUTE_HOME = "Inicio"
-        const val ROUTE_ABOUTUS = "¿Quiénes Somos?"
+        const val ROUTE_ABOUTUS = "Nosotr@s"
         const val ROUTE_COMUNITY = "Comunidad"
-        const val ROUTE_CONFIG = "Configuración"
+        // const val ROUTE_CONFIG = "Configuración"
         const val ROUTE_CHATBOT = "ChatBot"
         const val ROUTE_CALENDAR = "Calendario"
         const val ROUTE_STORE = "Tienda"
@@ -36,7 +40,7 @@ sealed class Windows(
 
     private data object AboutUsView : Windows(
         ROUTE_ABOUTUS,
-        "¿Quiénes Somos?",
+        "Nosotr@s",
         Icons.Default.ThumbUp
     )
 
@@ -46,11 +50,11 @@ sealed class Windows(
         Icons.Default.Person
     )
 
-    private data object ConfigView : Windows(
-        ROUTE_CONFIG,
-        "Configuración",
-        Icons.Default.Person
-    )
+//    private data object ConfigView : Windows(
+//        ROUTE_CONFIG,
+//        "Configuración",
+//        Icons.Default.Person
+//    )
 
     private data object ChatBotView : Windows(
         ROUTE_CHATBOT,

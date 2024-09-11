@@ -1,6 +1,6 @@
 package mx.equipo6.proyectoapp.view
 
-import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -37,14 +37,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import mx.equipo6.proyectoapp.R
 import mx.equipo6.proyectoapp.include.ViewState
 import mx.equipo6.proyectoapp.model.products.Products
 import mx.equipo6.proyectoapp.viewmodel.ProductVM
 
+/**
+ * ShopView: Vista principal de la tienda, muestra los productos en una vista de cuadrícula
+ * @author Julio Vivas
+ * @param paddingValues PaddingValues
+ * @param productVM ProductVM
+ * @param navController NavHostController
+ */
 @Composable
-fun ShopView(paddingValues: PaddingValues, productVM: ProductVM) {
+fun ShopView(paddingValues: PaddingValues, productVM: ProductVM, navController: NavHostController) {
         val productListViewState by productVM.products.collectAsState()
         val isConnected by productVM.isConnected.collectAsState()
 
@@ -58,7 +66,7 @@ fun ShopView(paddingValues: PaddingValues, productVM: ProductVM) {
                         // modifier = Modifier.padding(modifier),
                         content = {
                             items(productList.size) { index: Int ->
-                                ProductsCardUI(productList[index])
+                                ProductsCardUI(productList[index], navController)
                             }
                         })
                 }
@@ -110,13 +118,13 @@ private fun LoadingScreen() {
     ) {
         CircularProgressIndicator(
             modifier = Modifier.align(Alignment.Center),
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.background
         )
     }
 }
 
 @Composable
-private fun ProductsCardUI(products: Products) {
+private fun ProductsCardUI(products: Products, navController: NavHostController) {
     val ctx = LocalContext.current
     Card(
         modifier = Modifier
@@ -124,9 +132,8 @@ private fun ProductsCardUI(products: Products) {
             .width(212.dp)
             .padding(6.dp)
             .clickable {
-//                val intent = Intent(this, ProductDetailScreen::class.java)
-//                intent.putExtra("productObject", products)
-//                startActivity(intent)
+                navController.navigate(Windows.ROUTE_STORE + "/${products.id}")
+                Toast.makeText(ctx, "Product: ${products.title}", Toast.LENGTH_SHORT).show()
             },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
@@ -156,7 +163,7 @@ private fun ProductsCardUI(products: Products) {
                 maxLines = 1
             )
             Text(
-                text = products.title,
+                text = products.description,
                 modifier = Modifier.padding(top = 3.dp),
                 fontFamily = FontFamily.SansSerif,
                 fontSize = 15.sp,
@@ -180,7 +187,7 @@ private fun ProductsCardUI(products: Products) {
                     modifier = Modifier
                         .size(30.dp)
                         .clip(shape = CircleShape)
-                        .background(Color.Black), contentAlignment = Alignment.Center
+                        .background(Color(0xFFC7A8BC)), contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_cart),

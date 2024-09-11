@@ -4,29 +4,31 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
-// Annotation to make the class parcelable
+/**
+* Clase de datos que representa un producto, puede ser utilizada con cualquier formato JSON (Temporalmente para la API de fakestore)
+* @author Julio Vivas
+* @param category Mapea la clave JSON "category" a la propiedad category
+* @param description Mapea la clave JSON "description" a la propiedad description
+* @param id Mapea la clave JSON "id" a la propiedad id
+* @param image Mapea la clave JSON "image" a la propiedad image
+* @param price Mapea la clave JSON "price" a la propiedad price
+* @param rating Mapea la clave JSON "rating" a la propiedad rating
+* @param title Mapea la clave JSON "title" a la propiedad title
+*/
 @Parcelize
-// Data class representing a product, can be used with any JSON format, here it's for fakestore API
 class Products (
-    // Mapping JSON key "category" to property category
     @SerializedName("category")
     val category: String,
-    // Mapping JSON key "description" to property description
     @SerializedName("description")
     val description: String,
-    // Mapping JSON key "id" to property id
     @SerializedName("id")
     val id: Int,
-    // Mapping JSON key "image" to property image
     @SerializedName("image")
     val image: String,
-    // Mapping JSON key "price" to property price
     @SerializedName("price")
     val price: Double,
-    // Mapping JSON key "rating" to property rating
     @SerializedName("rating")
     val rating: Rating,
-    // Mapping JSON key "title" to property title
     @SerializedName("title")
     val title: String
-) : Parcelable // Making the class implement Parcelable interface
+) : Parcelable

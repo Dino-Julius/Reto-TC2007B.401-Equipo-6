@@ -9,6 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
+/**
+ * Subtitulo de la pantalla
+ * @author Equipo 6
+ * @param texto Texto a mostrar
+ * @param modifier Modificador de la vista
+ */
 @Composable
 fun Subtitle(texto: String, modifier: Modifier = Modifier) {
     Text(text = texto,

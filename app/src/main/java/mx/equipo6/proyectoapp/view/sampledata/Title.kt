@@ -7,6 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 
+/**
+ * Composable que muestra un texto centrado con estilo de título
+ * @author Equipo 6
+ * @param texto Texto a mostrar
+ * @param modifier Modificador de diseño
+ */
 @Composable
 fun Title(texto: String, modifier: Modifier = Modifier) {
     Text(text = texto,

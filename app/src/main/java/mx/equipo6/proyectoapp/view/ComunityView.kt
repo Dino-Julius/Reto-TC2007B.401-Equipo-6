@@ -14,9 +14,7 @@ import mx.equipo6.proyectoapp.view.sampledata.Title
 
 /**
  * HomeView: Composable que define la vista de la página "Comunidad" de la aplicación.
- *
  * @param modifier Modificador de diseño.
- * @param  ViewModel de la aplicación.
  */
 @Preview(showBackground = true, widthDp = 400)
 @Composable

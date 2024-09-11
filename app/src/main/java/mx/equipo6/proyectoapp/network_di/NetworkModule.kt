@@ -13,7 +13,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-// Annotate the class as a Dagger module
+/**
+ * This module provides the necessary dependencies for the network layer of the app using Dagger Hilt.
+ * The module provides the base URL for the API, an instance of [HttpLoggingInterceptor] for logging HTTP requests and responses,
+ * an instance of [OkHttpClient] with custom configurations, a Converter.Factory for [Retrofit] to use Gson for JSON conversion,
+ * an instance of [Retrofit] configured with the base URL, [OkHttpClient], and [Converter.Factory], and an instance of [ApiService] created by [Retrofit].
+ * @author Dinesh Chavan [@Dinesh2510 on Github]
+ */
 @Module
 // Specify that this module will be installed in the SingletonComponent
 @InstallIn(SingletonComponent::class)

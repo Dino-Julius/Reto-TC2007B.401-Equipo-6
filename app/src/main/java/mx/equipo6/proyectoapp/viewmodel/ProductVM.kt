@@ -16,9 +16,16 @@ import kotlinx.coroutines.launch
 import mx.equipo6.proyectoapp.include.ViewState
 import mx.equipo6.proyectoapp.model.products.ProductList
 import mx.equipo6.proyectoapp.model.products.ProductRespository
+import mx.equipo6.proyectoapp.model.products.Products
 import mx.equipo6.proyectoapp.network_di.NetworkChangeReceiver.NetworkChangeReceiver.isNetworkConnected
 import javax.inject.Inject
 
+/**
+ * ViewModel para mostrar el inverntario de productos
+ * @author Julio Vivas
+ * @param productRespository ProductRespository
+ * @param context Context
+ */
 @HiltViewModel
 class ProductVM @Inject constructor(
     private val productRespository: ProductRespository,
@@ -72,5 +79,9 @@ class ProductVM @Inject constructor(
         super.onCleared()
         // unRegister
         context.unregisterReceiver(networkChangeReceiver)
+    }
+
+    fun getProductById(productId: Int?): Products? {
+        return (products.value as? ViewState.Success)?.data?.find { it.id == productId }
     }
 }
