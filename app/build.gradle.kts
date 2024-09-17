@@ -78,6 +78,8 @@ dependencies {
     // Coil
     implementation(libs.coil.compose)
 
+    implementation ("com.google.accompanist:accompanist-pager:0.24.13-rc")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

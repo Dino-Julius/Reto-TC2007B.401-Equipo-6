@@ -1,64 +1,148 @@
 package mx.equipo6.proyectoapp.view
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Divider
+import androidx.compose.runtime.*
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
+import mx.equipo6.proyectoapp.view.sampledata.CircleButton
+import mx.equipo6.proyectoapp.view.sampledata.CircleButtonList
+import mx.equipo6.proyectoapp.view.sampledata.PagerIndicator
+import mx.equipo6.proyectoapp.view.sampledata.RectangularButton
+import mx.equipo6.proyectoapp.view.sampledata.SampleCard
 import mx.equipo6.proyectoapp.view.sampledata.Subtitle
-import mx.equipo6.proyectoapp.view.sampledata.Title
 import mx.equipo6.proyectoapp.viewmodel.HomeVM
 
-/**
- * HomeView: Composable que define la vista de la página de inicio de la aplicación.
- *
- * @param  ViewModel de la aplicación.
- * @param modifier Modificador de diseño.
- */
-@Preview(showBackground = true, widthDp = 400)
+@OptIn(ExperimentalPagerApi::class)
 @Composable
-fun HomeView(modifier: Modifier = Modifier, homeVM: HomeVM = HomeVM()) {
-    // Estado de la app
-    // val estado = homeVM.estado.collectAsState() // Subscripción al estado de la app
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
-        Title("Página de Inicio desde el HomeView")
-        Spacer(
+fun HomeView(modifier: Modifier = Modifier, homeVM: HomeVM = viewModel()) {
+    val adviceList = homeVM.adviceList.collectAsState().value
+    val pagerState = rememberPagerState()
+    val selectedButtons = remember { mutableStateListOf<ImageVector>() }
+    val allUserButtons = listOf(
+        Icons.Default.Home,
+        Icons.Default.Settings,
+        Icons.Default.Favorite
+    )
+    val allShoppingButtons = listOf(
+        Icons.Default.Share,
+        Icons.Default.Search,
+        Icons.Default.Notifications
+    )
+    val availableUserButtons = remember { mutableStateListOf(*allUserButtons.toTypedArray()) }
+    val availableShoppingButtons = remember { mutableStateListOf(*allShoppingButtons.toTypedArray()) }
+    var showButtonList by remember { mutableStateOf(false) }
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        Column(
             modifier = Modifier
-                .height(16.dp)
                 .fillMaxWidth()
-        )
-        // Marcadores
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.weight(1f)) {
-                Subtitle(texto = "Prototipo")
+                .padding(top = 22.dp)
+        ) {
+            Subtitle("¡Bienvenido, @usuario!")
+            Divider(color = Color.LightGray, thickness = 1.dp)
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Spacer(modifier = Modifier.height(2.dp))
+
+            Subtitle("Accesos directos")
+            Spacer(modifier = if (selectedButtons.isEmpty()) Modifier.height(1.dp) else Modifier.height(4.dp)) // Further reduced spacing
+
+            if (selectedButtons.isNotEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 2.dp, bottom = 4.dp),
+                    verticalArrangement = Arrangement.spacedBy(20.dp) // Entre botones
+                ) {
+                    selectedButtons.chunked(3).forEach { rowButtons ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            rowButtons.forEach { icon ->
+                                CircleButton(icon = icon,
+                                    onClick = { /* Handle button click */ },
+                                    onRemove = if (showButtonList) {
+                                        {
+                                            selectedButtons.remove(icon)
+                                            if (allUserButtons.contains(icon)) {
+                                                availableUserButtons.add(icon)
+                                            } else {
+                                                availableShoppingButtons.add(icon)
+                                            }
+                                        }
+                                    } else null)
+                            }
+                        }
+                    }
+                }
             }
-            Column(modifier = Modifier.weight(1f)) {
-                Subtitle(texto = "Segundo Texto")
+
+            RectangularButton(icon = Icons.Default.Add, text = "Agregar acceso directo") {
+                showButtonList = !showButtonList
             }
+
+            if (showButtonList) {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircleButtonList(
+                        userButtons = allUserButtons.filter { it !in selectedButtons },
+                        shoppingButtons = allShoppingButtons.filter { it !in selectedButtons }
+                    ) { icon ->
+                        if (selectedButtons.size < 6) {
+                            selectedButtons.add(icon)
+                        }
+                    }
+                }
+            }
+
+            Divider(color = Color.LightGray, thickness = 1.dp)
+
+            Subtitle("Consejos del día")
+
+            HorizontalPager(
+                count = adviceList.size,
+                state = pagerState,
+                modifier = Modifier.fillMaxWidth()
+            ) { page ->
+                SampleCard(
+                    texto = adviceList[page].text
+                )
+            }
+
+            PagerIndicator(
+                totalDots = adviceList.size,
+                selectedIndex = pagerState.currentPage,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(4.dp)
+            )
+
+            Divider(color = Color.LightGray, thickness = 1.dp)
+
+            Subtitle("Accesos rápidos")
         }
     }
 }
-
-//@Composable
-//fun HomeView(modifier: Modifier = Modifier, navController: NavHostController) {
-//    Box (
-//        contentAlignment = Alignment.Center,
-//        modifier = Modifier.fillMaxWidth()
-//    ) {
-//        Column{
-//            Text(
-//                text = "Vista de Inicio Aplicación",
-//                textAlign = TextAlign.Center,
-//                modifier = Modifier.fillMaxWidth()
-//            )
-//        }
-//    }
-//}
