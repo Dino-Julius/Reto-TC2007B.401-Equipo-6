@@ -187,7 +187,7 @@ class NavigationBars {
             TopAppBar(
                 title = {
                     Box(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().padding(start = 45.dp),
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
