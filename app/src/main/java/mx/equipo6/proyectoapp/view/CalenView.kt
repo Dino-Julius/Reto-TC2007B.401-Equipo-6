@@ -14,19 +14,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.viewmodel.compose.viewModel
+import mx.equipo6.proyectoapp.viewmodel.CalenVM
 import java.util.*
 
 @Composable
-fun CalenView(modifier: Modifier = Modifier) {
-    var selectedDate by remember { mutableStateOf("") }
-    var selectedDateInMillis by remember { mutableStateOf(0L) } // Store date in millis
-    var calculatedDate by remember { mutableStateOf("") }
-
-    // State to control when to show the pop up
-    var showDialog by remember { mutableStateOf(false) }
-
-    // Retrieve the context (Where the dates are saved in the system)
+fun CalenView(modifier: Modifier = Modifier, viewModel: CalenVM) {
     val context = LocalContext.current
+    var showDialog by remember { mutableStateOf(false) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -56,15 +51,12 @@ fun CalenView(modifier: Modifier = Modifier) {
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                // Calendar and Date Display
                 EmbeddedCalendarView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
                     onDateSelected = { dateInMillis ->
-                        val calendar = Calendar.getInstance().apply { timeInMillis = dateInMillis }
-                        selectedDate = "${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.YEAR)}"
-                        selectedDateInMillis = dateInMillis // Save the selected date in millis
+                        viewModel.updateSelectedDate(dateInMillis)
                     }
                 )
             }
@@ -74,62 +66,45 @@ fun CalenView(modifier: Modifier = Modifier) {
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                // Button to Calculate 30 Days From Selected Date
                 Button(
                     onClick = {
-                        // Calculate 30 days from the selected date
-                        val calendar = Calendar.getInstance().apply {
-                            if (selectedDateInMillis != 0L) {
-                                timeInMillis = selectedDateInMillis // Use selected date instead of today
-                                add(Calendar.DAY_OF_YEAR, 28) // Add 28 days
-                            }
-                        }
-                        calculatedDate = "${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.YEAR)}"
+                        viewModel.calculateNextCycle()
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFD5507C) // Set button color to #D5507C
+                        containerColor = Color(0xFFD5507C)
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
                         .weight(1f)
                 ) {
-                    Text(text = "Calcular Ciclo Menstural")
+                    Text(text = "Calcular Ciclo Menstrual")
                 }
 
-                // Button to mark sexual activity
                 Button(
                     onClick = {
-                        if (selectedDateInMillis != 0L) {
-                            // Save the selected date using SharedPreferences
-                            saveSexualActivityDate(context, dateInMillis = selectedDateInMillis)
-                            // Trigger the pop up to show saved dates
-                            showDialog = true
-                        }
+                        viewModel.saveDate(context)
+                        showDialog = true
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFD5507C) // Set button color to #D5507C
+                        containerColor = Color(0xFFD5507C)
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
                         .weight(1f)
-
                 ) {
-                    Text(text = "Marcar Actividad sexual"
-
-                    )
+                    Text(text = "Marcar Actividad sexual")
                 }
             }
 
-            // Display the selected date and calculated date
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Fecha Seleccionada: $selectedDate",
+                    text = "Fecha Seleccionada: ${viewModel.selectedDate}",
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                         .padding(2.dp)
@@ -141,7 +116,7 @@ fun CalenView(modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Fecha estimada próximo ciclo menstrual: $calculatedDate",
+                    text = "Fecha estimada próximo ciclo menstrual: ${viewModel.calculatedDate}",
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                         .padding(16.dp)
@@ -150,11 +125,11 @@ fun CalenView(modifier: Modifier = Modifier) {
         }
     }
 
-    // Show the pop-up dialog when marking a sexual activity
     if (showDialog) {
         SavedDatesDialog(
             context = context,
-            onDismiss = { showDialog = false } // Close the dialog
+            viewModel = viewModel,
+            onDismiss = { showDialog = false }
         )
     }
 }
@@ -165,13 +140,8 @@ fun EmbeddedCalendarView(modifier: Modifier = Modifier, onDateSelected: (Long) -
         modifier = modifier,
         factory = { context ->
             CalendarView(context).apply {
-                //Set the background color
                 setBackgroundColor(android.graphics.Color.parseColor("#F4D0CB"))
-
-                // Set the date to today
                 date = Date().time
-
-                // Set the listener for when the date changes
                 setOnDateChangeListener { _, year, month, dayOfMonth ->
                     val calendar = Calendar.getInstance()
                     calendar.set(year, month, dayOfMonth)
@@ -181,55 +151,60 @@ fun EmbeddedCalendarView(modifier: Modifier = Modifier, onDateSelected: (Long) -
         }
     )
 }
-
-// Composable to show a dialog with the saved dates
 @Composable
 fun SavedDatesDialog(
     context: Context,
+    viewModel: CalenVM,
     onDismiss: () -> Unit
 ) {
-    // Get the list of saved dates from SharedPreferences
-    val savedDates = remember { getSavedDates(context) }
+    LaunchedEffect(Unit) {
+        viewModel.loadSavedDates(context)
+    }
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "Saved Sexual Activity Dates") },
+        confirmButton = {
+            Button(
+                onClick = onDismiss,
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD5507C))
+            ) {
+                Text("Cerrar", color = Color.White)
+            }
+        },
+        title = {
+            Text(
+                text = "Fechas Guardadas",
+                style = MaterialTheme.typography.titleLarge,
+                color = Color(0xFF333333) // Color del texto del título
+            )
+        },
         text = {
-            LazyColumn {
-                items(savedDates) { date ->
-                    Text(text = date, modifier = Modifier.padding(8.dp))
+            LazyColumn(
+                modifier = Modifier
+                    .padding(16.dp) // Espaciado dentro del pop up
+                    .fillMaxWidth()
+            ) {
+                items(viewModel.savedDates) { date ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp), // Espaciado entre elementos de la lista
+                        shape = MaterialTheme.shapes.medium, // Esquinas redondeadas
+                        elevation = CardDefaults.cardElevation(4.dp)
+                    ) {
+                        Text(
+                            text = date,
+                            modifier = Modifier.padding(16.dp),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Color(0xFF555555) // Color del texto
+                        )
+                    }
                 }
             }
         },
-        confirmButton = {
-            Button(onClick = onDismiss,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFD5507C) // Set button color to #D5507C
-                )) {
-                Text("Close")
-
-            }
-
-        }
+        shape = MaterialTheme.shapes.large // Esquinas redondeadas del pop up
     )
 }
 
-// Function to save the date of sexual activity to SharedPreferences
-fun saveSexualActivityDate(context: Context, dateInMillis: Long) {
-    val sharedPreferences = context.getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
-    with(sharedPreferences.edit()) {
-        putLong("sexualActivityDate_${dateInMillis}", dateInMillis)
-        apply()
-    }
-}
 
-// Function to retrieve all saved dates from SharedPreferences
-fun getSavedDates(context: Context): List<String> {
-    val sharedPreferences = context.getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
-    return sharedPreferences.all
-        .mapNotNull { entry ->
-            val dateInMillis = entry.value as? Long ?: return@mapNotNull null
-            val calendar = Calendar.getInstance().apply { timeInMillis = dateInMillis }
-            "${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.YEAR)}"
-        }
-}
+
