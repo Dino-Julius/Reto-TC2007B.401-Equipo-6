@@ -88,5 +88,9 @@ fun AppNavHost(
             val product = productVM.getProductById(productId?.toIntOrNull()) // Implementa esta función en tu ViewModel
             ProductDetailView(product, navController)
         }
+        composable(Windows.ROUTE_CALENDAR) {
+            CalenView(modifier)
+        }
+
     }
 }
