@@ -20,7 +20,7 @@ class HomeVM : ViewModel() {
         fetchAdvice()
     }
 
-    fun fetchAdvice() {
+    private fun fetchAdvice() {
         viewModelScope.launch {
             // Simulate API call
             val adviceFromApi = listOf(

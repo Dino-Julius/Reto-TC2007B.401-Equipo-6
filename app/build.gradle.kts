@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    // Add the Google services Gradle plugin
+    id("com.google.gms.google-services")
 
     id("kotlin-kapt")
     id("kotlin-parcelize")
@@ -78,7 +80,15 @@ dependencies {
     // Coil
     implementation(libs.coil.compose)
 
-    implementation ("com.google.accompanist:accompanist-pager:0.24.13-rc")
+    implementation (libs.accompanist.pager)
+
+    // Import the Firebase BoM
+    implementation(platform(libs.firebase.bom))
+    // TODO: Add the dependencies for Firebase products you want to use
+    // When using the BoM, don't specify versions in Firebase dependencies
+    implementation(libs.firebase.analytics)
+    // Add the dependencies for any other desired Firebase products
+    // https://firebase.google.com/docs/android/setup#available-libraries
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

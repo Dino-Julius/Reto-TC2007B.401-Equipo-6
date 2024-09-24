@@ -1,6 +1,7 @@
 package mx.equipo6.proyectoapp.viewmodel
 
 import android.content.Context
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +14,7 @@ import java.util.*
 class CalenVM : ViewModel() {
 
     // Estado reactivo para la fecha seleccionada
-    var selectedDateInMillis = mutableStateOf(0L)
+    private var selectedDateInMillis = mutableLongStateOf(0L)
         private set
 
     var selectedDate = mutableStateOf("")
@@ -28,7 +29,7 @@ class CalenVM : ViewModel() {
 
     // Función para actualizar la fecha seleccionada
     fun updateSelectedDate(dateInMillis: Long) {
-        selectedDateInMillis.value = dateInMillis
+        selectedDateInMillis.longValue = dateInMillis
         val calendar = Calendar.getInstance().apply { timeInMillis = dateInMillis }
         selectedDate.value = "${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.YEAR)}"
     }
@@ -36,8 +37,8 @@ class CalenVM : ViewModel() {
     // Función para calcular la fecha del próximo ciclo menstrual (28 días después)
     fun calculateNextCycle() {
         val calendar = Calendar.getInstance().apply {
-            if (selectedDateInMillis.value != 0L) {
-                timeInMillis = selectedDateInMillis.value
+            if (selectedDateInMillis.longValue != 0L) {
+                timeInMillis = selectedDateInMillis.longValue
                 add(Calendar.DAY_OF_YEAR, 28) // Sumar 28 días
             }
         }
@@ -47,8 +48,8 @@ class CalenVM : ViewModel() {
     // Función para guardar la fecha de actividad sexual y actualizar la lista de fechas guardadas
     fun saveDate(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
-            if (selectedDateInMillis.value != 0L) {
-                saveSexualActivityDate(context, selectedDateInMillis.value)
+            if (selectedDateInMillis.longValue != 0L) {
+                saveSexualActivityDate(context, selectedDateInMillis.longValue)
                 // Actualizar la lista de fechas guardadas
                 savedDates.value = getSavedDates(context)
             }

@@ -21,7 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
@@ -52,7 +52,7 @@ import mx.equipo6.proyectoapp.model.products.Products
 @Composable
 fun ProductDetailView(products: Products?, navController: NavHostController) {
     val context = LocalContext.current
-    val act = LocalContext.current as Activity
+    LocalContext.current as Activity
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -75,7 +75,7 @@ fun ProductDetailView(products: Products?, navController: NavHostController) {
                     .clip(CircleShape)
             ) {
                 Image(
-                    imageVector = Icons.Default.ArrowBack, contentDescription = null
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null
                 )
             }
             Row(
@@ -134,7 +134,7 @@ fun ProductDetailView(products: Products?, navController: NavHostController) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = products!!.title,
+                            text = products.title,
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp
                         )
