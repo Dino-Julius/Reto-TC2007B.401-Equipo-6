@@ -21,10 +21,10 @@ sealed class Windows(
 ) {
     // Definir miembros de clase estáticos
     companion object {
-        var listaPantallas = listOf(HomeView, AboutUsView, ComunityView, StoreView)
+        var listaPantallas = listOf(HomeView, AboutUsView, ComunityView, StoreView, CalendarView)
         // Constante en tiempo de compilación (#Define)
         const val ROUTE_HOME = "Inicio"
-        const val ROUTE_ABOUTUS = "Nosotr@s"
+        const val ROUTE_ABOUTUS = "Nosotros"
         const val ROUTE_COMUNITY = "Comunidad"
         // const val ROUTE_CONFIG = "Configuración"
         const val ROUTE_CHATBOT = "ChatBot"
@@ -34,13 +34,13 @@ sealed class Windows(
 
     private data object HomeView : Windows(
         ROUTE_HOME,
-        "HOME",
+        "Inicio",
         Icons.Default.Home
     )
 
     private data object AboutUsView : Windows(
         ROUTE_ABOUTUS,
-        "Nosotr@s",
+        "Nosotros",
         Icons.Default.ThumbUp
     )
 
