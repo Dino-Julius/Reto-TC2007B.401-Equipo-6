@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.dagger.hilt.android)
+    implementation(libs.play.services.phenotype)
     kapt(libs.dagger.hilt.android.compiler)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)

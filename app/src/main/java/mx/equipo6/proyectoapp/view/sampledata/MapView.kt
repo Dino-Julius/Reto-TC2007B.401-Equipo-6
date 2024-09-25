@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -30,6 +31,8 @@ class MapManager(private val context: Context) {
     private val mapController = mapView.controller
 
     init {
+        // Configurar el agente de usuario
+        Configuration.getInstance().userAgentValue = context.packageName
         mapController.setZoom(13.3)
     }
 
