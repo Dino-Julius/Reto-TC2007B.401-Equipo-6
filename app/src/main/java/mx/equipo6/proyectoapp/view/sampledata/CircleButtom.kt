@@ -11,6 +11,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
@@ -20,6 +21,7 @@ fun CircleButton(icon: ImageVector, onClick: () -> Unit, onRemove: (() -> Unit)?
     Box(
         modifier = Modifier
             .size(66.dp)
+            .then(if (onRemove == null) Modifier.shadow(8.dp, CircleShape) else Modifier)
             .background(color = Color(0xFFD1C4E9), shape = CircleShape)
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center

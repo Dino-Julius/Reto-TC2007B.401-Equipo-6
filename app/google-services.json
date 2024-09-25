@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "374323828794",
+    "project_id": "equipo6-zazil-app",
+    "storage_bucket": "equipo6-zazil-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:374323828794:android:ee3b017890dff1c8e27d03",
+        "android_client_info": {
+          "package_name": "mx.equipo6.proyectoapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCS-ZKk4tx2OG7urkADhlp8M668q574D2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
