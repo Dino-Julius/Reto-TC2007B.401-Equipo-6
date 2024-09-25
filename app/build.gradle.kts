@@ -80,22 +80,19 @@ dependencies {
     // Coil
     implementation(libs.coil.compose)
 
-<<<<<<< Updated upstream
     implementation (libs.accompanist.pager)
 
     // Import the Firebase BoM
+    implementation ("com.google.accompanist:accompanist-pager:0.24.13-rc")
     implementation(platform(libs.firebase.bom))
     // TODO: Add the dependencies for Firebase products you want to use
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation(libs.firebase.analytics)
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
-=======
-    implementation ("com.google.accompanist:accompanist-pager:0.24.13-rc")
     implementation ("com.google.android.gms:play-services-maps:18.0.2")
     implementation ("org.osmdroid:osmdroid-android:6.1.13")
 
->>>>>>> Stashed changes
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
