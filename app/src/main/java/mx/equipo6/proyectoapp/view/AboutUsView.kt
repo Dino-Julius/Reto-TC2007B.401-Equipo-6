@@ -1,5 +1,7 @@
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,12 +29,16 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -41,12 +47,28 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.FileProvider
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import mx.equipo6.proyectoapp.R
+import mx.equipo6.proyectoapp.view.sampledata.OSMDroidMapView
 import mx.equipo6.proyectoapp.viewmodel.AboutUsVM
+import org.osmdroid.config.Configuration
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
+
+/**
+ * AboutUsView: Muestra la información de la organización.
+ * @autor Jesus Guzman Ortega
+ */
 
 val bellefair = FontFamily(Font(R.font.bellefair_regular))
 
@@ -57,7 +79,7 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Color(0xFFC7A8BC)
+        color = Color(0xFFFFFFFF)
     ) {
         Column(
             modifier = Modifier
@@ -152,14 +174,14 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                     Text(
                         text = "Zazil es una organización sin ánimo de lucro comprometida con el bienestar de las mujeres y el cuidado del medio ambiente. Su misión es proporcionar soluciones innovadoras y sostenibles para el período menstrual. A través de la creación de toallas femeninas reutilizables.",
                         fontFamily = bellefair,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.ExtraBold, // Changed to Normal for a balanced look
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.ExtraBold,
                         color = Color(0xFFFFFFFF),
                         textAlign = TextAlign.Center,
                         modifier = Modifier
-                            .padding(12.dp) // Increased padding for better spacing
-                            .background(Color(0xFFF4D0CB), shape = RoundedCornerShape(12.dp)) // Soft background behind text
-                            .padding(16.dp) // Extra padding for the text itself
+                            .padding(12.dp)
+                            .background(Color(0xFFF4D0CB), shape = RoundedCornerShape(12.dp))
+                            .padding(16.dp)
                     )
                 }
 
@@ -171,12 +193,12 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                     fontWeight = FontWeight.Black,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 8.dp)
+                        .padding(14.dp)
                 )
                 //Boton Donaciones
                 Button(
                     onClick = { /* TODO */ },
-                    colors = ButtonDefaults.buttonColors(Color(0xFFF4D0CB)), // Custom background color
+                    colors = ButtonDefaults.buttonColors(Color(0xFFF4D0CB)),
                     modifier = Modifier
                         .padding(10.dp)
                         .clip(RoundedCornerShape(16.dp))
@@ -194,7 +216,7 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
             Button(
                 onClick = {
                     // Open PDF from raw resources
-                    val pdfFile = File(context.cacheDir, "aviso.pdf") // Temporary file path
+                    val pdfFile = File(context.cacheDir, "aviso.pdf")
 
                     // Copy PDF from raw resources to the temporary file
                     try {
@@ -301,21 +323,52 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                     )
                 }
             }
-                // Informacion de contacto
-            Text(
-                text = "¡Ante cualquier duda o aclaración, llámanos y con gusto te atenderemos!\n" +
-                        " +52 56 2808 3883\n" +
-                        "\n" +
-                        " Contacto@fundaciontodasbrillamos.org",
-                fontFamily = bellefair,
-                textAlign = TextAlign.Center,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Black,
+
+            Spacer(modifier = Modifier.height(80.dp))
+            // MAPS VIEW
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .height(300.dp) // Set a fixed height for the map
+                        .fillMaxWidth()
+
+                ) {
+                    OSMDroidMapView()
+                }
+            }
+
+
+            Spacer(modifier = Modifier.height(30.dp))
+            // Informacion de contacto
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp)
-            )
+                    .padding(10.dp)
+                    .background(
+                        color = Color.White,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .shadow(6.dp, shape = RoundedCornerShape(8.dp), spotColor = Color(0xFFF4D0CB), ambientColor = Color(0xFFF4D0CB))
+                    .border(1.dp, Color(0xFFF4D0CB), RoundedCornerShape(8.dp))
+            ) {
+                Text(
+                    text = "¡Ante cualquier duda o aclaración, llámanos y con gusto te atenderemos!\n" +
+                            " +52 56 2808 3883\n" +
+                            "\n" +
+                            " Contacto@fundaciontodasbrillamos.org",
+                    fontFamily = bellefair,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color(0xFFFFFFFF),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .background(Color(0xFFF4D0CB), shape = RoundedCornerShape(12.dp))
+                        .padding(16.dp)
+                )
+            }
         }
     }
 }
-
