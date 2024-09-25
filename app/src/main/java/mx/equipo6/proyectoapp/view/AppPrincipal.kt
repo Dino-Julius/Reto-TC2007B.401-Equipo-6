@@ -83,6 +83,9 @@ fun AppNavHost(
         composable(Windows.ROUTE_STORE) {
             ShopView(innerPadding, productVM, navController)
         }
+        composable(Windows.ROUTE_CHATBOT) {
+        //    ChatBotView(modifier)
+        }
         composable(Windows.ROUTE_STORE + "/{productId}") { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId")
             val product = productVM.getProductById(productId?.toIntOrNull()) // Implementa esta función en tu ViewModel

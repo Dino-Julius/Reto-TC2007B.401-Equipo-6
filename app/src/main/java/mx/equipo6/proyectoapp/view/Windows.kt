@@ -1,6 +1,7 @@
 package mx.equipo6.proyectoapp.view
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
@@ -21,7 +22,7 @@ sealed class Windows(
 ) {
     // Definir miembros de clase estáticos
     companion object {
-        var listaPantallas = listOf(HomeView, AboutUsView, ComunityView, StoreView)
+        var listaPantallas = listOf(HomeView, AboutUsView, ComunityView, StoreView, ChatBotView)
         // Constante en tiempo de compilación (#Define)
         const val ROUTE_HOME = "Inicio"
         const val ROUTE_ABOUTUS = "Nosotr@s"
@@ -59,7 +60,7 @@ sealed class Windows(
     private data object ChatBotView : Windows(
         ROUTE_CHATBOT,
         "ChatBot",
-        Icons.Default.Person
+        Icons.Default.Email
     )
 
     private data object CalendarView : Windows(
