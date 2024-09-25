@@ -90,8 +90,8 @@ dependencies {
     implementation(libs.firebase.analytics)
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
-    implementation ("com.google.android.gms:play-services-maps:18.0.2")
-    implementation ("org.osmdroid:osmdroid-android:6.1.13")
+    // implementation ("com.google.android.gms:play-services-maps:18.0.2")
+    implementation (libs.osmdroid.android)
 
 
     testImplementation(libs.junit)
