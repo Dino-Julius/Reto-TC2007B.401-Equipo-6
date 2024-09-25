@@ -52,7 +52,7 @@ fun HomeView(modifier: Modifier = Modifier, homeVM: HomeVM = viewModel()) {
                 .padding(top = 22.dp)
         ) {
             Subtitle("¡Bienvenido, @usuario!")
-            Divider(color = Color.LightGray, thickness = 1.dp)
+            Divider(color = Color.LightGray, thickness = 0.5.dp)
         }
 
         Column(
@@ -64,14 +64,14 @@ fun HomeView(modifier: Modifier = Modifier, homeVM: HomeVM = viewModel()) {
         ) {
             Spacer(modifier = Modifier.height(2.dp))
 
-            Subtitle("Accesos directos")
+            //Subtitle("Accesos directos")
             Spacer(modifier = if (selectedButtons.isEmpty()) Modifier.height(1.dp) else Modifier.height(4.dp)) // Further reduced spacing
 
             if (selectedButtons.isNotEmpty()) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 2.dp, bottom = 4.dp),
+                        .padding(top = 15.dp, bottom = 4.dp), // Entre botones y dividers.
                     verticalArrangement = Arrangement.spacedBy(20.dp) // Entre botones
                 ) {
                     selectedButtons.chunked(3).forEach { rowButtons ->
@@ -118,7 +118,7 @@ fun HomeView(modifier: Modifier = Modifier, homeVM: HomeVM = viewModel()) {
                 }
             }
 
-            Divider(color = Color.LightGray, thickness = 1.dp)
+            Divider(color = Color.LightGray, thickness = 0.5.dp)
 
             Subtitle("Consejos del día")
 
@@ -140,7 +140,7 @@ fun HomeView(modifier: Modifier = Modifier, homeVM: HomeVM = viewModel()) {
                     .padding(4.dp)
             )
 
-            Divider(color = Color.LightGray, thickness = 1.dp)
+            Divider(color = Color.LightGray, thickness = 0.5.dp)
 
             Subtitle("Accesos rápidos")
         }

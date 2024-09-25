@@ -35,7 +35,7 @@ val bellefair = FontFamily(Font(R.font.bellefair_regular))
 fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM()) {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Color(0xFFC7A8BC)
+        //color = Color(0xFFC7A8BC)
     ) {
         Column(
             modifier = Modifier
