@@ -3,6 +3,7 @@ package mx.equipo6.proyectoapp.view
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -21,15 +22,18 @@ sealed class Windows(
 ) {
     // Definir miembros de clase estáticos
     companion object {
-        var listaPantallas = listOf(HomeView, AboutUsView, ComunityView, StoreView, CalendarView)
-        // Constante en tiempo de compilación (#Define)
+        var listaPantallas = listOf(HomeView, AboutUsView,
+            ChatBotView, ShopView,
+            ComunityView, CalenView,
+            CartView, ConfigView)
         const val ROUTE_HOME = "Inicio"
-        const val ROUTE_ABOUTUS = "Nosotros"
+        const val ROUTE_ABOUTUS = "Zazil"
         const val ROUTE_COMUNITY = "Comunidad"
-        // const val ROUTE_CONFIG = "Configuración"
+        const val ROUTE_CONFIG = "Configuración"
         const val ROUTE_CHATBOT = "ChatBot"
         const val ROUTE_CALENDAR = "Calendario"
         const val ROUTE_STORE = "Tienda"
+        const val ROUTE_CART = "Carrito"
     }
 
     private data object HomeView : Windows(
@@ -40,7 +44,7 @@ sealed class Windows(
 
     private data object AboutUsView : Windows(
         ROUTE_ABOUTUS,
-        "Nosotros",
+        "Zazil",
         Icons.Default.ThumbUp
     )
 
@@ -50,11 +54,11 @@ sealed class Windows(
         Icons.Default.Person
     )
 
-//    private data object ConfigView : Windows(
-//        ROUTE_CONFIG,
-//        "Configuración",
-//        Icons.Default.Person
-//    )
+    private data object ConfigView : Windows(
+        ROUTE_CONFIG,
+        "Configuración",
+        Icons.Default.Person
+    )
 
     private data object ChatBotView : Windows(
         ROUTE_CHATBOT,
@@ -62,15 +66,21 @@ sealed class Windows(
         Icons.Default.Person
     )
 
-    private data object CalendarView : Windows(
+    private data object CalenView : Windows(
         ROUTE_CALENDAR,
         "Calendario",
         Icons.Default.Person
     )
 
-    private data object StoreView : Windows(
+    private data object ShopView : Windows(
         ROUTE_STORE,
         "Tienda",
         Icons.Default.Star
+    )
+
+    private data object CartView : Windows(
+        ROUTE_CART,
+        "Carrito",
+        Icons.Default.ShoppingCart
     )
 }

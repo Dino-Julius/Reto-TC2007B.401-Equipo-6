@@ -13,20 +13,18 @@ import androidx.compose.ui.unit.dp
 import mx.equipo6.proyectoapp.view.sampledata.Title
 
 /**
- * Composable que define la vista de la página "Comunidad" de la aplicación.
+ * Composable que define la vista de la página "Configuración" de la aplicación.
  * @param modifier Modificador de diseño.
  */
 @Preview(showBackground = true, widthDp = 400)
 @Composable
-fun ComunityView(modifier: Modifier = Modifier) {
-    // Estado de la app
-    // val estado = homeVM.estado.collectAsState() // Subscripción al estado de la app
+fun ConfigView(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .padding(16.dp)
             .fillMaxSize()
     ) {
-        Title("Página de Comunidad desde el HomeView")
+        Title("Página de configuración desde el ConfigView")
         Spacer(
             modifier = Modifier
                 .height(16.dp)

@@ -1,7 +1,5 @@
 package mx.equipo6.proyectoapp.view.sampledata
 
-import android.app.Activity
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -31,7 +29,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -62,12 +59,21 @@ class NavigationBars {
                 val navigationPile by navController.currentBackStackEntryAsState()
                 val actualScreen = navigationPile?.destination
 
+                // Pantallas que se incluirán en la barra de navegación inferior
+                val includedRoutes = listOf(
+                    Windows.ROUTE_ABOUTUS,
+                    Windows.ROUTE_CHATBOT,
+                    Windows.ROUTE_STORE,
+                    Windows.ROUTE_COMUNITY,
+                    Windows.ROUTE_CALENDAR
+                )
+
                 // Generar el menú inferior
-                Windows.listaPantallas.forEach { pantalla ->
+                Windows.listaPantallas.filter { it.route in includedRoutes }.forEach() { window ->
                     NavigationBarItem(
-                        selected = pantalla.route == actualScreen?.route,
+                        selected = window.route == actualScreen?.route,
                         onClick = {
-                            navController.navigate(pantalla.route) {
+                            navController.navigate(window.route) {
                                 popUpTo(navController.graph.findStartDestination().id) {
                                     saveState = true
                                 }
@@ -75,11 +81,11 @@ class NavigationBars {
                                 restoreState = true
                             }
                         },
-                        label = { Text(text = pantalla.etiqueta) },
+                        label = { Text(text = window.etiqueta) },
                         icon = {
                             Icon(
-                                imageVector = pantalla.icono,
-                                contentDescription = pantalla.etiqueta,
+                                imageVector = window.icono,
+                                contentDescription = window.etiqueta,
                                 modifier = Modifier.size(35.dp)
                             )
                         },
@@ -172,13 +178,14 @@ class NavigationBars {
     @ExperimentalMaterial3Api
     @ExperimentalLayoutApi
     @Composable
-    fun ExperimentalTopAppBar(title: String,
+    fun ExperimentalTopAppBar(
+        navController: NavHostController, title: String,
                               // onLeftButtonClick: () -> Unit,
                               // onMiddleButtonClick: () -> Unit,
                               // onRightButtonClick: () -> Unit
         ) {
 
-        val act = LocalContext.current as Activity
+        // val act = LocalContext.current as Activity
         Surface(
             color = MaterialTheme.colorScheme.primary, // Color de fondo
             modifier = Modifier.fillMaxWidth(),
@@ -203,7 +210,8 @@ class NavigationBars {
                 navigationIcon = {
                     IconButton(onClick = {
                         // onLeftButtonClick()
-                        Toast.makeText(act, "Inicio", Toast.LENGTH_SHORT).show()
+                        navController.navigate(Windows.ROUTE_HOME)
+                        // Toast.makeText(act, "Inicio", Toast.LENGTH_SHORT).show()
                     }) {
                         Icon(
                             imageVector = Icons.Filled.Home,
@@ -215,8 +223,8 @@ class NavigationBars {
                 },
                 actions = {
                     IconButton(onClick = {
-                        // onMiddleButtonClick()
-                        Toast.makeText(act, "Carrito", Toast.LENGTH_SHORT).show()
+                        navController.navigate(Windows.ROUTE_CART)
+                        // Toast.makeText(act, "Carrito", Toast.LENGTH_SHORT).show()
                     }) {
                         Icon(
                             imageVector = Icons.Default.ShoppingCart,
@@ -227,7 +235,8 @@ class NavigationBars {
                     }
                     IconButton(onClick = {
                         // onRightButtonClick()
-                        Toast.makeText(act, "Configuración", Toast.LENGTH_SHORT).show()
+                        navController.navigate(Windows.ROUTE_CONFIG)
+                        // Toast.makeText(act, "Configuración", Toast.LENGTH_SHORT).show()
                     }) {
                         Icon(
                             imageVector = Icons.Filled.AccountCircle,

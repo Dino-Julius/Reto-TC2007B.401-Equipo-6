@@ -35,7 +35,7 @@ import java.util.Calendar
 import java.util.Date
 
 @Composable
-fun CalenView(modifier: Modifier = Modifier, viewModel: CalenVM) {
+fun CalenView(viewModel: CalenVM) {
     val context = LocalContext.current
 
     // Observar el estado reactivo del ViewModel
@@ -45,7 +45,7 @@ fun CalenView(modifier: Modifier = Modifier, viewModel: CalenVM) {
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Color(0xFFC7A8BC)
+        color = Color(0xFFFFFFFF) // Color(0xFFC7A8BC)
     ) {
         Column(
             modifier = Modifier

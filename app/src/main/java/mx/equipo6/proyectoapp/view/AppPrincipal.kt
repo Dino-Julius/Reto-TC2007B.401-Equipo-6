@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -35,15 +36,13 @@ val bellefair = FontFamily(Font(R.font.bellefair_regular))
  */
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
-fun AppPrincipal(homeVM: HomeVM, aboutUsVM: AboutUsVM, productVM: ProductVM, calenVM: CalenVM, modifier: Modifier = Modifier) {
+fun AppPrincipal(homeVM: HomeVM = viewModel(), aboutUsVM: AboutUsVM = viewModel(),
+                 productVM: ProductVM = viewModel(), calenVM: CalenVM = viewModel(),
+                 modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     RetoAppTheme {
         Scaffold(
-//            topBar = { NavigationBars().AppTopBar(
-//                onLeftButtonClick = { Log.d("check", "Botón del lado izquierdo") },
-//                onRightButtonClick = { Log.d("check", "Botón del lado derecho") }
-//            ) },
-            topBar = { NavigationBars().ExperimentalTopAppBar("ZAZIL")},
+            topBar = { NavigationBars().ExperimentalTopAppBar(navController, "ZAZIL")},
             bottomBar = { NavigationBars().AppBottomBar(navController) }
         ) { innerPadding ->
             AppNavHost(
@@ -92,8 +91,16 @@ fun AppNavHost(
             ProductDetailView(product, navController)
         }
         composable(Windows.ROUTE_CALENDAR) {
-            CalenView(modifier, calenVM)
+            CalenView(calenVM)
         }
-
+        composable(Windows.ROUTE_CART) {
+            CartView(modifier)
+        }
+        composable(Windows.ROUTE_CHATBOT) {
+            ChatBotView(modifier)
+        }
+        composable(Windows.ROUTE_CONFIG) {
+            ConfigView(modifier)
+        }
     }
 }
