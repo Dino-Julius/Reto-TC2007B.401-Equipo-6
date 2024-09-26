@@ -66,7 +66,7 @@ fun ShopView(paddingValues: PaddingValues, productVM: ProductVM, navController: 
                         // modifier = Modifier.padding(modifier),
                         content = {
                             items(productList.size) { index: Int ->
-                                ProductsCardUI(productList[index], navController)
+                                ProductsCardUI(productList[index], navController, productVM)
                             }
                         })
                 }
@@ -124,7 +124,7 @@ private fun LoadingScreen() {
 }
 
 @Composable
-private fun ProductsCardUI(products: Products, navController: NavHostController) {
+private fun ProductsCardUI(products: Products, navController: NavHostController, productVM: ProductVM) {
     val ctx = LocalContext.current
     Card(
         modifier = Modifier
@@ -186,13 +186,20 @@ private fun ProductsCardUI(products: Products, navController: NavHostController)
                 Box(
                     modifier = Modifier
                         .size(30.dp)
+                        .clickable {
+                            productVM.addItemToCart(products)
+
+                            Toast.makeText(ctx, "Producto agregado al carrito", Toast.LENGTH_SHORT) // in Activity
+                            .show()
+                        }
                         .clip(shape = CircleShape)
-                        .background(Color(0xFFC7A8BC)), contentAlignment = Alignment.Center
+                        .background(Color(0xFFC7A8BC)),
+                    contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_cart),
                         contentDescription = "",
-                        modifier = Modifier.size(20.dp),
+                        modifier = Modifier.size(18.dp),
                         tint = Color.White
                     )
                 }

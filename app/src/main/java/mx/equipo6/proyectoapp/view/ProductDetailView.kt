@@ -42,15 +42,17 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import mx.equipo6.proyectoapp.model.products.Products
+import mx.equipo6.proyectoapp.viewmodel.ProductVM
 
 /**
- * ProductDetailView: Muestra los detalles de un producto.
+ * ProductDetailView: Shows product details
  * @autor Julio Vivas
- * @param products Producto a mostrar.
- * @param navController Controlador de navegación.
+ * @param products Product to show.
+ * @param navController navigation controller
+ * @param productVM ViewModel.
  */
 @Composable
-fun ProductDetailView(products: Products?, navController: NavHostController) {
+fun ProductDetailView(products: Products?, navController: NavHostController, productVM: ProductVM) {
     val context = LocalContext.current
     LocalContext.current as Activity
     Column(
@@ -62,7 +64,7 @@ fun ProductDetailView(products: Products?, navController: NavHostController) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 15.dp, end = 15.dp, top = 15.dp),
+                .padding(start = 10.dp, end = 15.dp, top = 10.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -186,8 +188,10 @@ fun ProductDetailView(products: Products?, navController: NavHostController) {
                         .height(60.dp)
                         .clip(RoundedCornerShape(15.dp)),
                     onClick = {
+                        productVM.addItemToCart(products!!)
+
                         Toast.makeText(
-                            context, "Successfully added to cart", Toast.LENGTH_SHORT
+                            context, "Producto agregado al carrito", Toast.LENGTH_SHORT
                         ).show()
                     },
                 ) {

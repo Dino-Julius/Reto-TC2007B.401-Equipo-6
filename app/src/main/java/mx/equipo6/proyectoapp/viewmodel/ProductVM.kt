@@ -35,6 +35,10 @@ class ProductVM @Inject constructor(
     private val _product = MutableStateFlow<ViewState<ProductList>>(ViewState.Loading)
     val products : StateFlow<ViewState<ProductList>> get() = _product
 
+    // cart state
+    private val _cartItems = MutableStateFlow<List<Products>>(emptyList())
+    val cartItems: StateFlow<List<Products>> get() = _cartItems
+
     // LiveData for observ network connection
     private val _isConnected = MutableStateFlow(isNetworkConnected(context))
     val isConnected : StateFlow<Boolean> get() = _isConnected
@@ -79,6 +83,15 @@ class ProductVM @Inject constructor(
         super.onCleared()
         // unRegister
         context.unregisterReceiver(networkChangeReceiver)
+    }
+
+
+    //fn for adding and removing items from the cart
+    fun addItemToCart(product: Products) {
+        _cartItems.value = _cartItems.value + product
+    }
+    fun removeItemFromCart(product: Products) {
+        _cartItems.value = _cartItems.value - product
     }
 
     fun getProductById(productId: Int?): Products? {

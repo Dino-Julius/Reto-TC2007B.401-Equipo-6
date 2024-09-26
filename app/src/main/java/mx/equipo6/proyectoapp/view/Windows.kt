@@ -30,6 +30,7 @@ sealed class Windows(
         const val ROUTE_CHATBOT = "ChatBot"
         const val ROUTE_CALENDAR = "Calendario"
         const val ROUTE_STORE = "Tienda"
+        const val ROUTE_CARRO = "Carro"
     }
 
     private data object HomeView : Windows(
@@ -71,6 +72,12 @@ sealed class Windows(
     private data object StoreView : Windows(
         ROUTE_STORE,
         "Tienda",
+        Icons.Default.Star
+    )
+
+    private data object CartView : Windows(
+        ROUTE_STORE,
+        "CARRO",
         Icons.Default.Star
     )
 }
