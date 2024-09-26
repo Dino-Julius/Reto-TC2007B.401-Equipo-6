@@ -19,6 +19,7 @@ import mx.equipo6.proyectoapp.R
 import mx.equipo6.proyectoapp.ui.theme.RetoAppTheme
 import mx.equipo6.proyectoapp.view.sampledata.NavigationBars
 import mx.equipo6.proyectoapp.viewmodel.AboutUsVM
+import mx.equipo6.proyectoapp.viewmodel.ChatBotViewModel
 import mx.equipo6.proyectoapp.viewmodel.HomeVM
 import mx.equipo6.proyectoapp.viewmodel.ProductVM
 
@@ -34,7 +35,13 @@ val bellefair = FontFamily(Font(R.font.bellefair_regular))
  */
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
-fun AppPrincipal(homeVM: HomeVM, aboutUsVM: AboutUsVM, productVM: ProductVM, modifier: Modifier = Modifier) {
+fun AppPrincipal(
+    homeVM: HomeVM,
+    aboutUsVM: AboutUsVM,
+    productVM: ProductVM,
+    chatBotVM: ChatBotViewModel = ChatBotViewModel(),
+    modifier: Modifier = Modifier
+) {
     val navController = rememberNavController()
     RetoAppTheme {
         Scaffold(
@@ -51,6 +58,7 @@ fun AppPrincipal(homeVM: HomeVM, aboutUsVM: AboutUsVM, productVM: ProductVM, mod
                 homeVM,
                 aboutUsVM,
                 productVM,
+                chatBotVM,
                 navController
             )
         }
@@ -64,6 +72,7 @@ fun AppNavHost(
     homeVM: HomeVM,
     aboutUsVM: AboutUsVM,
     productVM: ProductVM,
+    chatBotVM: ChatBotViewModel,
     navController: NavHostController
 ) {
     NavHost(
@@ -84,7 +93,7 @@ fun AppNavHost(
             ShopView(innerPadding, productVM, navController)
         }
         composable(Windows.ROUTE_CHATBOT) {
-        //    ChatBotView(modifier)
+            ChatBotView(chatBotVM)
         }
         composable(Windows.ROUTE_STORE + "/{productId}") { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId")
