@@ -1,6 +1,7 @@
 package mx.equipo6.proyectoapp.view
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -25,7 +26,7 @@ sealed class Windows(
         var listaPantallas = listOf(HomeView, AboutUsView,
             ChatBotView, ShopView,
             ComunityView, CalenView,
-            CartView, ConfigView)
+            CartView, CheckoutView, ConfigView)
         const val ROUTE_HOME = "Inicio"
         const val ROUTE_ABOUTUS = "Zazil"
         const val ROUTE_COMUNITY = "Comunidad"
@@ -34,6 +35,7 @@ sealed class Windows(
         const val ROUTE_CALENDAR = "Calendario"
         const val ROUTE_STORE = "Tienda"
         const val ROUTE_CART = "Carrito"
+        const val ROUTE_CHECKOUT = "Checkout"
     }
 
     private data object HomeView : Windows(
@@ -82,5 +84,11 @@ sealed class Windows(
         ROUTE_CART,
         "Carrito",
         Icons.Default.ShoppingCart
+    )
+
+    private data object CheckoutView : Windows(
+        ROUTE_CHECKOUT,
+        "Checkout",
+        Icons.Default.CheckCircle
     )
 }

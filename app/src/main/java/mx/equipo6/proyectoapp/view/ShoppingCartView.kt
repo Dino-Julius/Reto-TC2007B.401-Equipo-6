@@ -1,5 +1,6 @@
 package mx.equipo6.proyectoapp.view
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -80,7 +81,10 @@ fun ShoppingCartView(productVM: ProductVM, navController: NavHostController) {
             )
 
             Button(
-                onClick = { /* TODO CHECKOUT */ },
+                onClick = {
+                    navController.navigate("Checkout")
+                    // Toast.makeText(null, "Compra realizada", Toast.LENGTH_SHORT).show()
+                },
                 colors = ButtonDefaults.buttonColors(Color(0xFFC7A8BC))
             ) {
                 Text(

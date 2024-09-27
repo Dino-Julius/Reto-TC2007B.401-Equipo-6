@@ -76,30 +76,41 @@ fun AppNavHost(
         composable(Windows.ROUTE_ABOUTUS) {
             AboutUsView(modifier, aboutUsVM)
         }
+
         composable(Windows.ROUTE_HOME) {
             HomeView(modifier, homeVM)
         }
+
         composable(Windows.ROUTE_COMUNITY) {
-            ShoppingCartView(productVM, navController) // TODO AQUI VA COMMUNITY, SHOPPING CART ES TEMPORAL
+            ComunityView(modifier)
         }
 
         composable(Windows.ROUTE_STORE) {
             ShopView(innerPadding, productVM, navController)
         }
+
         composable(Windows.ROUTE_STORE + "/{productId}") { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId")
             val product = productVM.getProductById(productId?.toIntOrNull()) // Implementa esta función en tu ViewModel
             ProductDetailView(product, navController, productVM)
         }
+
         composable(Windows.ROUTE_CALENDAR) {
             CalenView(calenVM)
         }
+
         composable(Windows.ROUTE_CART) {
-            CartView(modifier)
+            ShoppingCartView(productVM, navController)
         }
+
+        composable(Windows.ROUTE_CHECKOUT) {
+            CheckoutView(navController) // TODO: implementar vista checokut
+        }
+
         composable(Windows.ROUTE_CHATBOT) {
             ChatBotView(modifier)
         }
+
         composable(Windows.ROUTE_CONFIG) {
             ConfigView(modifier)
         }
