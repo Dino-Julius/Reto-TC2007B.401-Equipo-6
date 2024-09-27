@@ -19,6 +19,7 @@ retrofit = "2.11.0"
 hiltAndroid = "2.50"
 navigationCompose = "2.7.7"
 playServicesPhenotype = "17.0.0"
+uiTestJunit4Android = "1.6.6"
 
 [libraries]
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
@@ -51,6 +52,7 @@ osmdroid-android = { module = "org.osmdroid:osmdroid-android", version.ref = "os
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 play-services-phenotype = { group = "com.google.android.gms", name = "play-services-phenotype", version.ref = "playServicesPhenotype" }
+androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
