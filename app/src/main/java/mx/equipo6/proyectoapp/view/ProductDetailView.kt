@@ -29,6 +29,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,16 +44,21 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import mx.equipo6.proyectoapp.model.products.Products
+import mx.equipo6.proyectoapp.view.sampledata.Stepper
+import mx.equipo6.proyectoapp.viewmodel.ProductVM
 
 /**
- * ProductDetailView: Muestra los detalles de un producto.
+ * ProductDetailView: Shows product details
  * @autor Julio Vivas
- * @param products Producto a mostrar.
- * @param navController Controlador de navegación.
+ * @param products Product to show.
+ * @param navController navigation controller
+ * @param productVM ViewModel.
  */
 @Composable
-fun ProductDetailView(products: Products?, navController: NavHostController) {
+fun ProductDetailView(products: Products?, navController: NavHostController, productVM: ProductVM) {
     val context = LocalContext.current
+    val quantityToAdd = remember { mutableStateOf(1) } // Default is 1
+
     LocalContext.current as Activity
     Column(
         modifier = Modifier
@@ -62,7 +69,7 @@ fun ProductDetailView(products: Products?, navController: NavHostController) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 15.dp, end = 15.dp, top = 15.dp),
+                .padding(start = 10.dp, end = 15.dp, top = 10.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -176,22 +183,46 @@ fun ProductDetailView(products: Products?, navController: NavHostController) {
                     .clip(RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Button(
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = Color.White
-                    ),
-                    modifier = Modifier
-                        .width(200.dp)
-                        .padding(top = 30.dp, bottom = 30.dp)
-                        .height(60.dp)
-                        .clip(RoundedCornerShape(15.dp)),
-                    onClick = {
-                        Toast.makeText(
-                            context, "Successfully added to cart", Toast.LENGTH_SHORT
-                        ).show()
-                    },
-                ) {
-                    Text(text = "Add to Cart", fontSize = 16.sp)
+                Row{
+                    // Display the current quantity with a stepper
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(15.dp)
+                    ) {
+                        Text("Cantidad a agregar:", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        // Stepper for choosing the quantity to add
+                        Stepper(
+                            value = quantityToAdd.value,
+                            onValueChange = { quantityToAdd.value = it },
+                            minValue = 1,
+                            maxValue = 100
+                        )
+                    }
+
+                    // Add to Cart Button
+                    Button(
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = Color.White
+                        ),
+                        modifier = Modifier
+                            .width(200.dp)
+                            .padding(top = 30.dp, bottom = 30.dp)
+                            .height(60.dp)
+                            .clip(RoundedCornerShape(15.dp)),
+                        onClick = {
+                            productVM.addItemToCart(products!!, quantityToAdd.value) // Pass the selected quantity
+
+                            Toast.makeText(
+                                context, "${quantityToAdd.value} producto(s) agregado(s) al carrito", Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    ) {
+                        Text(text = "Agregar al carrito")
+                    }
                 }
             }
         }

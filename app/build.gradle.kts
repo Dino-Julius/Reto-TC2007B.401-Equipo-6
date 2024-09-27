@@ -93,7 +93,8 @@ dependencies {
     // https://firebase.google.com/docs/android/setup#available-libraries
     // implementation ("com.google.android.gms:play-services-maps:18.0.2")
     implementation (libs.osmdroid.android)
-
+    implementation("com.google.android.material:material:1.9.0")
+    implementation(libs.androidx.material.icons.extended)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
