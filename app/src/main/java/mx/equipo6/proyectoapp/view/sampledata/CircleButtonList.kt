@@ -10,13 +10,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun CircleButtonList(
-    userButtons: List<ImageVector>,
-    shoppingButtons: List<ImageVector>,
+    userButtons: List<Pair<ImageVector, String>>,
+    shoppingButtons: List<Pair<ImageVector, String>>,
     onButtonSelected: (ImageVector) -> Unit
 ) {
+    val buttonWidth = 0.3f // botones alineados por fila.
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -26,23 +29,45 @@ fun CircleButtonList(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Usuario", style = MaterialTheme.typography.titleLarge)
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            userButtons.forEach { icon ->
-                CircleButton(icon = icon, onClick = { onButtonSelected(icon) })
+        Text("Usuario", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold))
+        if (userButtons.isEmpty()) {
+            Text("Accesos en uso", style = MaterialTheme.typography.bodyLarge)
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                userButtons.forEach { (icon, name) ->
+                    Column(
+                        modifier = Modifier.weight(buttonWidth),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        CircleButton(icon = icon, onClick = { onButtonSelected(icon) })
+                        Text(text = name, modifier = Modifier.padding(top = 12.dp)) // Separación entre el botón y el texto.
+                    }
+                }
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Text("Compras", style = MaterialTheme.typography.titleLarge)
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            shoppingButtons.forEach { icon ->
-                CircleButton(icon = icon, onClick = { onButtonSelected(icon) })
+        Spacer(modifier = Modifier.height(3.dp))
+        Text("Compras", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold))
+        if (shoppingButtons.isEmpty()) {
+            Text("Accesos en uso", style = MaterialTheme.typography.bodyLarge)
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                shoppingButtons.forEach { (icon, name) ->
+                    Column(
+                        modifier = Modifier.weight(buttonWidth),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        CircleButton(icon = icon, onClick = { onButtonSelected(icon) })
+                        Text(text = name, modifier = Modifier.padding(top = 12.dp)) // Separación entre el botón y el texto.
+                    }
+                }
             }
         }
     }

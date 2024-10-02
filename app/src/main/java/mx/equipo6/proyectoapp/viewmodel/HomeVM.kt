@@ -1,15 +1,20 @@
 package mx.equipo6.proyectoapp.viewmodel
 
+import android.content.Context
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
-import mx.equipo6.proyectoapp.model.Advice
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import mx.equipo6.proyectoapp.model.Advice
 
 /**
  * ViewModel de la pantalla principal de la aplicación
- * @autor Equipo 6
+ * @autor Ulises Jaramillo Portilla | A01798380.
  */
 
 class HomeVM : ViewModel() {
@@ -30,6 +35,26 @@ class HomeVM : ViewModel() {
                 Advice(4, "Be patient.")
             )
             _adviceList.value = adviceFromApi
+        }
+    }
+
+    fun saveSelectedButtons(context: Context, selectedButtons: List<ImageVector>) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                val buttonNames = selectedButtons.map { it.name }
+                sharedPreferences.edit {
+                    putStringSet("selected_buttons", buttonNames.toSet())
+                }
+            }
+        }
+    }
+
+    fun loadSelectedButtons(context: Context, allUserButtons: List<ImageVector>, allShoppingButtons: List<ImageVector>): List<ImageVector> {
+        val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val buttonNames = sharedPreferences.getStringSet("selected_buttons", emptySet()) ?: emptySet()
+        return buttonNames.mapNotNull { name ->
+            allUserButtons.find { it.name == name } ?: allShoppingButtons.find { it.name == name }
         }
     }
 }

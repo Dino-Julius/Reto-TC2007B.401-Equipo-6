@@ -82,7 +82,7 @@ fun AppNavHost(
         }
 
         composable(Windows.ROUTE_COMUNITY) {
-            ComunityView(modifier)
+            CommunityView(modifier)
         }
 
         composable(Windows.ROUTE_STORE) {
