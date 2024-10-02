@@ -1,5 +1,6 @@
 package mx.equipo6.proyectoapp.view
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
@@ -31,10 +32,12 @@ fun ChatBotView(chatBotVM: ChatBotViewModel) {
 
         // Send button
         Button(onClick = {
+            Log.d("ChatBotView", "User input: $userInput")
             chatBotVM.sendMessage2(
                 content = userInput,
                 onFailure = { /* Handle failure */ },
                 onStream = { response ->
+                    Log.d("ChatBotView", "Bot response: $response")
                     chatHistory = chatHistory + "Bot: $response"
                 },
                 onFullResponse = { /* Handle full response */ }
@@ -44,5 +47,6 @@ fun ChatBotView(chatBotVM: ChatBotViewModel) {
         }) {
             Text("Send")
         }
+
     }
 }

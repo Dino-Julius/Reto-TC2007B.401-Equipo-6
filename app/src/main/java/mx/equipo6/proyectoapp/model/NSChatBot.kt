@@ -6,11 +6,10 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 //import me.bush.translator.Language
+import android.util.Log
 
 class NSChatBot {
     private var apiUrl: String = ""
-    //private var language: me.bush.translator.Language = me.bush.translator.Language.ENGLISH
-    //private val translator = me.bush.translator.Translator()
     private val chatBotMessages = mutableListOf<Map<String, String>>()
     private val client = okhttp3.OkHttpClient.Builder()
         .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
@@ -18,31 +17,23 @@ class NSChatBot {
         .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
         .build()
 
-    fun initialize(apiUrl: String, /*language: me.bush.translator.Language*/) {
+    fun initialize(apiUrl: String) {
         this.apiUrl = apiUrl
-        //this.language = language
     }
 
     suspend fun sendMessage(message: String, onStream: (String) -> Unit, onFailure: (IOException) -> Unit, onCompleted: () -> Unit) {
         withContext(Dispatchers.IO) {
             try {
-                //val translatedMessage = translateMessage(message)
-                //addMessage("user", translatedMessage)
                 addMessage("user", message)
-
                 val request = buildRequest()
+                Log.d("NSChatBot", "Sending request to $apiUrl with message: $message")
                 val response = executeRequest(request)
-
                 handleResponse(response, onStream, onCompleted)
             } catch (e: IOException) {
                 handleFailure(e, onFailure)
             }
         }
     }
-
-    //private suspend fun translateMessage(message: String): String {
-    //    return translator.translate(message, me.bush.translator.Language.ENGLISH, language).translatedText
-    //}
 
     private fun addMessage(role: String, content: String) {
         chatBotMessages.add(mapOf("role" to role, "content" to content))
@@ -69,10 +60,6 @@ class NSChatBot {
             while (!it.exhausted()) {
                 val line = it.readUtf8Line()
                 fullResponse += line.orEmpty()
-                //val translatedMessage = translator.translate(fullResponse, language, me.bush.translator.Language.ENGLISH).translatedText
-                //withContext(Dispatchers.Main) {
-                //    onStream(translatedMessage)
-                //}
                 onStream(fullResponse)
             }
             onCompleted()
