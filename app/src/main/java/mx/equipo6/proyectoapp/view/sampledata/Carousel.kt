@@ -36,7 +36,7 @@ fun CarouselCard(
     Card(
         modifier = Modifier
             .width(250.dp)
-            .height(180.dp) // Adjusted card height
+            .height(180.dp)
             .padding(8.dp),
         shape = RoundedCornerShape(16.dp),
         colors = androidx.compose.material3.CardDefaults.cardColors(
@@ -46,19 +46,23 @@ fun CarouselCard(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(2.dp),
-            verticalArrangement = Arrangement.Top, // Align contents at the top
+                .padding(10.dp),
+            verticalArrangement = Arrangement.SpaceBetween, // Distribute the space evenly
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Title with fixed height to ensure alignment
-            Text(
-                text = title,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = Color.White,
-                modifier = Modifier.height(40.dp), // Fixed height for title
-                textAlign = TextAlign.Center
-            )
+            // Only show title if it's not empty
+            if (title.isNotEmpty()) {
+                Text(
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = Color.White,
+                    modifier = Modifier
+                        .height(40.dp), // Fixed height for title
+                    textAlign = TextAlign.Center
+                )
+            }
+            Spacer(modifier = Modifier.height(4.dp)) // Space between title and description
             Text(
                 text = description,
                 textAlign = TextAlign.Center,
@@ -85,7 +89,13 @@ fun Carousel() {
                 "- Son hipoalergénicas.\n" +
                 "- Son impermeables.\n" +
                 "- Mantienen la piel fresca y libre de olores."),
-        Pair("Producto 4", "Descripción del producto 4")
+        Pair("", "Estamos comprometidas con el " +
+                "bienestar de las mujeres y el cuidado " +
+                "del planeta.\n" +
+                "Creamos productos de alta " +
+                "calidad y amigables con el ambiente, "  +
+                "ayudando a mujeres."
+        )
     )
 
     LazyRow(
