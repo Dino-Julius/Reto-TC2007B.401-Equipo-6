@@ -84,7 +84,7 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp) // Asegurar que no haya padding adicional
+                    .padding(top = 8.dp)
             )
 
             Spacer(modifier = Modifier.height(2.dp)) // Un espacio pequeño si es necesario

@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.dagger.hilt.android)
     implementation(libs.play.services.phenotype)
+    implementation(libs.androidx.ui.test.android)
     testImplementation(libs.androidx.ui.test.junit4.android)
     kapt(libs.dagger.hilt.android.compiler)
     implementation(libs.retrofit)

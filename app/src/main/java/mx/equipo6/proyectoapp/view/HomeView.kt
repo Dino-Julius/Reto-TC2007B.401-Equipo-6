@@ -1,11 +1,16 @@
 package mx.equipo6.proyectoapp.view
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -25,6 +30,10 @@ import mx.equipo6.proyectoapp.view.sampledata.SampleCard
 import mx.equipo6.proyectoapp.view.sampledata.Subtitle
 import mx.equipo6.proyectoapp.viewmodel.HomeVM
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
+import mx.equipo6.proyectoapp.view.sampledata.Carousel
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -148,7 +157,22 @@ fun HomeView(modifier: Modifier = Modifier, homeVM: HomeVM = viewModel()) {
 
             Divider(color = Color.LightGray, thickness = 0.5.dp)
 
-            Subtitle("Accesos rápidos")
+            Subtitle("Nuestra idea")
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "\"Por cada producto que adquieras,\notra toalla es donada\"", // \n crea un salto de línea
+                    fontFamily = bellefair,
+                    fontSize = 22.sp,
+                    textAlign = TextAlign.Center, // Asegura que el texto se centre correctamente
+                    modifier = Modifier.fillMaxWidth() // Añade este modificador para que el texto se ajuste al ancho disponible
+                )
+            }
+            Carousel()
         }
     }
 }

@@ -23,7 +23,7 @@ fun Subtitle(texto: String, modifier: Modifier = Modifier) {
         style = MaterialTheme.typography.headlineSmall,
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 20.dp, bottom = 10.dp, top = 10.dp),
+            .padding(start = 20.dp, bottom = 5.dp, top = 0.dp),
         fontWeight = FontWeight.Bold
     )
     Spacer(
