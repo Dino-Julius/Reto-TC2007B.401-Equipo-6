@@ -130,7 +130,7 @@ fun PostCard(
                         Text(
                             text = "Por: $author",
                             style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.padding(top = 3.dp)
+                            modifier = Modifier.padding(top = 6.dp)
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp))

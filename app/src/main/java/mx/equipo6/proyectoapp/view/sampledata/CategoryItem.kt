@@ -15,6 +15,8 @@ import androidx.compose.foundation.background
 
 @Composable
 fun CategoryItem(icon: ImageVector, title: String, isSelected: Boolean, modifier: Modifier = Modifier) {
+    val iconColor = if (isSelected) Color.Black else Color.LightGray
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.padding(8.dp)
@@ -22,19 +24,23 @@ fun CategoryItem(icon: ImageVector, title: String, isSelected: Boolean, modifier
         Icon(
             imageVector = icon,
             contentDescription = title,
+            tint = iconColor,
             modifier = Modifier.size(40.dp)
         )
-        Text(text = title, style = MaterialTheme.typography.bodySmall)
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.padding(top = 5.dp)
+        )
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(25.dp)
-
         ) {
             if (isSelected) {
                 Box(
                     modifier = Modifier
-                        .width(41.dp) // Fixed width for the indicator line
+                        .width(41.dp)
                         .height(2.dp)
                         .background(color = Color.Black)
                         .align(Alignment.Center)
