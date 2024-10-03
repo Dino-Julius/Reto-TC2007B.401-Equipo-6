@@ -5,16 +5,15 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
-//import me.bush.translator.Language
 import android.util.Log
 
 class NSChatBot {
     private var apiUrl: String = ""
     private val chatBotMessages = mutableListOf<Map<String, String>>()
     private val client = okhttp3.OkHttpClient.Builder()
-        .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
-        .writeTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
-        .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+        .connectTimeout(5, java.util.concurrent.TimeUnit.MINUTES)
+        .writeTimeout(5, java.util.concurrent.TimeUnit.MINUTES)
+        .readTimeout(5, java.util.concurrent.TimeUnit.MINUTES)
         .build()
 
     fun initialize(apiUrl: String) {
@@ -54,18 +53,21 @@ class NSChatBot {
 
     private suspend fun handleResponse(response: okhttp3.Response, onStream: (String) -> Unit, onCompleted: () -> Unit) {
         if (!response.isSuccessful) throw IOException("Unexpected code $response")
-        var fullResponse = ""
+        val fullResponse = StringBuilder()  // Usamos StringBuilder para construir la respuesta completa
         val source = response.body?.source()
         source?.let {
             while (!it.exhausted()) {
                 val line = it.readUtf8Line()
-                fullResponse += line.orEmpty()
-                onStream(fullResponse)
+                line?.let { fullResponse.append(it) } // Acumula las líneas en lugar de llamar a onStream
             }
-            onCompleted()
+            // Aquí solo llama a onStream si necesitas un flujo de actualización, en este caso se puede omitir
+            addMessage("assistant", fullResponse.toString())  // Añade la respuesta completa
         }
-        addMessage("assistant", fullResponse)
+        onStream(fullResponse.toString())  // Llama a onStream solo con la respuesta completa
+        onCompleted()  // Indica que la respuesta ha sido procesada
     }
+
+
 
     private suspend fun handleFailure(e: IOException, onFailure: (IOException) -> Unit) {
         withContext(Dispatchers.Main) {
