@@ -42,6 +42,7 @@ fun AppPrincipal(
     homeVM: HomeVM = viewModel(),
     aboutUsVM: AboutUsVM = viewModel(),
     productVM: ProductVM = viewModel(),
+    postVM: PostVM = viewModel(),
     calenVM: CalenVM = viewModel(),
     chatBotVM: ChatBotViewModel = ChatBotViewModel(),
     modifier: Modifier = Modifier)
