@@ -17,7 +17,7 @@ class ChatBotViewModel : ViewModel() {
     var isSending: Boolean? = null // Inicializa isSending a false
 
     init {
-        enchatbot.initialize("http://10.8.0.4:5000/chat")
+        enchatbot.initialize("http://10.48.93.227:5000/chat")
     }
 
     fun sendMessage2(

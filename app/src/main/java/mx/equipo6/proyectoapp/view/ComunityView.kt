@@ -1,36 +1,64 @@
 package mx.equipo6.proyectoapp.view
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
+import PostCard
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Divider
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import mx.equipo6.proyectoapp.view.components.CategoryBar
+import mx.equipo6.proyectoapp.view.sampledata.SearchBar
 import mx.equipo6.proyectoapp.view.sampledata.Title
+import androidx.compose.ui.Alignment
+import mx.equipo6.proyectoapp.R
+import mx.equipo6.proyectoapp.view.sampledata.Subtitle
 
-/**
- * HomeView: Composable que define la vista de la página "Comunidad" de la aplicación.
- * @param modifier Modificador de diseño.
- */
-@Preview(showBackground = true, widthDp = 400)
 @Composable
-fun ComunityView(modifier: Modifier = Modifier) {
-    // Estado de la app
-    // val estado = homeVM.estado.collectAsState() // Subscripción al estado de la app
-    Column(
-        modifier = modifier
-            .padding(16.dp)
-            .fillMaxSize()
-    ) {
-        Title("Página de Comunidad desde el HomeView")
-        Spacer(
+fun CommunityView(modifier: Modifier = Modifier) {
+    val selectedIndex = 0 // Índice por defecto
+    val itemWidth = 25f // Ancho de los ítems en píxeles
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        Column(
             modifier = Modifier
-                .height(16.dp)
                 .fillMaxWidth()
-        )
+                .padding(top = 22.dp)
+        ) {
+            Title(
+                "Comunidad",
+                modifier = Modifier.padding(bottom = 10.dp),
+                textAlign = TextAlign.Start
+            )
+
+            Column(modifier = Modifier.fillMaxSize()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 2.dp)
+                ) {
+                    SearchBar(modifier = Modifier.padding(bottom = 10.dp))
+
+                    // Usamos Box para superponer el Divider sobre la CategoryBar
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        Divider(
+                            color = Color.LightGray,
+                            thickness = 0.5.dp,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .offset(y = (-18).dp)
+                                .align(Alignment.BottomCenter)
+                        )
+                        CategoryBar(
+                            selectedIndex = selectedIndex,
+                            itemWidth = itemWidth
+                        )
+                    }
+                    PostCard(R.drawable.zazil, "Ejemplo 1", "Autor 1", "Texto de ejemplo de como sería la descripción del post.", "25/08/24")
+                    PostCard(R.drawable.zazil, "Ejemplo 2", "Autor 2", "Texto de ejemplo de como sería la descripción del post.", "25/08/24")
+                }
+            }
+        }
     }
 }

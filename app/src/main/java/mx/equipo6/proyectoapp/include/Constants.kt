@@ -14,5 +14,7 @@ class Constants {
         const val BASE_URL = " https://fakestoreapi.com/"
         // Endpoint for the list of products
         const val LIST_OF_PRODUCTS = "products"
+        // Endpoint for the list of posts
+        const val LIST_OF_POSTS = "posts"
     }
 }
