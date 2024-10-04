@@ -26,9 +26,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import mx.equipo6.proyectoapp.viewmodel.CalenVM
 import java.util.*
-/*
+/**
 * @author: Sebastian Espinoza
-* @param: viewModel: CalenVM
+* @param: viewModel: CalenVM view model para la vista
 * Funcion padre de la vista del calendario
  */
 @Composable
@@ -79,9 +79,9 @@ fun CalenView(viewModel: CalenVM) {
         }
     }
 }
-/*
+/**
 * @author: Sebastian Espinoza
-* @param: showDialog: MutableState<Boolean>
+* @param: showDialog: MutableState<Boolean> este estado es para mostrar el pop-up
 * Funcion para mostrar el header del calendario, contiene el titulo y el boton
 * de ver las fechas de actividad sexual guardada
  */
@@ -116,9 +116,9 @@ fun HeaderSection(showDialog: MutableState<Boolean>) {
     }
 }
 
-/*
+/**
 * @author: Sebastian Espinoza
-* @param: viewModel: CalenVM
+* @param: viewModel: CalenVM view model para la vista
 * Funcion para mostrar el calendario en la parte media de la
 * pantalla
  */
@@ -150,11 +150,11 @@ fun CalendarSection(viewModel: CalenVM) {
     }
 }
 
-/*
+/**
 * @author: Sebastian Espinoza
-* @param: viewModel: CalenVM
-* @param: context: Context
-* @param: showDialog: MutableState<Boolean>
+* @param: viewModel: CalenVM view model para la vista
+* @param: context: Context contexto de la aplicacion
+* @param: showDialog: MutableState<Boolean> este estado es para mostrar el pop-up
 * Funcion para mostrar los botones de la parte inferior de la pantalla
  */
 @Composable
@@ -216,9 +216,9 @@ fun ActionButtons(viewModel: CalenVM, context: Context, showDialog: MutableState
     }
 }
 
-/*
+/**
 * @author: Sebastian Espinoza
-* @param: viewModel: CalenVM
+* @param: viewModel: CalenVM view model para la vista
 * Funcion para mostrar la fecha seleccionada debajo del calendario
  */
 @Composable
@@ -257,9 +257,9 @@ fun SelectedDateCard(viewModel: CalenVM) {
     }
 }
 
-/*
+/**
 * @author: Sebastian Espinoza
-* @param: viewModel: CalenVM
+* @param: viewModel: CalenVM view model para la vista
 * Funcion para mostrar la fecha estimada del siguiente ciclo menstrual
 * despúes de calcularla
  */
@@ -306,11 +306,11 @@ fun NextCycleCard(viewModel: CalenVM) {
     }
 }
 
-/*
+/**
 * @author: Sebastian Espinoza
-* @param: context: Context
-* @param: viewModel: CalenVM
-* @param: onDismiss: () -> Unit
+* @param: context: Context contexto de la aplicacion
+* @param: viewModel: CalenVM view model para la vista
+* @param: onDismiss: () -> Unit funcion para cerrar el pop-up
 * Funcion para mostrar el pop-up de las fechas guardadas
  */
 @Composable
@@ -390,10 +390,10 @@ fun SavedDatesDialog(
     )
 }
 
-/*
+/**
 * @author: Sebastian Espinoza
-* @param: modifier: Modifier
-* @param: onDateSelected: (Long) -> Unit
+* @param: modifier: Modifier modificador para el widget
+* @param: onDateSelected: (Long) -> Unit funcion para seleccionar la fecha
 * Funcion para crear el widget de calendario
  */
 @Composable
@@ -414,9 +414,9 @@ fun EmbeddedCalendarView(modifier: Modifier = Modifier, onDateSelected: (Long) -
     )
 }
 
-/*
+/**
 * @author: Sebastian Espinoza
-* @param: showDialog: MutableState<Boolean>
+* @param: showDialog: MutableState<Boolean> este estado es para mostrar el pop-up
 * Carta para mostrar el pop-up de las funciones adicionales (Calculadora de días fértiles,
 * consumo sano de pastilla de emergencia, fechas de uso de pastilla de emergencia)
  */
@@ -449,10 +449,10 @@ fun AdditionalFeaturesCard(showDialog: MutableState<Boolean>) {
     }
 }
 
-/*
+/**
 * @author: Sebastian Espinoza
-* @param: viewModel: CalenVM
-* @param: onDismiss: () -> Unit
+* @param: viewModel: CalenVM view model para la vista
+* @param: onDismiss: () -> Unit funcion para cerrar el pop-up
 * Funcion para mostrar el pop-up de las funciones adicionales
  */
 @Composable
@@ -523,9 +523,9 @@ fun AdditionalFeaturesDialogWithTabs(viewModel: CalenVM, onDismiss: () -> Unit) 
     )
 }
 
-/*
+/**
 * @author: Sebastian Espinoza
-* @param: viewModel: CalenVM
+* @param: viewModel: CalenVM view model para la vista
 * Funcion para mostrar la calculadora de días fértiles
  */
 @Composable
@@ -568,7 +568,7 @@ fun FertileWindowCalculator(viewModel: CalenVM) {
     }
 }
 
-/*
+/**
 * @author: Sebastian Espinoza
 * @param: viewModel: CalenVM
 * Funcion para mostrar la calculadora de pastilla de emergencia
@@ -665,9 +665,9 @@ fun EmergencyPillCalculator(viewModel: CalenVM) {
     }
 }
 
-/*
+/**
 * @author: Sebastian Espinoza
-* @param: viewModel: CalenVM
+* @param: viewModel: CalenVM view model para la vista
 * Funcion para mostrar la lista de fechas de consumo de la pastilla de emergencia
  */
 @Composable
