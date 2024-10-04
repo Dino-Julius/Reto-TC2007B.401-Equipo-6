@@ -58,53 +58,63 @@ android {
 
 dependencies {
 
+    // Core Android dependencies
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+
+    // Compose and UI dependencies
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
+
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
 
+    // Lifecycle and ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
+
+    // Dependency Injection (Hilt)
     implementation(libs.dagger.hilt.android)
-    implementation(libs.play.services.phenotype)
-    implementation(libs.androidx.ui.test.android)
-    testImplementation(libs.androidx.ui.test.junit4.android)
+    implementation(libs.androidx.ui.tooling.preview.android)
     kapt(libs.dagger.hilt.android.compiler)
+
+    // Networking (Retrofit, Gson, Volley)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
+    implementation(libs.volley)
 
-    // Coil
+    // Google Play and Google Pay APIs
+    implementation(libs.play.services.wallet)
+    implementation("com.google.pay.button:compose-pay-button:0.1.3")
+
+    // Stripe Payments
+    implementation(libs.stripe.android)
+
+    // Coil (Image Loading)
     implementation(libs.coil.compose)
 
-    implementation (libs.accompanist.pager)
+    // Accompanist Pager (For paging in Compose)
+    implementation(libs.accompanist.pager)
 
-    // Import the Firebase BoM
-    implementation ("com.google.accompanist:accompanist-pager:0.24.13-rc")
+    // Firebase dependencies
     implementation(platform(libs.firebase.bom))
-    // TODO: Add the dependencies for Firebase products you want to use
-    // When using the BoM, don't specify versions in Firebase dependencies
     implementation(libs.firebase.analytics)
-    // Add the dependencies for any other desired Firebase products
-    // https://firebase.google.com/docs/android/setup#available-libraries
-    // implementation ("com.google.android.gms:play-services-maps:18.0.2")
-    implementation (libs.osmdroid.android)
+
+    // OpenStreetMap (OSMDroid)
+    implementation(libs.osmdroid.android)
+
+    // Material Design
     implementation("com.google.android.material:material:1.9.0")
     implementation(libs.androidx.material.icons.extended)
 
-
-
+    // Testing dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation ("androidx.appcompat:appcompat:1.7.0")
+
 }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">RetoApp</string>
+    <string name="google_pay_environment">TEST</string>  <!-- or "PRODUCTION" in production -->
 </resources>
