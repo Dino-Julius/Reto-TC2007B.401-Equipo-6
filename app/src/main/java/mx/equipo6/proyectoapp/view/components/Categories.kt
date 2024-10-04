@@ -11,6 +11,10 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material.icons.filled.ShoppingCart
 
+/**
+ * Categorías de la aplicación.
+ * @autor Ulices Jaramillo Portilla | A01798380.
+ */
 val categories = listOf(
     "Todo" to Icons.Default.Home,
     "Salud" to Icons.Default.Favorite,

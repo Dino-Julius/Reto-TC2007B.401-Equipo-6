@@ -17,18 +17,20 @@ import kotlinx.parcelize.Parcelize
 */
 @Parcelize
 class Products (
-    @SerializedName("category")
-    val category: String,
-    @SerializedName("description")
-    val description: String,
-    @SerializedName("id")
-    val id: Int,
-    @SerializedName("image")
-    val image: String,
+    @SerializedName("sku")
+    val sku: String,
+    @SerializedName("name")
+    val name: String,
     @SerializedName("price")
     val price: Double,
+    @SerializedName("description")
+    val description: String,
+    @SerializedName("dimensions")
+    val dimensions: String,
+    @SerializedName("image_path")
+    val image_path: String,
+    @SerializedName("category")
+    val category: String,
     @SerializedName("rating")
-    val rating: Rating,
-    @SerializedName("title")
-    val title: String,
+    val rating: Double,
 ) : Parcelable

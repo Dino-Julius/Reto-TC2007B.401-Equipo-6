@@ -22,9 +22,10 @@ class CalenVM : ViewModel() {
     private var selectedDateInMillis = mutableLongStateOf(0L)
         private set
 
+    // Estado reactivo para la fecha seleccionada en formato de cadena
     var selectedDate = mutableStateOf("")
         private set
-
+    // Estado reactivo para la fecha calculada
     var calculatedDate = mutableStateOf("")
         private set
 
@@ -48,14 +49,14 @@ class CalenVM : ViewModel() {
     var savedEmergencyPillDates = mutableStateOf(listOf<Pair<Long, String>>())
         private set
 
-    // Función para actualizar la fecha seleccionada
+    // Para almacenar la fecha de pastilla de emergencia
     fun updateSelectedDate(dateInMillis: Long) {
         selectedDateInMillis.longValue = dateInMillis
         val calendar = Calendar.getInstance().apply { timeInMillis = dateInMillis }
         selectedDate.value = "${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.YEAR)}"
     }
 
-    // Función para calcular la fecha del próximo ciclo menstrual (28 días después)
+    // Para calcular la fecha del siguiente ciclo
     fun calculateNextCycle() {
         val calendar = Calendar.getInstance().apply {
             if (selectedDateInMillis.longValue != 0L) {
@@ -69,12 +70,12 @@ class CalenVM : ViewModel() {
         viewModelScope.launch {
             showAnimation.value = false
             // Añadir un pequeño delay para reiniciar la animación
-            kotlinx.coroutines.delay(100) // Retraso de 100 milisegundos
+            kotlinx.coroutines.delay(100)
             showAnimation.value = true
         }
     }
 
-    // Función para guardar la fecha de actividad sexual y actualizar la lista de fechas guardadas
+    // Para guardar la fecha de actividad sexual
     fun saveDate(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             if (selectedDateInMillis.longValue != 0L) {
@@ -84,14 +85,7 @@ class CalenVM : ViewModel() {
             }
         }
     }
-
-    // Función para cargar las fechas guardadas al abrir el diálogo
-    fun loadSavedDates(context: Context) {
-        viewModelScope.launch(Dispatchers.IO) {
-            savedDates.value = getSavedDates(context)
-        }
-    }
-
+    // Para cargar las fechas guardadas
     fun deleteDate(context: Context, dateInMillis: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             deleteSexualActivityDate(context, dateInMillis)
@@ -100,7 +94,7 @@ class CalenVM : ViewModel() {
             savedDatesWithKeys.value = updatedDates
         }
     }
-
+    // Para cargar las fechas guardadas
     fun loadSavedDatesWithKeys(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             savedDatesWithKeys.value = getSavedDatesWithKeys(context)
@@ -112,7 +106,7 @@ class CalenVM : ViewModel() {
         val fertileDates = calculateFertileWindowFromModel(startDate)
         _fertileWindow.value = fertileDates
     }
-
+    // Función para guardar la fecha de pastilla de emergencia
     fun calculateNextEmergencyPillDate(lastPillDate: String): String {
         val dateParts = lastPillDate.split("/")
         if (dateParts.size != 3) return "Fecha inválida"
@@ -166,21 +160,6 @@ class CalenVM : ViewModel() {
         }
     }
 
-    fun getSavedEmergencyPillDates(context: Context): List<Pair<Long, String>> {
-        val sharedPreferences = context.getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
-
-        return sharedPreferences.all
-            .filter { it.key.startsWith("emergencyPillDate_") }  // Filtra solo las fechas de pastillas
-            .mapNotNull { entry ->
-                val dateInMillis = entry.value as? Long ?: return@mapNotNull null
-                dateInMillis to Calendar.getInstance().apply { timeInMillis = dateInMillis }
-            }
-            .sortedByDescending { it.first }  // Ordena por la fecha más reciente
-            .map { (dateInMillis, calendar) ->
-                dateInMillis to "${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.YEAR)}"
-            }
-    }
-
     // Función para eliminar la fecha de pastilla de emergencia
     fun deleteEmergencyPillDate(context: Context, dateInMillis: Long) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -193,8 +172,4 @@ class CalenVM : ViewModel() {
             loadSavedEmergencyPillDates(context)
         }
     }
-
-
-
-
 }

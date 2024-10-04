@@ -1,37 +1,39 @@
-//package mx.equipo6.proyectoapp.model.posts
-//
-//import android.os.Parcelable
-//import com.google.gson.annotations.SerializedName
-//import kotlinx.parcelize.Parcelize
-//
-///**
-// * Clase de datos que representa un post, puede ser utilizada con cualquier formato JSON.
-// * @author Ulises Jaramillo Portilla | A01798380
-// * @param author Mapea la clave JSON "author" a la propiedad author
-// * @param content Mapea la clave JSON "content" a la propiedad content
-// * @param summary Breve resumen del post
-// * @param id Mapea la clave JSON "id" a la propiedad id
-// * @param image Mapea la clave JSON "image" a la propiedad image
-// * @param date Mapea la clave JSON "date" a la propiedad date
-// * @param title Mapea la clave JSON "title" a la propiedad title
-// * @param comments Lista de comentarios asociados al post
-// */
-//@Parcelize
-//class Post(
-//    @SerializedName("author")
-//    val author: String,
-//    @SerializedName("content")
-//    val content: String,
-//    @SerializedName("summary")
-//    val summary: String,
-//    @SerializedName("id")
-//    val id: Int,
-//    @SerializedName("image")
-//    val image: String,
-//    @SerializedName("date")
-//    val date: String,
-//    @SerializedName("title")
-//    val title: String,
-//    @SerializedName("comments")
-//    val comments: List<Comment>
-//) : Parcelable
+package mx.equipo6.proyectoapp.model.posts
+
+import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
+import org.w3c.dom.Comment
+import java.math.BigInteger
+
+/**
+ * Clase de datos que representa un post, puede ser utilizada con cualquier formato JSON.
+ * @author Ulises Jaramillo Portilla | A01798380
+ * @param post_id ID del post.
+ * @param title Título del post.
+ * @param summary Resumen del post.
+ * @param date Fecha de publicación del post.
+ * @param category Categoría del post.
+ * @param partner_id ID del partner que publicó el post.
+ * @param file_path Ruta del archivo del post.
+ * @param image_path Ruta de la imagen del post.
+ */
+@Parcelize
+class Post(
+    @SerializedName("post_id")
+    val post_id: Int,
+    @SerializedName("title")
+    val title: String,
+    @SerializedName("summary")
+    val summary: String,
+    @SerializedName("date")
+    val date: String,
+    @SerializedName("category")
+    val category: String,
+    @SerializedName("partner_id")
+    val partner_id: Int,
+    @SerializedName("file_path")
+    val file_path: String,
+    @SerializedName("image_path")
+    val image_path: String,
+) : Parcelable

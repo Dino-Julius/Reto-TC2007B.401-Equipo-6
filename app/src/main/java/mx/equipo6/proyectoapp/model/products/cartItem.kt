@@ -30,13 +30,13 @@ import mx.equipo6.proyectoapp.view.sampledata.Stepper
 /**
  * author: Jesus Guzman Ortega
  * CartItem: Shows the items in the cart.
- * @param product: Product
+ * @param products: Product
 *  @param quantity: Int
  *  @param onRemoveItem: (Products, Int) -> Unit
  **/
 
 @Composable
-fun CartItem(product: Products, quantity: Int, onRemoveItem: (Products, Int) -> Unit) {
+fun CartItem(products: Products, quantity: Int, onRemoveItem: (Products, Int) -> Unit) {
     // State variables for dialog and quantity to remove
     val showDialog = remember { mutableStateOf(false) }
     val quantityToRemove = remember { mutableStateOf(1) } // Default to removing 1 item
@@ -55,7 +55,7 @@ fun CartItem(product: Products, quantity: Int, onRemoveItem: (Products, Int) -> 
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = rememberAsyncImagePainter(model = product.image),
+                painter = rememberAsyncImagePainter(model = "http://104.248.55.22" + products.image_path),
                 contentDescription = null,
                 modifier = Modifier
                     .size(80.dp)
@@ -67,8 +67,8 @@ fun CartItem(product: Products, quantity: Int, onRemoveItem: (Products, Int) -> 
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                Text(text = product.title, fontWeight = FontWeight.Bold, maxLines = 1, fontSize = 16.sp)
-                Text(text = "${product.price}", fontSize = 14.sp, color = Color.Gray)
+                Text(text = products.name, fontWeight = FontWeight.Bold, maxLines = 1, fontSize = 16.sp)
+                Text(text = "${products.price}", fontSize = 14.sp, color = Color.Gray)
                 Text(text = "Cantidad: $quantity", fontSize = 14.sp, color = Color.Gray) // Show current quantity
             }
 
@@ -116,7 +116,7 @@ fun CartItem(product: Products, quantity: Int, onRemoveItem: (Products, Int) -> 
                     onClick = {
                         val quantityToRemoveValue = quantityToRemove.value // Get the value
                         if (quantityToRemoveValue > 0 && quantityToRemoveValue <= quantity) {
-                            onRemoveItem(product, quantityToRemoveValue) // Pass product and quantity to remove
+                            onRemoveItem(products, quantityToRemoveValue) // Pass product and quantity to remove
                             showDialog.value = false // Close the dialog
                         }
                     },

@@ -117,7 +117,7 @@ class ProductVM @Inject constructor(
     }
 
 
-    fun getProductById(productId: Int?): Products? {
-        return (products.value as? ViewState.Success)?.data?.find { it.id == productId }
+    fun getProductById(productId: String?): Products? {
+        return (products.value as? ViewState.Success)?.data?.find { it.sku == productId }
     }
 }

@@ -23,6 +23,7 @@ import mx.equipo6.proyectoapp.viewmodel.AboutUsVM
 import mx.equipo6.proyectoapp.viewmodel.CalenVM
 import mx.equipo6.proyectoapp.viewmodel.ChatBotViewModel
 import mx.equipo6.proyectoapp.viewmodel.HomeVM
+import mx.equipo6.proyectoapp.viewmodel.PostVM
 import mx.equipo6.proyectoapp.viewmodel.ProductVM
 
 val bellefair = FontFamily(Font(R.font.bellefair_regular))
@@ -57,6 +58,7 @@ fun AppPrincipal(
                 homeVM,
                 aboutUsVM,
                 productVM,
+                postVM,
                 calenVM,
                 chatBotVM,
                 navController
@@ -72,6 +74,7 @@ fun AppNavHost(
     homeVM: HomeVM,
     aboutUsVM: AboutUsVM,
     productVM: ProductVM,
+    postVM: PostVM,
     calenVM: CalenVM,
     chatBotVM: ChatBotViewModel,
     navController: NavHostController
@@ -90,7 +93,13 @@ fun AppNavHost(
         }
 
         composable(Windows.ROUTE_COMUNITY) {
-            CommunityView(modifier)
+            CommunityView(postVM, navController)
+        }
+
+        composable(Windows.ROUTE_COMUNITY + "/{postId}") { backStackEntry ->
+            val postId = backStackEntry.arguments?.getString("postId")
+            val post = postVM.getPostById(postId?.toIntOrNull()) // Implementa esta función en tu ViewModel
+            PostContentView(post, navController, postVM)
         }
 
         composable(Windows.ROUTE_STORE) {
@@ -103,7 +112,7 @@ fun AppNavHost(
 
         composable(Windows.ROUTE_STORE + "/{productId}") { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId")
-            val product = productVM.getProductById(productId?.toIntOrNull()) // Implementa esta función en tu ViewModel
+            val product = productVM.getProductById(productId) // Implementa esta función en tu ViewModel
             ProductDetailView(product, navController, productVM)
         }
 

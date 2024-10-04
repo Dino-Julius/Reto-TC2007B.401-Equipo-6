@@ -2,7 +2,9 @@ package mx.equipo6.proyectoapp.model
 
 import android.content.Context
 import java.util.Calendar
-
+/*
+ * Función para guardar la fecha de actividad sexual en SharedPreferences
+ */
 fun saveSexualActivityDate(context: Context, dateInMillis: Long) {
     val sharedPreferences = context.getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
     with(sharedPreferences.edit()) {
@@ -10,7 +12,9 @@ fun saveSexualActivityDate(context: Context, dateInMillis: Long) {
         apply()
     }
 }
-
+/*
+ * Función para obtener las fechas guardadas de actividad sexual
+ */
 fun getSavedDates(context: Context): List<String> {
     val sharedPreferences = context.getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
 
@@ -26,7 +30,9 @@ fun getSavedDates(context: Context): List<String> {
         }
 }
 
-
+/*
+ * Función para eliminar una fecha de actividad sexual
+ */
 fun deleteSexualActivityDate(context: Context, dateInMillis: Long) {
     val sharedPreferences = context.getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
     with(sharedPreferences.edit()) {
@@ -35,6 +41,9 @@ fun deleteSexualActivityDate(context: Context, dateInMillis: Long) {
     }
 }
 
+/*
+ * Función para obtener las fechas guardadas con su clave
+ */
 fun getSavedDatesWithKeys(context: Context): List<Pair<Long, String>> {
     val sharedPreferences = context.getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
 
@@ -50,7 +59,9 @@ fun getSavedDatesWithKeys(context: Context): List<Pair<Long, String>> {
         }
 }
 
-
+/*
+ * Función para calcular los días fértiles a partir de una fecha
+ */
 fun calculateFertileWindowFromModel(startDate: String): Pair<String, String>? {
     val dateParts = startDate.split("/")
     if (dateParts.size != 3) return null

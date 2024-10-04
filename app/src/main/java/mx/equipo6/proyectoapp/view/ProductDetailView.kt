@@ -95,7 +95,7 @@ fun ProductDetailView(products: Products?, navController: NavHostController, pro
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = products!!.rating.rate.toString(),
+                    text = products!!.rating.toString(),
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )
@@ -109,7 +109,7 @@ fun ProductDetailView(products: Products?, navController: NavHostController, pro
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .size(250.dp), painter = rememberAsyncImagePainter(
-                model = products!!.image, contentScale = ContentScale.Crop
+                model = "http://104.248.55.22" + products!!.image_path, contentScale = ContentScale.Crop
             ), contentDescription = "Coffee"
         )
         Spacer(
@@ -141,7 +141,7 @@ fun ProductDetailView(products: Products?, navController: NavHostController, pro
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = products.title,
+                            text = products.name,
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp
                         )

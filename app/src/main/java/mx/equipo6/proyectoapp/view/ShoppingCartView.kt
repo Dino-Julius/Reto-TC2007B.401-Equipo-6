@@ -92,7 +92,7 @@ fun ShoppingCartView(productVM: ProductVM, navController: NavHostController) {
             ) {
                 items(cartItems.entries.toList()) { (product, quantity) ->
                     CartItem(
-                        product = product,
+                        products = product,
                         quantity = quantity,
                         onRemoveItem = { product, quantityToRemove ->
                             productVM.removeItemFromCart(product, quantityToRemove) // Pass both product and quantity to remove
