@@ -1,6 +1,7 @@
 package mx.equipo6.proyectoapp.view
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
@@ -65,7 +66,7 @@ sealed class Windows(
     private data object ChatBotView : Windows(
         ROUTE_CHATBOT,
         "ChatBot",
-        Icons.Default.Person
+        Icons.Default.Email
     )
 
     private data object CalenView : Windows(

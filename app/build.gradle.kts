@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.dagger.hilt.android)
+    implementation(libs.androidx.runtime.livedata)
     implementation(libs.play.services.phenotype)
     implementation(libs.androidx.ui.test.android)
     testImplementation(libs.androidx.ui.test.junit4.android)
