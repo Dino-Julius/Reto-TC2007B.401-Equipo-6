@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -84,7 +85,7 @@ fun ShopView(paddingValues: PaddingValues, productVM: ProductVM, navController: 
 
                 is ViewState.Error -> {
                     val errorMsg =  (productListViewState as ViewState.Error).message
-                    ShowErrorMessage(errorMsg, paddingValues)
+                    ShowErrorMessage(errorMsg)
                 }
 
                 is ViewState.Loading -> {
@@ -92,12 +93,12 @@ fun ShopView(paddingValues: PaddingValues, productVM: ProductVM, navController: 
                 }
             }
         } else {
-            ShowErrorMessage("Not Connected to Internet ...", paddingValues)
+            ShowErrorMessage("Not Connected to Internet ...")
         }
 }
 
 @Composable
-private fun ShowErrorMessage(errorMsg: String, paddingValues: PaddingValues) {
+private fun ShowErrorMessage(errorMsg: String) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -146,8 +147,8 @@ fun ProductsCardUI(products: Products, navController: NavHostController, product
             .width(212.dp)
             .padding(6.dp)
             .clickable {
-                navController.navigate(Windows.ROUTE_STORE + "/${products.id}")
-                Toast.makeText(ctx, "Product: ${products.title}", Toast.LENGTH_SHORT).show()
+                navController.navigate(Windows.ROUTE_STORE + "/${products.sku}")
+                Toast.makeText(ctx, "Product: ${products.name}", Toast.LENGTH_SHORT).show()
             },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
@@ -157,62 +158,65 @@ fun ProductsCardUI(products: Products, navController: NavHostController, product
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 15.dp, end = 15.dp, top = 20.dp)
         ) {
             Image(
                 modifier = Modifier
-                    .align(alignment = Alignment.CenterHorizontally)
-                    .width(100.dp)
-                    .height(100.dp),
-                painter = rememberAsyncImagePainter(model = products.image),
+                    .fillMaxWidth()
+                    .height(135.dp), // Half of the card height
+                painter = rememberAsyncImagePainter(model = "http://104.248.55.22" + products.image_path),
                 contentScale = ContentScale.Crop,
                 contentDescription = ""
             )
-            Text(
-                text = products.title,
-                modifier = Modifier.padding(top = 28.dp),
-                fontFamily = FontFamily.SansSerif,
-                fontSize = 15.sp,
-                color = Color.Black,
-                maxLines = 1
-            )
-            Text(
-                text = products.description,
-                modifier = Modifier.padding(top = 3.dp),
-                fontFamily = FontFamily.SansSerif,
-                fontSize = 15.sp,
-                color = Color.Black,
-                maxLines = 1
-            )
-            Row(
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 15.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(start = 15.dp, end = 15.dp, top = 10.dp)
             ) {
                 Text(
-                    text = "${products.price}",
+                    text = products.name,
                     fontFamily = FontFamily.SansSerif,
                     fontSize = 15.sp,
-                    color = Color.Black
+                    color = Color.Black,
+                    maxLines = 1
                 )
-                Box(
+                Text(
+                    text = products.description,
+                    modifier = Modifier.padding(top = 3.dp),
+                    fontFamily = FontFamily.SansSerif,
+                    fontSize = 15.sp,
+                    color = Color.Black,
+                    maxLines = 1
+                )
+                Row(
                     modifier = Modifier
-                        .size(30.dp)
-                        .clickable {
-                            showDialog.value = true // Trigger dialog
-                        }
-                        .clip(shape = CircleShape)
-                        .background(Color(0xFFC7A8BC)),
-                    contentAlignment = Alignment.Center
+                        .fillMaxSize()
+                        .padding(top = 15.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_cart),
-                        contentDescription = "",
-                        modifier = Modifier.size(18.dp),
-                        tint = Color.White
+                    Text(
+                        text = "${products.price}",
+                        fontFamily = FontFamily.SansSerif,
+                        fontSize = 15.sp,
+                        color = Color.Black
                     )
+                    Box(
+                        modifier = Modifier
+                            .size(30.dp)
+                            .clickable {
+                                showDialog.value = true // Trigger dialog
+                            }
+                            .clip(shape = CircleShape)
+                            .background(Color(0xFFC7A8BC)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_cart),
+                            contentDescription = "",
+                            modifier = Modifier.size(18.dp),
+                            tint = Color.White
+                        )
+                    }
                 }
             }
         }

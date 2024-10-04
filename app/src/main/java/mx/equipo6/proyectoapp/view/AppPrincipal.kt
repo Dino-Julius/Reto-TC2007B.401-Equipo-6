@@ -22,6 +22,7 @@ import mx.equipo6.proyectoapp.view.sampledata.NavigationBars
 import mx.equipo6.proyectoapp.viewmodel.AboutUsVM
 import mx.equipo6.proyectoapp.viewmodel.CalenVM
 import mx.equipo6.proyectoapp.viewmodel.HomeVM
+import mx.equipo6.proyectoapp.viewmodel.PostVM
 import mx.equipo6.proyectoapp.viewmodel.ProductVM
 
 val bellefair = FontFamily(Font(R.font.bellefair_regular))
@@ -37,7 +38,7 @@ val bellefair = FontFamily(Font(R.font.bellefair_regular))
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 fun AppPrincipal(homeVM: HomeVM = viewModel(), aboutUsVM: AboutUsVM = viewModel(),
-                 productVM: ProductVM = viewModel(), calenVM: CalenVM = viewModel(),
+                 productVM: ProductVM = viewModel(), postVM: PostVM = viewModel(), calenVM: CalenVM = viewModel(),
                  modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     RetoAppTheme {
@@ -51,6 +52,7 @@ fun AppPrincipal(homeVM: HomeVM = viewModel(), aboutUsVM: AboutUsVM = viewModel(
                 homeVM,
                 aboutUsVM,
                 productVM,
+                postVM,
                 calenVM,
                 navController
             )
@@ -65,6 +67,7 @@ fun AppNavHost(
     homeVM: HomeVM,
     aboutUsVM: AboutUsVM,
     productVM: ProductVM,
+    postVM: PostVM,
     calenVM: CalenVM,
     navController: NavHostController
 ) {
@@ -82,7 +85,13 @@ fun AppNavHost(
         }
 
         composable(Windows.ROUTE_COMUNITY) {
-            CommunityView(modifier)
+            CommunityView(postVM, navController)
+        }
+
+        composable(Windows.ROUTE_COMUNITY + "/{postId}") { backStackEntry ->
+            val postId = backStackEntry.arguments?.getString("postId")
+            val post = postVM.getPostById(postId?.toIntOrNull()) // Implementa esta función en tu ViewModel
+            PostContentView(post, navController, postVM)
         }
 
         composable(Windows.ROUTE_STORE) {
@@ -91,7 +100,7 @@ fun AppNavHost(
 
         composable(Windows.ROUTE_STORE + "/{productId}") { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId")
-            val product = productVM.getProductById(productId?.toIntOrNull()) // Implementa esta función en tu ViewModel
+            val product = productVM.getProductById(productId) // Implementa esta función en tu ViewModel
             ProductDetailView(product, navController, productVM)
         }
 

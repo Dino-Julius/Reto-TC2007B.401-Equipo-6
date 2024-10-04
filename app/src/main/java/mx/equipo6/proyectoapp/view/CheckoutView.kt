@@ -16,7 +16,7 @@ import mx.equipo6.proyectoapp.view.sampledata.Title
 /**
  * Composable que define la vista de la página "Checkout" de la aplicación.
  */
-@Preview(showBackground = true, widthDp = 400)
+//@Preview(showBackground = true, widthDp = 400)
 @Composable
 fun CheckoutView(navController: NavHostController) {
     Column(

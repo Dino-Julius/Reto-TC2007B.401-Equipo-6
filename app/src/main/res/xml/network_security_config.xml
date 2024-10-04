@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<network-security-config>
+    <!-- Configuración de seguridad de red que permite el tráfico en texto claro para el dominio especificado -->
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- Permite el tráfico en texto claro para el dominio 104.248.55.22 y sus subdominios -->
+        <domain includeSubdomains="true">104.248.55.22</domain>
+    </domain-config>
+</network-security-config>

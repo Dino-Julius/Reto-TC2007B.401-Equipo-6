@@ -5,7 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import mx.equipo6.proyectoapp.api.ApiService
-import mx.equipo6.proyectoapp.include.Constants.Companion.BASE_URL
+import mx.equipo6.proyectoapp.include.Constants.Companion.API_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
@@ -28,7 +28,7 @@ object NetworkModule {
     // Provide the base URL for the API
     @Provides
     fun provdesBaseUrl(): String {
-        return BASE_URL
+        return API_URL
     }
 
     // Provide an instance of HttpLoggingInterceptor for logging HTTP requests and responses

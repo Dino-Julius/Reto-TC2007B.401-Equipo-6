@@ -12,6 +12,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import mx.equipo6.proyectoapp.view.sampledata.CategoryItem
 
+/**
+ * Composable que muestra una barra de categorías.
+ * @author Ulises Jaramillo Portilla | A01798380.
+ * @param selectedIndex Índice de la categoría seleccionada.
+ * @param itemWidth Ancho de cada ítem.
+ */
 @Composable
 fun CategoryBar(selectedIndex: Int, itemWidth: Float) {
     val listState = rememberLazyListState()
@@ -22,6 +28,7 @@ fun CategoryBar(selectedIndex: Int, itemWidth: Float) {
 
     val itemWidthPx = with(density) { itemWidth.dp.toPx() }
 
+    // Lista de categorías con efecto de desplazamiento.
     LaunchedEffect(listState) {
         snapshotFlow {
             listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset
@@ -36,6 +43,7 @@ fun CategoryBar(selectedIndex: Int, itemWidth: Float) {
         }
     }
 
+    // LazyRow con las categorías.
     Box {
         LazyRow(
             state = listState,
@@ -57,6 +65,7 @@ fun CategoryBar(selectedIndex: Int, itemWidth: Float) {
         }
     }
 
+    // Efecto de desplazamiento al seleccionar una categoría.
     LaunchedEffect(selectedCategoryIndex) {
         coroutineScope.launch {
             delay(120) // Delay para esperar a que la lista se desplace.
