@@ -114,5 +114,9 @@ fun AppNavHost(
         composable(Windows.ROUTE_CONFIG) {
             ConfigView(modifier)
         }
+
+        composable(Windows.ROUTE_TICKET) {
+            TicketView(navController)
+        }
     }
 }

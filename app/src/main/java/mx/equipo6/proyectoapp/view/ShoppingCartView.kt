@@ -53,7 +53,7 @@ fun ShoppingCartView(productVM: ProductVM, navController: NavHostController) {
         // Handle the result from PaymentActivity
         if (result.resultCode == Activity.RESULT_OK) {
             Log.d("valores", "Pago Exitoso, despues del context")
-            navController.navigate(Windows.ROUTE_ABOUTUS)
+            navController.navigate(Windows.ROUTE_TICKET)
         } else {
             Log.d("valores", "Pago fallido o cancelado")
         }
