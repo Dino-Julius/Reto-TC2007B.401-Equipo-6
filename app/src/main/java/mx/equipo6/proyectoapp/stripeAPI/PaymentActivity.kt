@@ -1,6 +1,9 @@
 package mx.equipo6.proyectoapp.stripeAPI
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -75,7 +78,7 @@ class PaymentActivity : AppCompatActivity() {
 
         val body = RequestBody.create("application/json; charset=utf-8".toMediaType(), jsonBody.toString())
         val request = Request.Builder()
-            .url("http://192.168.0.3:3000/create-payment-intent") // Replace with your server URL
+            .url("http://10.48.78.90:3000/create-payment-intent") // Replace with your server URL
             .post(body)
             .build()
 
@@ -103,18 +106,23 @@ class PaymentActivity : AppCompatActivity() {
 
                             // Finish the PaymentActivity after confirming the payment
                             showToast("Pago exitoso!")
+                            Log.d("valores", "Pago Exitoso")
+
+                            // Return the result of successful payment
+                            setResult(Activity.RESULT_OK)
                             finish() // Close the PaymentActivity
                         }
                     }
                 } else {
                     runOnUiThread {
                         showToast("Server error: ${response.message}")
+                        setResult(Activity.RESULT_CANCELED)
+                        finish()
                     }
                 }
             }
         })
     }
-
 
     private fun showToast(message: String) {
         Toast.makeText(this@PaymentActivity, message, Toast.LENGTH_SHORT).show()
