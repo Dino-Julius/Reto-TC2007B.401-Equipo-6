@@ -26,6 +26,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import mx.equipo6.proyectoapp.viewmodel.CalenVM
 import java.util.*
+/*
+* @author: Sebastian Espinoza
+* @param: viewModel: CalenVM
+* Funcion padre de la vista del calendario
+ */
 @Composable
 fun CalenView(viewModel: CalenVM) {
     val context = LocalContext.current
@@ -74,7 +79,12 @@ fun CalenView(viewModel: CalenVM) {
         }
     }
 }
-
+/*
+* @author: Sebastian Espinoza
+* @param: showDialog: MutableState<Boolean>
+* Funcion para mostrar el header del calendario, contiene el titulo y el boton
+* de ver las fechas de actividad sexual guardada
+ */
 @Composable
 fun HeaderSection(showDialog: MutableState<Boolean>) {
     Row(
@@ -106,16 +116,22 @@ fun HeaderSection(showDialog: MutableState<Boolean>) {
     }
 }
 
+/*
+* @author: Sebastian Espinoza
+* @param: viewModel: CalenVM
+* Funcion para mostrar el calendario en la parte media de la
+* pantalla
+ */
 @Composable
 fun CalendarSection(viewModel: CalenVM) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .shadow(8.dp, shape = MaterialTheme.shapes.medium), // Rounded corners and shadow
-        shape = MaterialTheme.shapes.medium, // Use MaterialTheme's predefined shapes for roundness
-        elevation = CardDefaults.cardElevation(8.dp), // Elevation for the shadow
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFff8fa2)) // Calendar background color
+            .shadow(8.dp, shape = MaterialTheme.shapes.medium),
+        shape = MaterialTheme.shapes.medium,
+        elevation = CardDefaults.cardElevation(8.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFff8fa2)) //Color del borde de calendario
     ) {
         Row(
             modifier = Modifier
@@ -134,7 +150,13 @@ fun CalendarSection(viewModel: CalenVM) {
     }
 }
 
-
+/*
+* @author: Sebastian Espinoza
+* @param: viewModel: CalenVM
+* @param: context: Context
+* @param: showDialog: MutableState<Boolean>
+* Funcion para mostrar los botones de la parte inferior de la pantalla
+ */
 @Composable
 fun ActionButtons(viewModel: CalenVM, context: Context, showDialog: MutableState<Boolean>) {
     Row(
@@ -194,6 +216,11 @@ fun ActionButtons(viewModel: CalenVM, context: Context, showDialog: MutableState
     }
 }
 
+/*
+* @author: Sebastian Espinoza
+* @param: viewModel: CalenVM
+* Funcion para mostrar la fecha seleccionada debajo del calendario
+ */
 @Composable
 fun SelectedDateCard(viewModel: CalenVM) {
     val selectedDate by viewModel.selectedDate
@@ -230,6 +257,12 @@ fun SelectedDateCard(viewModel: CalenVM) {
     }
 }
 
+/*
+* @author: Sebastian Espinoza
+* @param: viewModel: CalenVM
+* Funcion para mostrar la fecha estimada del siguiente ciclo menstrual
+* despúes de calcularla
+ */
 @Composable
 fun NextCycleCard(viewModel: CalenVM) {
     val calculatedDate by viewModel.calculatedDate
@@ -273,6 +306,13 @@ fun NextCycleCard(viewModel: CalenVM) {
     }
 }
 
+/*
+* @author: Sebastian Espinoza
+* @param: context: Context
+* @param: viewModel: CalenVM
+* @param: onDismiss: () -> Unit
+* Funcion para mostrar el pop-up de las fechas guardadas
+ */
 @Composable
 fun SavedDatesDialog(
     context: Context,
@@ -350,7 +390,12 @@ fun SavedDatesDialog(
     )
 }
 
-
+/*
+* @author: Sebastian Espinoza
+* @param: modifier: Modifier
+* @param: onDateSelected: (Long) -> Unit
+* Funcion para crear el widget de calendario
+ */
 @Composable
 fun EmbeddedCalendarView(modifier: Modifier = Modifier, onDateSelected: (Long) -> Unit) {
     AndroidView(
@@ -369,6 +414,12 @@ fun EmbeddedCalendarView(modifier: Modifier = Modifier, onDateSelected: (Long) -
     )
 }
 
+/*
+* @author: Sebastian Espinoza
+* @param: showDialog: MutableState<Boolean>
+* Carta para mostrar el pop-up de las funciones adicionales (Calculadora de días fértiles,
+* consumo sano de pastilla de emergencia, fechas de uso de pastilla de emergencia)
+ */
 @Composable
 fun AdditionalFeaturesCard(showDialog: MutableState<Boolean>) {
     Card(
@@ -376,7 +427,7 @@ fun AdditionalFeaturesCard(showDialog: MutableState<Boolean>) {
             .fillMaxWidth()
             .padding(top = 16.dp)
             .clickable { showDialog.value = true },  // Mostrar el pop-up al hacer clic
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFB0E0E6)),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFdea8cb)),
         elevation = CardDefaults.cardElevation(8.dp),
         shape = MaterialTheme.shapes.medium
     ) {
@@ -392,25 +443,32 @@ fun AdditionalFeaturesCard(showDialog: MutableState<Boolean>) {
                 fontSize = 18.sp,
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black
+                color = Color.White
             )
         }
     }
 }
 
+/*
+* @author: Sebastian Espinoza
+* @param: viewModel: CalenVM
+* @param: onDismiss: () -> Unit
+* Funcion para mostrar el pop-up de las funciones adicionales
+ */
 @Composable
 fun AdditionalFeaturesDialogWithTabs(viewModel: CalenVM, onDismiss: () -> Unit) {
     var selectedTab by remember { mutableStateOf(0) }
 
-    val tabs = listOf("Fechas Fértiles", "Pastilla de Emergencia", "Fechas de consumo de pastilla de emergencia")
+    val tabs = listOf("Fechas Fértiles", "Pastilla de emergencia", "Fechas de uso  de pastilla")
 
     AlertDialog(
         onDismissRequest = onDismiss,
+        modifier = Modifier.width(600.dp),
         confirmButton = {
             Button(
                 onClick = onDismiss,
                 colors = ButtonDefaults.elevatedButtonColors(
-                    containerColor = Color(0xFFFF607A)
+                    containerColor = Color(0xFFC7A8BC)
                 )
             ) {
                 Text("Cerrar", color = MaterialTheme.colorScheme.onSecondary)
@@ -418,13 +476,18 @@ fun AdditionalFeaturesDialogWithTabs(viewModel: CalenVM, onDismiss: () -> Unit) 
         },
         title = {
             Text(
-                text = "Funcionalidades Adicionales",
+                text = "Calculadoras Adicionales",
                 style = MaterialTheme.typography.titleMedium,
-                color = Color.Black
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+
             )
         },
         text = {
-            Column {
+            Column(modifier = Modifier.width(600.dp))
+                    {
+
                 // TabRow para mostrar las pestañas
                 TabRow(
                     selectedTabIndex = selectedTab,
@@ -438,7 +501,9 @@ fun AdditionalFeaturesDialogWithTabs(viewModel: CalenVM, onDismiss: () -> Unit) 
                             text = {
                                 Text(
                                     text = title,
-                                    color = if (selectedTab == index) Color.Black else Color.Gray
+                                    color = if (selectedTab == index) Color.Black else Color.Gray,
+                                    fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal,
+                                    fontSize = 15.sp
                                 )
                             }
                         )
@@ -458,6 +523,11 @@ fun AdditionalFeaturesDialogWithTabs(viewModel: CalenVM, onDismiss: () -> Unit) 
     )
 }
 
+/*
+* @author: Sebastian Espinoza
+* @param: viewModel: CalenVM
+* Funcion para mostrar la calculadora de días fértiles
+ */
 @Composable
 fun FertileWindowCalculator(viewModel: CalenVM) {
     var startDate by remember { mutableStateOf("") }
@@ -493,11 +563,16 @@ fun FertileWindowCalculator(viewModel: CalenVM) {
 
         // Mostrar el resultado de los días fértiles inmediatamente
         fertileWindow?.let { (startFertile, endFertile) ->
-            Text("Tus días fértiles serán del $startFertile al $endFertile.")
+            Text("Tus días fértiles serán aproximadamente del $startFertile al $endFertile.")
         }
     }
 }
 
+/*
+* @author: Sebastian Espinoza
+* @param: viewModel: CalenVM
+* Funcion para mostrar la calculadora de pastilla de emergencia
+ */
 @Composable
 fun EmergencyPillCalculator(viewModel: CalenVM) {
     var lastPillDate by remember { mutableStateOf("") }
@@ -557,7 +632,7 @@ fun EmergencyPillCalculator(viewModel: CalenVM) {
                     "debes esperar al menos hasta el siguiente ciclo menstrual.")
         }
 
-        // Card for warning
+        // Carta para mostrar la importancia de la pastilla de emergencia
         Spacer(modifier = Modifier.height(16.dp))
         Card(
             modifier = Modifier
@@ -578,7 +653,10 @@ fun EmergencyPillCalculator(viewModel: CalenVM) {
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "La pastilla anticonceptiva de emergencia es una opción segura para prevenir el embarazo después de una relación sexual sin protección o en casos de falla de un método anticonceptivo. Sin embargo, no debe utilizarse como un método anticonceptivo regular. El uso frecuente de la pastilla puede reducir su efectividad y alterar tu ciclo menstrual, lo que puede llevar a irregularidades o efectos secundarios no deseados.",
+                    text = "La pastilla anticonceptiva de emergencia es una opción segura para prevenir el embarazo después " +
+                            "de una relación sexual sin protección o en casos de falla de un método anticonceptivo. Sin embargo, " +
+                            "no debe utilizarse como un método anticonceptivo regular. El uso frecuente de la pastilla puede reducir " +
+                            "su efectividad y alterar tu ciclo menstrual, lo que puede llevar a irregularidades o efectos secundarios no deseados.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -587,6 +665,11 @@ fun EmergencyPillCalculator(viewModel: CalenVM) {
     }
 }
 
+/*
+* @author: Sebastian Espinoza
+* @param: viewModel: CalenVM
+* Funcion para mostrar la lista de fechas de consumo de la pastilla de emergencia
+ */
 @Composable
 fun EmergencyPillDates(viewModel: CalenVM) {
     val context = LocalContext.current
