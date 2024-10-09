@@ -1,12 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    // Add the Google services Gradle plugin
+    // Google services Gradle plugin
     id("com.google.gms.google-services")
 
+    // Kotlin-specific plugins
     id("kotlin-kapt")
     id("kotlin-parcelize")
 
+    // Dependency injection using Hilt
     id("com.google.dagger.hilt.android")
 }
 
@@ -36,19 +38,24 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
     buildFeatures {
         compose = true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -58,67 +65,68 @@ android {
 
 dependencies {
 
+    // Core Android libraries
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+
+    // Compose and UI dependencies
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
 
+    // Lifecycle and ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
+
+    // Dependency Injection with Hilt
     implementation(libs.dagger.hilt.android)
-    implementation(libs.androidx.runtime.livedata)
-    implementation(libs.play.services.phenotype)
-    implementation(libs.androidx.ui.test.android)
-    testImplementation(libs.androidx.ui.test.junit4.android)
-
-    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
-    // Mockito Core for basic mocking
-    testImplementation ("org.mockito:mockito-core:4.6.1")
-
-// Mockito Kotlin support (if you're using Kotlin for your tests)
-    testImplementation ("org.mockito.kotlin:mockito-kotlin:4.1.0")
-
-// To support mocking final classes and methods
-    testImplementation ("org.mockito:mockito-inline:4.6.1")
-
-
-
     kapt(libs.dagger.hilt.android.compiler)
+
+    // Networking: Retrofit, Gson, Volley
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
+    implementation(libs.volley)
 
-    // Coil
+    // Google Play and Google Pay APIs
+    implementation(libs.play.services.wallet)
+    implementation("com.google.pay.button:compose-pay-button:0.1.3")
+
+    // Stripe Payments integration
+    implementation(libs.stripe.android)
+
+    // Coil for image loading
     implementation(libs.coil.compose)
 
-    implementation (libs.accompanist.pager)
+    // Accompanist Pager (for paging in Compose)
+    implementation(libs.accompanist.pager)
 
-    // Import the Firebase BoM
-    implementation ("com.google.accompanist:accompanist-pager:0.24.13-rc")
+    // Firebase dependencies
     implementation(platform(libs.firebase.bom))
-    // TODO: Add the dependencies for Firebase products you want to use
-    // When using the BoM, don't specify versions in Firebase dependencies
     implementation(libs.firebase.analytics)
-    // Add the dependencies for any other desired Firebase products
-    // https://firebase.google.com/docs/android/setup#available-libraries
-    // implementation ("com.google.android.gms:play-services-maps:18.0.2")
-    implementation (libs.osmdroid.android)
+
+    // OpenStreetMap (OSMDroid)
+    implementation(libs.osmdroid.android)
+
+    // Material Design
     implementation("com.google.android.material:material:1.9.0")
     implementation(libs.androidx.material.icons.extended)
 
-
-
+    // Testing dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
+
+    // AppCompat for backward compatibility
+    implementation("androidx.appcompat:appcompat:1.7.0")
+
+    // Preview support in Compose
+    implementation(libs.androidx.ui.tooling.preview.android)
+
+    // Debugging tools for Compose UI
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

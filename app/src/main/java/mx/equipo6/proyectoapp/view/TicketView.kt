@@ -62,7 +62,7 @@ fun TicketView(navController: NavController, modifier: Modifier = Modifier, prod
                             .fillMaxWidth()
                             .padding(bottom = 8.dp)
                     ) {
-                        Text(text = "Producto: ${product.title}", style = TextStyle(fontWeight = FontWeight.Medium, fontSize = 16.sp))
+                        Text(text = "Producto: ${product.name}", style = TextStyle(fontWeight = FontWeight.Medium, fontSize = 16.sp))
                         Text(text = "Cantidad: $quantity", style = TextStyle(fontSize = 14.sp))
                     }
                 }

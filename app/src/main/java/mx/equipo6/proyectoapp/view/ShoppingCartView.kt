@@ -3,6 +3,7 @@ package mx.equipo6.proyectoapp.view
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -37,6 +38,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import mx.equipo6.proyectoapp.model.products.CartItem
 import mx.equipo6.proyectoapp.viewmodel.ProductVM
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import java.io.IOException
 
 private const val REQUEST_CODE_PAYMENT = 1001
 
@@ -132,26 +139,43 @@ fun ShoppingCartView(productVM: ProductVM, navController: NavHostController) {
 
             Button(
                 onClick = {
-                    // Convert total price to cents and ensure it is an integer
-                    val priceInCents = (totalPrice * 100).toInt()
+                    // Ensure totalPrice is valid and non-zero
+                    val priceInCents = totalPrice?.times(100)?.toInt() ?: 0
 
-                    // Use the correct context to create the Intent
-                    val intent = Intent(context, mx.equipo6.proyectoapp.stripeAPI.PaymentActivity::class.java).apply {
-                        putExtra("totalPrice", priceInCents) // Pass totalPrice in cents to the PaymentActivity
+                    if (priceInCents > 0) {
+                        val intent = Intent(context, mx.equipo6.proyectoapp.stripeAPI.PaymentActivity::class.java).apply {
+                            putExtra("totalPrice", priceInCents)
+                        }
+
+                        // Check server connectivity with OkHttp before proceeding
+                        OkHttpClient().newCall(Request.Builder().url("http://10.48.78.90:3000").build()).enqueue(object : Callback {
+                            override fun onFailure(call: Call, e: IOException) {
+                                Log.e("PingServer", "Failed to connect: ${e.localizedMessage}")
+                            }
+
+                            override fun onResponse(call: Call, response: Response) {
+                                Log.i("PingServer", "Connected: ${response.code}")
+                            }
+                        })
+
+                        // Ensure paymentLauncher is registered before using it
+                        paymentLauncher.launch(intent)
+                        Log.d("valores", "Iniciando pago...")
+
+                    } else {
+                        // Show a toast if totalPrice is 0 or null
+                        Toast.makeText(context, "Ingrese productos", Toast.LENGTH_SHORT).show()
                     }
-
-                    // Launch PaymentActivity using the launcher
-                    paymentLauncher.launch(intent)
-                    Log.d("valores", "Iniciando pago...")
                 },
                 colors = ButtonDefaults.buttonColors(Color(0xFFC7A8BC))
             ) {
                 Text(
-                    text = "Continuar compra",
+                    text = "Pagar",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Black
                 )
             }
+
         }
     }
 }
