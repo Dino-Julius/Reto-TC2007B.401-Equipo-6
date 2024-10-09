@@ -1,12 +1,16 @@
 package mx.equipo6.proyectoapp.view
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Store
+import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -74,13 +78,13 @@ sealed class Windows(
     private data object CalenView : Windows(
         ROUTE_CALENDAR,
         "Calendario",
-        Icons.Default.Person
+        Icons.Default.CalendarMonth
     )
 
     private data object ShopView : Windows(
         ROUTE_STORE,
         "Tienda",
-        Icons.Default.Star
+        Icons.Default.ShoppingBag
     )
 
     private data object CartView : Windows(

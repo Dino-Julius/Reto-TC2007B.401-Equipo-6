@@ -3,8 +3,6 @@ package mx.equipo6.proyectoapp.model.posts
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
-import org.w3c.dom.Comment
-import java.math.BigInteger
 
 /**
  * Clase de datos que representa un post, puede ser utilizada con cualquier formato JSON.
@@ -14,7 +12,7 @@ import java.math.BigInteger
  * @param summary Resumen del post.
  * @param date Fecha de publicación del post.
  * @param category Categoría del post.
- * @param partner_id ID del partner que publicó el post.
+ * @param partner_email ID del partner que publicó el post.
  * @param file_path Ruta del archivo del post.
  * @param image_path Ruta de la imagen del post.
  */
@@ -30,8 +28,8 @@ class Post(
     val date: String,
     @SerializedName("category")
     val category: String,
-    @SerializedName("partner_id")
-    val partner_id: Int,
+    @SerializedName("partner_email")
+    val partner_email: String,
     @SerializedName("file_path")
     val file_path: String,
     @SerializedName("image_path")

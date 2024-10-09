@@ -82,7 +82,7 @@ fun PostCard(post: Post, navController: NavHostController, postVM: PostVM) {
                             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
                         )
                         Text(
-                            text = "Por: ${post.partner_id}",
+                            text = "Por: ${post.partner_email}",
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier.padding(top = 6.dp)
                         )
