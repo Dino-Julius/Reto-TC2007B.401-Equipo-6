@@ -55,7 +55,7 @@ fun CartItem(products: Products, quantity: Int, onRemoveItem: (Products, Int) ->
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = rememberAsyncImagePainter(model = "http://104.248.55.22" + products.image_path),
+                painter = rememberAsyncImagePainter(model = products.image_path),
                 contentDescription = null,
                 modifier = Modifier
                     .size(80.dp)

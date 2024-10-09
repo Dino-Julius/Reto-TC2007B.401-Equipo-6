@@ -1,6 +1,5 @@
 package mx.equipo6.proyectoapp.view
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,9 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,18 +18,16 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -43,7 +38,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -52,19 +46,17 @@ import mx.equipo6.proyectoapp.R
 import mx.equipo6.proyectoapp.include.ViewState
 import mx.equipo6.proyectoapp.model.products.Products
 import mx.equipo6.proyectoapp.view.sampledata.ProductQuantityDialog
-import mx.equipo6.proyectoapp.view.sampledata.Stepper
 import mx.equipo6.proyectoapp.viewmodel.ProductVM
 
 /**
  * ShopView: Vista principal de la tienda, muestra los productos en una vista de cuadrícula
  * @author Julio Vivas
- * @param paddingValues PaddingValues
  * @param productVM ProductVM
  * @param navController NavHostController
  */
 
 @Composable
-fun ShopView(paddingValues: PaddingValues, productVM: ProductVM, navController: NavHostController) {
+fun ShopView(productVM: ProductVM, navController: NavHostController) {
         val productListViewState by productVM.products.collectAsState()
         val isConnected by productVM.isConnected.collectAsState()
 
@@ -138,7 +130,7 @@ private fun LoadingScreen() {
 @Composable
 fun ProductsCardUI(products: Products, navController: NavHostController, productVM: ProductVM) {
     val ctx = LocalContext.current
-    val quantityToAdd = remember { mutableStateOf(1) }
+    val quantityToAdd = remember { mutableIntStateOf(1) }
     val showDialog = remember { mutableStateOf(false) }
 
     Card(
@@ -163,7 +155,7 @@ fun ProductsCardUI(products: Products, navController: NavHostController, product
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(135.dp), // Half of the card height
-                painter = rememberAsyncImagePainter(model = "http://104.248.55.22" + products.image_path),
+                painter = rememberAsyncImagePainter(model = products.image_path),
                 contentScale = ContentScale.Crop,
                 contentDescription = ""
             )

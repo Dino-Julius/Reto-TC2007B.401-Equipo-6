@@ -109,8 +109,8 @@ fun ProductDetailView(products: Products?, navController: NavHostController, pro
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .size(250.dp), painter = rememberAsyncImagePainter(
-                model = "http://104.248.55.22" + products!!.image_path, contentScale = ContentScale.Crop
-            ), contentDescription = "Coffee"
+                model = products!!.image_path, contentScale = ContentScale.Crop
+            ), contentDescription = products.name
         )
         Spacer(
             modifier = Modifier

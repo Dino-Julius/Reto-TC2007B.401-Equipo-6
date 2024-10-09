@@ -5,7 +5,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.collectAsState
@@ -31,7 +31,7 @@ import mx.equipo6.proyectoapp.view.sampledata.Carousel
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun HomeView(modifier: Modifier = Modifier, homeVM: HomeVM = viewModel()) {
+fun HomeView(homeVM: HomeVM = viewModel()) {
     val context = LocalContext.current
     val adviceList = homeVM.adviceList.collectAsState().value
     val pagerState = rememberPagerState()
@@ -60,7 +60,7 @@ fun HomeView(modifier: Modifier = Modifier, homeVM: HomeVM = viewModel()) {
                 "¡Bienvenido, @usuario!",
                 modifier = Modifier.padding(bottom = 10.dp)
             )
-            Divider(color = Color.LightGray, thickness = 0.5.dp)
+            HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)
         }
 
         Column(
@@ -72,7 +72,11 @@ fun HomeView(modifier: Modifier = Modifier, homeVM: HomeVM = viewModel()) {
         ) {
             Spacer(modifier = Modifier.height(2.dp))
 
-            Spacer(modifier = if (selectedButtons.isEmpty()) Modifier.height(1.dp) else Modifier.height(4.dp))
+            Spacer(
+                modifier = if (selectedButtons.isEmpty()) Modifier.height(1.dp) else Modifier.height(
+                    4.dp
+                )
+            )
 
             if (selectedButtons.isNotEmpty()) {
                 Column(
@@ -127,7 +131,7 @@ fun HomeView(modifier: Modifier = Modifier, homeVM: HomeVM = viewModel()) {
                 }
             }
 
-            Divider(color = Color.LightGray, thickness = 0.5.dp)
+            HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)
 
             Subtitle("Consejos del día")
 
@@ -149,7 +153,7 @@ fun HomeView(modifier: Modifier = Modifier, homeVM: HomeVM = viewModel()) {
                     .padding(4.dp)
             )
 
-            Divider(color = Color.LightGray, thickness = 0.5.dp)
+            HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)
 
             Subtitle("Nuestra idea")
             Column(

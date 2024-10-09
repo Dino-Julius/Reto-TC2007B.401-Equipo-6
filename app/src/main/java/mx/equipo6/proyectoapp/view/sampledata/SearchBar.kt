@@ -1,3 +1,4 @@
+// Update SearchBar.kt
 package mx.equipo6.proyectoapp.view.sampledata
 
 import androidx.compose.foundation.background
@@ -31,7 +32,8 @@ fun SearchBar(
     height: Dp = 54.dp,
     cornerRadius: Dp = 32.dp,
     backgroundColor: Color = Color.White,
-    icon: ImageVector = Icons.Default.Search
+    icon: ImageVector = Icons.Default.Search,
+    onValueChange: (TextFieldValue) -> Unit
 ) {
     var textState by remember { mutableStateOf(TextFieldValue("")) }
 
@@ -47,7 +49,10 @@ fun SearchBar(
                 .background(backgroundColor),
             color = MaterialTheme.colorScheme.surface
         ) {
-            SearchBarContent(icon, textState, onValueChange = { textState = it })
+            SearchBarContent(icon, textState, onValueChange = {
+                textState = it
+                onValueChange(it)
+            })
         }
     }
 }

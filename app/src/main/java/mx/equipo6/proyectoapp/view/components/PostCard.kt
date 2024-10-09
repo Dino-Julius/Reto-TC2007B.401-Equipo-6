@@ -1,26 +1,32 @@
 package mx.equipo6.proyectoapp.view.components
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import mx.equipo6.proyectoapp.model.posts.Post
 import mx.equipo6.proyectoapp.view.Windows
 import mx.equipo6.proyectoapp.viewmodel.PostVM
@@ -41,6 +47,7 @@ fun PostCard(post: Post, navController: NavHostController, postVM: PostVM) {
             .shadow(16.dp, RoundedCornerShape(16.dp), ambientColor = Color.Gray, spotColor = Color.Black)
             .clickable {
                 navController.navigate(Windows.ROUTE_COMUNITY + "/${post.post_id}")
+
                 Toast.makeText(ctx, "Post: ${post.title}", Toast.LENGTH_SHORT).show()
             }
     ) {
@@ -50,7 +57,7 @@ fun PostCard(post: Post, navController: NavHostController, postVM: PostVM) {
                 .background(Color(0xFFF5F5F5))
         ) {
             // Imagen del post
-            val painter: Painter = rememberImagePainter(data = "http://104.248.55.22/" + post.image_path)
+            val painter: Painter = rememberAsyncImagePainter(model = post.image_path)
             Image(
                 painter = painter,
                 contentDescription = null,

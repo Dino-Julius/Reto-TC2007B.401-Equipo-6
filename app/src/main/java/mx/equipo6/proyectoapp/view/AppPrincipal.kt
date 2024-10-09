@@ -2,7 +2,6 @@ package mx.equipo6.proyectoapp.view
 
 import AboutUsView
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,9 +36,8 @@ val bellefair = FontFamily(Font(R.font.bellefair_regular))
  */
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
-fun AppPrincipal(homeVM: HomeVM = viewModel(), aboutUsVM: AboutUsVM = viewModel(),
-                 productVM: ProductVM = viewModel(), postVM: PostVM = viewModel(), calenVM: CalenVM = viewModel(),
-                 modifier: Modifier = Modifier) {
+fun AppPrincipal(modifier: Modifier = Modifier, homeVM: HomeVM = viewModel(), aboutUsVM: AboutUsVM = viewModel(),
+                 productVM: ProductVM = viewModel(), postVM: PostVM = viewModel(), calenVM: CalenVM = viewModel()) {
     val navController = rememberNavController()
     RetoAppTheme {
         Scaffold(
@@ -47,7 +45,6 @@ fun AppPrincipal(homeVM: HomeVM = viewModel(), aboutUsVM: AboutUsVM = viewModel(
             bottomBar = { NavigationBars().AppBottomBar(navController) }
         ) { innerPadding ->
             AppNavHost(
-                innerPadding,
                 modifier.padding(innerPadding),
                 homeVM,
                 aboutUsVM,
@@ -62,7 +59,6 @@ fun AppPrincipal(homeVM: HomeVM = viewModel(), aboutUsVM: AboutUsVM = viewModel(
 
 @Composable
 fun AppNavHost(
-    innerPadding: PaddingValues,
     modifier: Modifier = Modifier,
     homeVM: HomeVM,
     aboutUsVM: AboutUsVM,
@@ -81,7 +77,7 @@ fun AppNavHost(
         }
 
         composable(Windows.ROUTE_HOME) {
-            HomeView(modifier, homeVM)
+            HomeView(homeVM)
         }
 
         composable(Windows.ROUTE_COMUNITY) {
@@ -95,7 +91,7 @@ fun AppNavHost(
         }
 
         composable(Windows.ROUTE_STORE) {
-            ShopView(innerPadding, productVM, navController)
+            ShopView(productVM, navController)
         }
 
         composable(Windows.ROUTE_STORE + "/{productId}") { backStackEntry ->
