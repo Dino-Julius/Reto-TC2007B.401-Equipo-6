@@ -10,15 +10,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import mx.equipo6.proyectoapp.include.ViewState
 import mx.equipo6.proyectoapp.model.posts.Post
 import mx.equipo6.proyectoapp.model.posts.PostList
 import mx.equipo6.proyectoapp.model.posts.PostRepository
 import mx.equipo6.proyectoapp.network_di.NetworkChangeReceiver.NetworkChangeReceiver.isNetworkConnected
 import java.io.File
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.io.IOException
 import javax.inject.Inject
 
@@ -80,12 +84,34 @@ class PostVM @Inject constructor(
     }
 
     // Función para leer texto desde un archivo dado el file path
-    fun readTextFromFile(filePath: String): String {
-        return try {
-            File(filePath).readText()
-        } catch (e: IOException) {
-            e.printStackTrace()
-            "Error al leer el archivo"
+    private suspend fun fetchFileContentFromUrl(url: String): String {
+        return withContext(Dispatchers.IO) {
+            try {
+                val client = OkHttpClient()
+                val request = Request.Builder().url(url).build()
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    response.body?.string() ?: "Error al leer el archivo: respuesta vacía"
+                } else {
+                    "Error al leer el archivo: ${response.message}"
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                "Error al leer el archivo: ${e.message}"
+            }
+        }
+    }
+
+    suspend fun readTextFromFile(filePath: String): String {
+        return if (filePath.startsWith("http")) {
+            fetchFileContentFromUrl(filePath)
+        } else {
+            try {
+                File(filePath).readText()
+            } catch (e: IOException) {
+                e.printStackTrace()
+                "Error al leer el archivo: ${e.message}"
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package mx.equipo6.proyectoapp.view
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +24,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import kotlinx.coroutines.launch
 import mx.equipo6.proyectoapp.model.posts.Post
 import mx.equipo6.proyectoapp.view.sampledata.Title
 import mx.equipo6.proyectoapp.viewmodel.PostVM
@@ -46,13 +54,24 @@ import mx.equipo6.proyectoapp.viewmodel.PostVM
  */
 @Composable
 fun PostContentView(post: Post?, navController: NavHostController, postVM: PostVM) {
+    var fileContent by remember { mutableStateOf("Cargando...") }
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(post?.file_path) {
+        post?.file_path?.let { path ->
+            coroutineScope.launch {
+                fileContent = postVM.readTextFromFile(path)
+                Log.d("imagepost", fileContent)
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)
-            .verticalScroll(rememberScrollState())
     ) {
+        // Code to be moved outside the vertical scroll
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -77,73 +96,83 @@ fun PostContentView(post: Post?, navController: NavHostController, postVM: PostV
             )
         }
 
+        // Divider to separate the header from the scrollable content
         HorizontalDivider(color = Color.LightGray, thickness = 0.5.dp)
 
-        Title(
-            post?.title ?: "",
+        // Scrollable content
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center
-        )
-
-        Image(
-            painter = rememberAsyncImagePainter(model = post?.image_path),
-            contentDescription = "Post Image",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
-                .padding(start = 20.dp, end = 20.dp)
-        )
-
-        HorizontalDivider(color = Color.LightGray, thickness = 0.5.dp)
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
-            Column {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp, bottom = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+            Title(
+                post?.title ?: "",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+                textAlign = TextAlign.Center
+            )
+
+            HorizontalDivider(color = Color.Gray, thickness = 1.dp)
+
+            Image(
+                painter = rememberAsyncImagePainter(model = post?.image_path),
+                contentDescription = "Post Image",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp)
+            )
+
+            HorizontalDivider(color = Color.Gray, thickness = 1.dp)
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, end = 20.dp)
+            ) {
+                Column {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp, bottom = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Por: ${post?.partner_email}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = post?.date ?: "",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+
+                    HorizontalDivider(color = Color.LightGray, thickness = 0.5.dp)
+
                     Text(
-                        text = "Por: ${post?.partner_id}",
+                        text = post?.summary ?: "",
                         style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = post?.date ?: "",
-                        style = MaterialTheme.typography.bodyMedium
+                        textAlign = TextAlign.Justify,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp, bottom = 16.dp)
                     )
                 }
-
-                Text(
-                    text = post?.summary ?: "",
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp, bottom = 16.dp)
-                )
             }
+
+            HorizontalDivider(color = Color.Gray, thickness = 1.dp)
+
+            Text(
+                text = fileContent,
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Justify,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, end = 20.dp, bottom = 16.dp)
+            )
         }
-
-        HorizontalDivider(color = Color.LightGray, thickness = 0.5.dp)
-
-        // Mostrar el contenido del archivo
-        val fileContent = post?.file_path?.let { postVM.readTextFromFile(it) } ?: "No file path available"
-
-        Text(
-            text = fileContent,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp)
-        )
     }
 }

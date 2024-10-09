@@ -99,6 +99,8 @@ dependencies {
 
     implementation (libs.accompanist.pager)
 
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+
     // Import the Firebase BoM
     implementation ("com.google.accompanist:accompanist-pager:0.24.13-rc")
     implementation(platform(libs.firebase.bom))
@@ -111,6 +113,7 @@ dependencies {
     implementation (libs.osmdroid.android)
     implementation("com.google.android.material:material:1.9.0")
     implementation(libs.androidx.material.icons.extended)
+
 
 
 
