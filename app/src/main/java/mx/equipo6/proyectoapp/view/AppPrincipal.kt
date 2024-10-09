@@ -116,7 +116,7 @@ fun AppNavHost(
         }
 
         composable(Windows.ROUTE_TICKET) {
-            TicketView(navController)
+            TicketView(navController, modifier, productVM)
         }
     }
 }
