@@ -1,6 +1,7 @@
 package mx.equipo6.proyectoapp.view
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Home
@@ -72,7 +73,7 @@ sealed class Windows(
     private data object CalenView : Windows(
         ROUTE_CALENDAR,
         "Calendario",
-        Icons.Default.Person
+        Icons.Default.CalendarMonth
     )
 
     private data object ShopView : Windows(
