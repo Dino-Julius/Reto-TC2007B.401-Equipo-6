@@ -67,7 +67,7 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 22.dp)
+                .padding(top = 15.dp)
         ) {
             Title(
                 "Comunidad",

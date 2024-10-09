@@ -21,9 +21,11 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import mx.equipo6.proyectoapp.view.sampledata.Title
 import mx.equipo6.proyectoapp.viewmodel.CalenVM
 import java.util.*
 /**
@@ -44,9 +46,11 @@ fun CalenView(viewModel: CalenVM) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(10.dp),
+                .padding(2.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            item { Spacer(modifier = Modifier.height(2.dp)) }
+
             item { HeaderSection(showDialog) }
 
             item { CalendarSection(viewModel) }
@@ -88,31 +92,38 @@ fun CalenView(viewModel: CalenVM) {
  */
 @Composable
 fun HeaderSection(showDialog: MutableState<Boolean>) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "Calendario",
-            fontSize = 34.sp,
-            color = Color.Black,
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.titleLarge
-        )
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Button(
-                onClick = { showDialog.value = true },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFdea8cb),
-                    contentColor = Color.White
-                ),
-                modifier = Modifier.height(40.dp)
-            ) {
-                Text(text = "Ver lista de fechas guardadas:")
-            }
+    Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 4.dp)
 
+        ) {
+            Title(
+                "Calendario",
+                modifier = Modifier.padding(bottom = 10.dp),
+                textAlign = TextAlign.Start
+            )
+        }
+    }
+
+    Column(modifier = Modifier.fillMaxSize()
+        .padding(start = 10.dp)   ) {
+        Button(
+            onClick = { showDialog.value = true },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFdea8cb),
+                contentColor = Color.White
+            ),
+            modifier = Modifier.height(40.dp)
+                .shadow(2.dp, shape = MaterialTheme.shapes.medium),
+
+            elevation = ButtonDefaults.elevatedButtonElevation(8.dp),
+            contentPadding = PaddingValues(8.dp),
+            shape = MaterialTheme.shapes.medium
+        ) {
+            Text(text = "Ver lista de fechas guardadas:")
         }
     }
 }
@@ -184,7 +195,7 @@ fun ActionButtons(viewModel: CalenVM, context: Context, showDialog: MutableState
                 fontSize = 18.sp,
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.fillMaxWidth(),
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                textAlign = TextAlign.Center
             )
         }
 
@@ -211,7 +222,7 @@ fun ActionButtons(viewModel: CalenVM, context: Context, showDialog: MutableState
                 fontSize = 18.sp,
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.fillMaxWidth(),
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                textAlign = TextAlign.Center
             )
         }
     }
@@ -458,7 +469,7 @@ fun AdditionalFeaturesCard(showDialog: MutableState<Boolean>) {
  */
 @Composable
 fun AdditionalFeaturesDialogWithTabs(viewModel: CalenVM, onDismiss: () -> Unit) {
-    var selectedTab by remember { mutableStateOf(0) }
+    var selectedTab by remember { mutableIntStateOf(0) }
 
     val tabs = listOf("Fechas Fértiles", "Pastilla de emergencia", "Fechas de uso  de pastilla")
 
