@@ -39,6 +39,9 @@ class ProductVM @Inject constructor(
     private val _cartItems = MutableStateFlow<Map<Products, Int>>(emptyMap())
     val cartItems: StateFlow<Map<Products, Int>> get() = _cartItems
 
+    var soldItems: List<Map.Entry<Products, Int>> = listOf()
+    var isPaymentSuccessful: Boolean = false
+
     // LiveData for observ network connection
     private val _isConnected = MutableStateFlow(isNetworkConnected(context))
     val isConnected : StateFlow<Boolean> get() = _isConnected
@@ -114,6 +117,10 @@ class ProductVM @Inject constructor(
                 }
             }
         }
+    }
+
+    fun clearCart() {
+        _cartItems.value = mapOf()
     }
 
 

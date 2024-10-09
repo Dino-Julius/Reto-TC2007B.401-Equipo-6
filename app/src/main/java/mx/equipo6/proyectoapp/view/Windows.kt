@@ -27,7 +27,8 @@ sealed class Windows(
         var listaPantallas = listOf(HomeView, AboutUsView,
             ChatBotView, ShopView,
             ComunityView, CalenView,
-            CartView, CheckoutView, ConfigView)
+            CartView, CheckoutView, ConfigView,
+            TicketView)
         const val ROUTE_HOME = "Inicio"
         const val ROUTE_ABOUTUS = "Zazil"
         const val ROUTE_COMUNITY = "Comunidad"
@@ -37,6 +38,7 @@ sealed class Windows(
         const val ROUTE_STORE = "Tienda"
         const val ROUTE_CART = "Carrito"
         const val ROUTE_CHECKOUT = "Checkout"
+        const val ROUTE_TICKET = "Ticket"
     }
 
     private data object HomeView : Windows(
@@ -90,6 +92,12 @@ sealed class Windows(
     private data object CheckoutView : Windows(
         ROUTE_CHECKOUT,
         "Checkout",
+        Icons.Default.CheckCircle
+    )
+
+    private data object TicketView : Windows(
+        ROUTE_TICKET,
+        "Ticket",
         Icons.Default.CheckCircle
     )
 }
