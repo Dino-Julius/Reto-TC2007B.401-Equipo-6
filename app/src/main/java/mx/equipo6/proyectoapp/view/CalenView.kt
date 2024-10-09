@@ -113,7 +113,7 @@ fun HeaderSection(showDialog: MutableState<Boolean>) {
         Button(
             onClick = { showDialog.value = true },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFdea8cb),
+                containerColor = Color(0xFFda70d6),
                 contentColor = Color.White
             ),
             modifier = Modifier.height(40.dp)
@@ -178,7 +178,7 @@ fun ActionButtons(viewModel: CalenVM, context: Context, showDialog: MutableState
         Button(
             onClick = { viewModel.calculateNextCycle() },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFdea8cb),
+                containerColor = Color(0xFFfb315f),
                 contentColor = Color.White
             ),
             modifier = Modifier
@@ -205,7 +205,7 @@ fun ActionButtons(viewModel: CalenVM, context: Context, showDialog: MutableState
                 showDialog.value = true
             },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFdea8cb),
+                containerColor = Color(0xFFfb315f),
                 contentColor = Color.White
             ),
             modifier = Modifier
@@ -439,7 +439,7 @@ fun AdditionalFeaturesCard(showDialog: MutableState<Boolean>) {
             .fillMaxWidth()
             .padding(top = 16.dp)
             .clickable { showDialog.value = true },  // Mostrar el pop-up al hacer clic
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFdea8cb)),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFda70d6)),
         elevation = CardDefaults.cardElevation(8.dp),
         shape = MaterialTheme.shapes.medium
     ) {
