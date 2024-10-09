@@ -1,6 +1,5 @@
 package mx.equipo6.proyectoapp.view
 
-import AboutUsView
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -20,6 +19,7 @@ import mx.equipo6.proyectoapp.ui.theme.RetoAppTheme
 import mx.equipo6.proyectoapp.view.sampledata.NavigationBars
 import mx.equipo6.proyectoapp.viewmodel.AboutUsVM
 import mx.equipo6.proyectoapp.viewmodel.CalenVM
+import mx.equipo6.proyectoapp.viewmodel.ChatBotViewModel
 import mx.equipo6.proyectoapp.viewmodel.HomeVM
 import mx.equipo6.proyectoapp.viewmodel.PostVM
 import mx.equipo6.proyectoapp.viewmodel.ProductVM
@@ -37,7 +37,8 @@ val bellefair = FontFamily(Font(R.font.bellefair_regular))
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 fun AppPrincipal(modifier: Modifier = Modifier, homeVM: HomeVM = viewModel(), aboutUsVM: AboutUsVM = viewModel(),
-                 productVM: ProductVM = viewModel(), postVM: PostVM = viewModel(), calenVM: CalenVM = viewModel()) {
+                 productVM: ProductVM = viewModel(), postVM: PostVM = viewModel(), calenVM: CalenVM = viewModel(),
+                 chatBotViewModel: ChatBotViewModel = viewModel()) {
     val navController = rememberNavController()
     RetoAppTheme {
         Scaffold(
@@ -51,6 +52,7 @@ fun AppPrincipal(modifier: Modifier = Modifier, homeVM: HomeVM = viewModel(), ab
                 productVM,
                 postVM,
                 calenVM,
+                chatBotViewModel,
                 navController
             )
         }
@@ -65,6 +67,7 @@ fun AppNavHost(
     productVM: ProductVM,
     postVM: PostVM,
     calenVM: CalenVM,
+    chatBotVM: ChatBotViewModel,
     navController: NavHostController
 ) {
     NavHost(
@@ -113,7 +116,7 @@ fun AppNavHost(
         }
 
         composable(Windows.ROUTE_CHATBOT) {
-            ChatBotView(modifier)
+            ChatBotView(chatBotVM)
         }
 
         composable(Windows.ROUTE_CONFIG) {

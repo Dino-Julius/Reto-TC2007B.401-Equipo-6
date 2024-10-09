@@ -1,3 +1,5 @@
+package mx.equipo6.proyectoapp.view
+
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
@@ -54,12 +56,11 @@ import java.io.InputStream
  * @autor Jesus Guzman Ortega
  */
 
-val bellefair = FontFamily(Font(R.font.bellefair_regular))
-
 @Preview(showBackground = true, widthDp = 400)
 @Composable
 fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM()) {
     val context = LocalContext.current // Obtener el contexto para abrir enlaces
+    val bellefair = FontFamily(Font(R.font.bellefair_regular))
 
     Surface(
         modifier = Modifier.fillMaxSize(),

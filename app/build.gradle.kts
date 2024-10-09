@@ -72,9 +72,23 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.dagger.hilt.android)
+    implementation(libs.androidx.runtime.livedata)
     implementation(libs.play.services.phenotype)
     implementation(libs.androidx.ui.test.android)
     testImplementation(libs.androidx.ui.test.junit4.android)
+
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
+    // Mockito Core for basic mocking
+    testImplementation ("org.mockito:mockito-core:4.6.1")
+
+// Mockito Kotlin support (if you're using Kotlin for your tests)
+    testImplementation ("org.mockito.kotlin:mockito-kotlin:4.1.0")
+
+// To support mocking final classes and methods
+    testImplementation ("org.mockito:mockito-inline:4.6.1")
+
+
+
     kapt(libs.dagger.hilt.android.compiler)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)

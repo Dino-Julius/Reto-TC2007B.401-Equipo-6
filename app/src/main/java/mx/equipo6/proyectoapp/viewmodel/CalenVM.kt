@@ -16,47 +16,83 @@ import mx.equipo6.proyectoapp.model.getSavedDatesWithKeys
 import mx.equipo6.proyectoapp.model.saveSexualActivityDate
 import java.util.*
 
+/**
+ * @author: Sebastian Espinoza
+ * Clase para el ViewModel del calendario
+ */
 class CalenVM : ViewModel() {
 
-    // Estado reactivo para la fecha seleccionada
+    /**
+     * @author: Sebastian Espinoza
+     * Variable para almacenar la fecha seleccionada en milisegundos
+     */
     private var selectedDateInMillis = mutableLongStateOf(0L)
         private set
 
-    // Estado reactivo para la fecha seleccionada en formato de cadena
+    /**
+     * @author: Sebastian Espinoza
+     * Variable para almacenar la fecha seleccionada en formato de cadena
+     */
     var selectedDate = mutableStateOf("")
         private set
-    // Estado reactivo para la fecha calculada
+
+    /**
+     * @author: Sebastian Espinoza
+     * Variable para almacenar la fecha estimada del siguiente ciclo menstrual en formato de cadena
+     */
     var calculatedDate = mutableStateOf("")
         private set
 
-    // Estado reactivo para almacenar las fechas guardadas
+    /**
+     * @author: Sebastian Espinoza
+     * Variable para almacenar las fechas guardadas en formato de cadena
+     */
     var savedDates = mutableStateOf(listOf<String>())
         private set
 
-    // Estado reactivo para controlar si se debe mostrar la animación
+    /**
+     * @author: Sebastian Espinoza
+     * Variable para controlar la animación de la fecha estimada del siguiente ciclo menstrual
+     */
     var showAnimation = mutableStateOf(false)
         private set
 
-    // Estado reactivo para almacenar las fechas guardadas con su clave
+    /**
+     * @author: Sebastian Espinoza
+     * Variable para almacenar las fechas guardadas con su respectiva clave en formato de cadena
+     */
     var savedDatesWithKeys = mutableStateOf(listOf<Pair<Long, String>>())
         private set
 
-    // Estado para los días fértiles calculados
+    /**
+     * @author: Sebastian Espinoza
+     * Variable para almacenar los días fértiles en formato de cadena
+     */
     private val _fertileWindow = MutableStateFlow<Pair<String, String>?>(null)
     val fertileWindow: StateFlow<Pair<String, String>?> = _fertileWindow
 
-    // Para almacenar las fechas de pastilla de emergencia
+    /**
+     * @author: Sebastian Espinoza
+     * Variable para almacenar las fechas de pastilla de emergencia en formato de cadena
+     */
     var savedEmergencyPillDates = mutableStateOf(listOf<Pair<Long, String>>())
         private set
 
-    // Para almacenar la fecha de pastilla de emergencia
+    /**
+     * @author: Sebastian Espinoza
+     * @param: dateInMillis: Long
+     * Funcion para actualizar la fecha seleccionada
+     */
     fun updateSelectedDate(dateInMillis: Long) {
         selectedDateInMillis.longValue = dateInMillis
         val calendar = Calendar.getInstance().apply { timeInMillis = dateInMillis }
         selectedDate.value = "${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.YEAR)}"
     }
 
-    // Para calcular la fecha del siguiente ciclo
+    /**
+     * @author: Sebastian Espinoza
+     * Funcion para calcular la fecha estimada del siguiente ciclo menstrual
+     */
     fun calculateNextCycle() {
         val calendar = Calendar.getInstance().apply {
             if (selectedDateInMillis.longValue != 0L) {
@@ -75,7 +111,11 @@ class CalenVM : ViewModel() {
         }
     }
 
-    // Para guardar la fecha de actividad sexual
+    /**
+     * @author: Sebastian Espinoza
+     * @param: context: Context
+     * Funcion para guardar la fecha de actividad sexual
+     */
     fun saveDate(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             if (selectedDateInMillis.longValue != 0L) {
@@ -85,7 +125,13 @@ class CalenVM : ViewModel() {
             }
         }
     }
-    // Para cargar las fechas guardadas
+
+    /**
+     * @author: Sebastian Espinoza
+     * @param: context: Context
+     * @param: dateInMillis: Long
+     * funcion para eliminar la fecha de actividad sexual
+     */
     fun deleteDate(context: Context, dateInMillis: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             deleteSexualActivityDate(context, dateInMillis)
@@ -94,19 +140,34 @@ class CalenVM : ViewModel() {
             savedDatesWithKeys.value = updatedDates
         }
     }
-    // Para cargar las fechas guardadas
+
+    /**
+     * @author: Sebastian Espinoza
+     * @param: context: Context
+     * funcion para cargar las fechas guardadas
+     */
     fun loadSavedDatesWithKeys(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             savedDatesWithKeys.value = getSavedDatesWithKeys(context)
         }
     }
 
-    // Función para calcular los días fértiles
+    /**
+     * @author: Sebastian Espinoza
+     * @param: startDate: String
+     * Funcion para calcular los días fértiles
+     */
     fun calculateFertileWindow(startDate: String) {
         val fertileDates = calculateFertileWindowFromModel(startDate)
         _fertileWindow.value = fertileDates
     }
-    // Función para guardar la fecha de pastilla de emergencia
+
+    /**
+     * @author: Sebastian Espinoza
+     * @param: lastPillDate: String
+     * @return: String
+     * Funcion para calcular la fecha de la próxima pastilla de emergencia
+     */
     fun calculateNextEmergencyPillDate(lastPillDate: String): String {
         val dateParts = lastPillDate.split("/")
         if (dateParts.size != 3) return "Fecha inválida"
@@ -129,7 +190,12 @@ class CalenVM : ViewModel() {
         return "${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.YEAR)}"
     }
 
-    // Función para guardar la fecha de pastilla de emergencia
+    /**
+     * @author: Sebastian Espinoza
+     * @param: context: Context
+     * @param: dateInMillis: Long
+     * Funcion para guardar la fecha de la próxima pastilla de emergencia
+     */
     fun saveEmergencyPillDate(context: Context, dateInMillis: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             val sharedPreferences = context.getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
@@ -140,7 +206,11 @@ class CalenVM : ViewModel() {
         }
     }
 
-    // Función para cargar las fechas de pastilla de emergencia
+    /**
+     * @author: Sebastian Espinoza
+     * @param: context: Context
+     * Funcion para cargar las fechas de pastilla de emergencia
+     */
     fun loadSavedEmergencyPillDates(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             val sharedPreferences = context.getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
@@ -160,7 +230,12 @@ class CalenVM : ViewModel() {
         }
     }
 
-    // Función para eliminar la fecha de pastilla de emergencia
+    /**
+     * @author: Sebastian Espinoza
+     * @param: context: Context
+     * @param: dateInMillis: Long
+     * Funcion para eliminar la fecha de la próxima pastilla de emergencia
+     */
     fun deleteEmergencyPillDate(context: Context, dateInMillis: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             val sharedPreferences = context.getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
