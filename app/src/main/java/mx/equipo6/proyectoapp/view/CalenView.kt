@@ -76,6 +76,7 @@ fun CalenView(viewModel: CalenVM) {
                     )
                 }
             }
+            item { Spacer(modifier = Modifier.height(16.dp)) }
         }
     }
 }
@@ -104,7 +105,7 @@ fun HeaderSection(showDialog: MutableState<Boolean>) {
             Button(
                 onClick = { showDialog.value = true },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFF607A),
+                    containerColor = Color(0xFFdea8cb),
                     contentColor = Color.White
                 ),
                 modifier = Modifier.height(40.dp)
@@ -131,7 +132,7 @@ fun CalendarSection(viewModel: CalenVM) {
             .shadow(8.dp, shape = MaterialTheme.shapes.medium),
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFff8fa2)) //Color del borde de calendario
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFdea8cb)) //Color del borde de calendario
     ) {
         Row(
             modifier = Modifier
@@ -166,7 +167,7 @@ fun ActionButtons(viewModel: CalenVM, context: Context, showDialog: MutableState
         Button(
             onClick = { viewModel.calculateNextCycle() },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFFF607A),
+                containerColor = Color(0xFFdea8cb),
                 contentColor = Color.White
             ),
             modifier = Modifier
@@ -193,7 +194,7 @@ fun ActionButtons(viewModel: CalenVM, context: Context, showDialog: MutableState
                 showDialog.value = true
             },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFFF607A),
+                containerColor = Color(0xFFdea8cb),
                 contentColor = Color.White
             ),
             modifier = Modifier
@@ -229,7 +230,7 @@ fun SelectedDateCard(viewModel: CalenVM) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 10.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFFFBCC7)),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFc596b4)),
         elevation = CardDefaults.cardElevation(8.dp),
         shape = MaterialTheme.shapes.medium
     ) {
@@ -277,7 +278,7 @@ fun NextCycleCard(viewModel: CalenVM) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 10.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFFFBCC7)),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFFc596b4)),
             elevation = CardDefaults.cardElevation(8.dp),
             shape = MaterialTheme.shapes.medium
         ) {
@@ -402,7 +403,7 @@ fun EmbeddedCalendarView(modifier: Modifier = Modifier, onDateSelected: (Long) -
         modifier = modifier,
         factory = { context ->
             CalendarView(context).apply {
-                setBackgroundColor(android.graphics.Color.parseColor("#FFBCC7"))
+                setBackgroundColor(android.graphics.Color.parseColor("#d9bfd0"))
                 date = Date().time
                 setOnDateChangeListener { _, year, month, dayOfMonth ->
                     val calendar = Calendar.getInstance()
