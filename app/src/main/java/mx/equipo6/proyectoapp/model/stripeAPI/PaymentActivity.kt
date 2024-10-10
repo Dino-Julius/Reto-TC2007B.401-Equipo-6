@@ -1,4 +1,4 @@
-package mx.equipo6.proyectoapp.stripeAPI
+package mx.equipo6.proyectoapp.model.stripeAPI
 
 import android.app.Activity
 import android.content.Intent

@@ -17,6 +17,7 @@ import mx.equipo6.proyectoapp.include.ViewState
 import mx.equipo6.proyectoapp.model.products.ProductList
 import mx.equipo6.proyectoapp.model.products.ProductRespository
 import mx.equipo6.proyectoapp.model.products.Products
+import mx.equipo6.proyectoapp.model.stripeAPI.sendSoldItemsToServer
 import mx.equipo6.proyectoapp.network_di.NetworkChangeReceiver.NetworkChangeReceiver.isNetworkConnected
 import javax.inject.Inject
 
@@ -127,4 +128,24 @@ class ProductVM @Inject constructor(
     fun getProductById(productId: String?): Products? {
         return (products.value as? ViewState.Success)?.data?.find { it.sku == productId }
     }
+
+    fun placeOrder(address: String, email: String) {
+        // Launch a coroutine in the ViewModel scope
+        viewModelScope.launch {
+            try {
+                // Log soldItems to check if they are correct
+                Log.d("placeOrder", "Preparing to send the following sold items:")
+                soldItems.forEach { entry ->
+                    Log.d("placeOrder", "SKU: ${entry.key.sku}, Quantity: ${entry.value}")
+                }
+
+                // Call the sendSoldItemsToServer suspend function
+                sendSoldItemsToServer(soldItems, address, email)
+                Log.d("placeOrder", "Order placed successfully")
+            } catch (e: Exception) {
+                Log.e("placeOrder", "Failed to place order: ${e.localizedMessage}")
+            }
+        }
+    }
+
 }

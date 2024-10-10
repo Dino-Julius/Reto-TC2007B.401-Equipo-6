@@ -206,7 +206,8 @@ fun ProductDetailView(products: Products?, navController: NavHostController, pro
                     // Add to Cart Button
                     Button(
                         colors = ButtonDefaults.buttonColors(
-                            contentColor = Color.White
+                            contentColor = Color.White,
+                            containerColor = Color(0xFFC7A8BC)
                         ),
                         modifier = Modifier
                             .width(200.dp)
@@ -219,7 +220,7 @@ fun ProductDetailView(products: Products?, navController: NavHostController, pro
                             Toast.makeText(
                                 context, "${quantityToAdd.value} producto(s) agregado(s) al carrito", Toast.LENGTH_SHORT
                             ).show()
-                        }
+                        },
                     ) {
                         Text(text = "Agregar al carrito")
                     }

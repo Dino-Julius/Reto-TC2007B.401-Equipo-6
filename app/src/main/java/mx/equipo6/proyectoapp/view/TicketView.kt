@@ -14,6 +14,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -25,11 +26,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import mx.equipo6.proyectoapp.model.stripeAPI.sendSoldItemsToServer
 import mx.equipo6.proyectoapp.viewmodel.ProductVM
 
+/**
+ * TicketView composable that displays the ticket information
+ * @author Jesus Guzman
+ * @param navController NavController
+ * @param modifier Modifier
+ * @param productVM ProductVM
+ */
 @Composable
 fun TicketView(navController: NavController, modifier: Modifier = Modifier, productVM: ProductVM) {
     val cartItems by productVM.cartItems.collectAsState()
+
+    LaunchedEffect(Unit) {
+        productVM.placeOrder("Freak Avenue 123, Colonia Centro", "FreakyFranklin@gmail.com")
+    }
 
     Column(
         modifier = Modifier
@@ -38,23 +51,21 @@ fun TicketView(navController: NavController, modifier: Modifier = Modifier, prod
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Contenedor del ticket con borde y fondo
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
-                .border(2.dp, color = Color.LightGray, shape = RoundedCornerShape(8.dp)) // Borde del ticket
-                .padding(16.dp) // Espacio interior del ticket
-                .background(color = Color.White), // Fondo del ticket
+                .border(2.dp, color = Color.LightGray, shape = RoundedCornerShape(8.dp))
+                .padding(16.dp)
+                .background(color = Color.White),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "Resumen de tu compra",
-                style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp), // Estilo más llamativo para el título
+                style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp),
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            // Si el carrito no está vacío
             if (cartItems.isNotEmpty()) {
                 cartItems.forEach { (product, quantity) ->
                     Column(
@@ -78,7 +89,7 @@ fun TicketView(navController: NavController, modifier: Modifier = Modifier, prod
                 Text(
                     text = "¡Gracias por tu compra!",
                     style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp),
-                    color = Color(0xFF4CAF50), // Color verde para el agradecimiento
+                    color = Color(0xFF4CAF50),
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
 
@@ -86,14 +97,12 @@ fun TicketView(navController: NavController, modifier: Modifier = Modifier, prod
 
                 Button(
                     onClick = {
-                        // Limpiar el carrito después de mostrar el ticket
                         productVM.clearCart()
-                        // Regresar a la pantalla anterior
                         navController.popBackStack()
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2196F3)) // Color del botón
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF4D0CB)),
                 ) {
-                    Text(text = "Regresar a la app", color = Color.White) // Texto blanco en el botón
+                    Text(text = "Regresar a la app", color = Color.White)
                 }
             } else {
                 Text(text = "No se encontraron productos en tu ticket")

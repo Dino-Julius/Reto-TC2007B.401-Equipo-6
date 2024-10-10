@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import mx.equipo6.proyectoapp.model.products.CartItem
+import mx.equipo6.proyectoapp.model.stripeAPI.PaymentActivity
 import mx.equipo6.proyectoapp.viewmodel.ProductVM
 import okhttp3.Call
 import okhttp3.Callback
@@ -144,9 +145,10 @@ fun ShoppingCartView(productVM: ProductVM, navController: NavHostController) {
                     val priceInCents = (totalPrice * 100).toInt()
 
                     if (priceInCents > 0) {
-                        val intent = Intent(context, mx.equipo6.proyectoapp.stripeAPI.PaymentActivity::class.java)
+                        val intent = Intent(context, PaymentActivity::class.java)
                         intent.putExtra("totalPrice", priceInCents)
                         // Ensure paymentLauncher is registered before using it
+                        productVM.soldItems = cartItems.entries.toList()
                         paymentLauncher.launch(intent)
                     } else {
                         // Show a toast if totalPrice is 0 or null
