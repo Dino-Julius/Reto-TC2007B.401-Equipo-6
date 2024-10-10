@@ -55,7 +55,7 @@ suspend fun sendSoldItemsToServer(soldItems: List<Map.Entry<Products, Int>>, add
 
     // Build the request
     val request = Request.Builder()
-        .url("http://10.48.78.90:3000/receive-order") // Replace with your server URL
+        .url("http://104.248.55.22:3000/api/receive-order") // Replace with your server URL
         .post(requestBody)
         .build()
 
