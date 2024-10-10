@@ -113,13 +113,11 @@ fun HeaderSection(showDialog: MutableState<Boolean>) {
         Button(
             onClick = { showDialog.value = true },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFda70d6),
+                containerColor = Color(0xFFb16ccd),
                 contentColor = Color.White
             ),
             modifier = Modifier.height(40.dp)
                 .shadow(2.dp, shape = MaterialTheme.shapes.medium),
-
-            elevation = ButtonDefaults.elevatedButtonElevation(8.dp),
             contentPadding = PaddingValues(8.dp),
             shape = MaterialTheme.shapes.medium
         ) {
@@ -178,7 +176,7 @@ fun ActionButtons(viewModel: CalenVM, context: Context, showDialog: MutableState
         Button(
             onClick = { viewModel.calculateNextCycle() },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFfb315f),
+                containerColor = Color(0xFFdea8cb),
                 contentColor = Color.White
             ),
             modifier = Modifier
@@ -205,7 +203,7 @@ fun ActionButtons(viewModel: CalenVM, context: Context, showDialog: MutableState
                 showDialog.value = true
             },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFfb315f),
+                containerColor = Color(0xFFdea8cb),
                 contentColor = Color.White
             ),
             modifier = Modifier
@@ -439,7 +437,7 @@ fun AdditionalFeaturesCard(showDialog: MutableState<Boolean>) {
             .fillMaxWidth()
             .padding(top = 16.dp)
             .clickable { showDialog.value = true },  // Mostrar el pop-up al hacer clic
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFda70d6)),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFb16ccd)),
         elevation = CardDefaults.cardElevation(8.dp),
         shape = MaterialTheme.shapes.medium
     ) {
