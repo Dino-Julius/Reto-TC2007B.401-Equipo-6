@@ -139,29 +139,15 @@ fun ShoppingCartView(productVM: ProductVM, navController: NavHostController) {
 
             Button(
                 onClick = {
-                    // Ensure totalPrice is valid and non-zero
-                    val priceInCents = totalPrice?.times(100)?.toInt() ?: 0
+                    // Ensure totalPrice is non-null and non-zero
+                    Log.d("valores", totalPrice.toString())
+                    val priceInCents = (totalPrice * 100).toInt()
 
                     if (priceInCents > 0) {
-                        val intent = Intent(context, mx.equipo6.proyectoapp.stripeAPI.PaymentActivity::class.java).apply {
-                            putExtra("totalPrice", priceInCents)
-                        }
-
-                        // Check server connectivity with OkHttp before proceeding
-                        OkHttpClient().newCall(Request.Builder().url("http://10.48.78.90:3000").build()).enqueue(object : Callback {
-                            override fun onFailure(call: Call, e: IOException) {
-                                Log.e("PingServer", "Failed to connect: ${e.localizedMessage}")
-                            }
-
-                            override fun onResponse(call: Call, response: Response) {
-                                Log.i("PingServer", "Connected: ${response.code}")
-                            }
-                        })
-
+                        val intent = Intent(context, mx.equipo6.proyectoapp.stripeAPI.PaymentActivity::class.java)
+                        intent.putExtra("totalPrice", priceInCents)
                         // Ensure paymentLauncher is registered before using it
                         paymentLauncher.launch(intent)
-                        Log.d("valores", "Iniciando pago...")
-
                     } else {
                         // Show a toast if totalPrice is 0 or null
                         Toast.makeText(context, "Ingrese productos", Toast.LENGTH_SHORT).show()
@@ -175,7 +161,6 @@ fun ShoppingCartView(productVM: ProductVM, navController: NavHostController) {
                     fontWeight = FontWeight.Black
                 )
             }
-
         }
     }
 }

@@ -7,5 +7,7 @@
         <domain includeSubdomains="true">104.248.55.22</domain>
         <domain includeSubdomains="true">10.48.93.227</domain>
         <domain includeSubdomains="true">10.48.78.90</domain>
+        <domain includeSubdomains="true">192.168.0.13</domain>
+        <domain includeSubdomains="true">api.stripe.com</domain>
     </domain-config>
 </network-security-config>

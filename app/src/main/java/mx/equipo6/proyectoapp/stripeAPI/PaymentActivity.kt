@@ -30,7 +30,7 @@ class PaymentActivity : AppCompatActivity() {
         setContentView(R.layout.activity_payment)
 
         // Initialize Stripe SDK
-        PaymentConfiguration.init(applicationContext, "pk_test_51Q5tAn1L09JDsSP2jjvRpSuZoeAOHruC8iXNxPZs6l8uQ7rWJ3mBqtOiPVDSuFEkWU5fs2lVsWnYa2FwSozvqg6r00ugcXQ5Ll") // Replace with your actual publishable key
+        PaymentConfiguration.init(applicationContext, "pk_test_51Q5tAn1L09JDsSP2jjvRpSuZoeAOHruC8iXNxPZs6l8uQ7rWJ3mBqtOiPVDSuFEkWU5fs2lVsWnYa2FwSozvqg6r00ugcXQ5Ll")
         stripe = Stripe(applicationContext, PaymentConfiguration.getInstance(applicationContext).publishableKey)
 
         val cardInputWidget = findViewById<CardInputWidget>(R.id.cardInputWidget)
@@ -41,6 +41,9 @@ class PaymentActivity : AppCompatActivity() {
             val params = cardInputWidget.paymentMethodCreateParams
 
             if (params != null) {
+                // Log the card params for debugging purposes
+                Log.d("CardInputParams", params.toString())
+
                 // Use coroutine to create PaymentMethod asynchronously
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
@@ -59,6 +62,7 @@ class PaymentActivity : AppCompatActivity() {
                         withContext(Dispatchers.Main) {
                             showToast("Error creating PaymentMethod: ${e.localizedMessage}")
                         }
+                        Log.e("PaymentActivity", "Error creating PaymentMethod, ${e.localizedMessage}")
                     }
                 }
             } else {
@@ -70,6 +74,9 @@ class PaymentActivity : AppCompatActivity() {
     private fun sendPaymentIntentToServer(paymentMethodId: String) {
         val totalPrice = intent.getIntExtra("totalPrice", 0)
 
+        // Log the amount being sent to the server
+        Log.d("Amount", "Total Price (in cents): $totalPrice")
+
         // JSON to send to the server
         val jsonBody = JSONObject().apply {
             put("amount", totalPrice)
@@ -78,7 +85,7 @@ class PaymentActivity : AppCompatActivity() {
 
         val body = RequestBody.create("application/json; charset=utf-8".toMediaType(), jsonBody.toString())
         val request = Request.Builder()
-            .url("http://10.48.78.90:3000/create-payment-intent") // Replace with your server URL
+            .url("http://104.248.55.22:3000/api/create-payment-intent") // Replace with your server URL
             .post(body)
             .build()
 
