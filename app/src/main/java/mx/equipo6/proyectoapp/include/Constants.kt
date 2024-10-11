@@ -1,6 +1,5 @@
 package mx.equipo6.proyectoapp.include
 
-// Define a class named Constants
 /**
  * Define la clase con constantes
  * @author Julio Vivas
@@ -11,7 +10,7 @@ class Constants {
 // Objeto companion para mantener valores constantes
     companion object {
         // Base URL for the API PRODUCTS
-        const val API_URL = "http://104.248.55.22/api/"
+        const val API_URL = "http://104.248.55.22:3000/api/"
         // Endpoint for the list of products
         const val LIST_OF_PRODUCTS = "products"
         // Endpoint for the list of posts
