@@ -5,18 +5,26 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.EmojiEmotions
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Forest
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import mx.equipo6.proyectoapp.view.sampledata.CategoryItem
 
 /**
  * Composable que muestra una barra de categorías.
+ * @param categories Lista de categorías a mostrar.
  * @param selectedIndex Índice de la categoría seleccionada.
  */
 @Composable
-fun CategoryBar(selectedIndex: Int) {
+fun CategoryBar(categories: List<Pair<String, ImageVector>>, selectedIndex: Int, onCategorySelected: (String) -> Unit) {
     val listState = rememberLazyListState()
     var selectedCategoryIndex by remember { mutableIntStateOf(selectedIndex) }
     val coroutineScope = rememberCoroutineScope()
@@ -30,17 +38,18 @@ fun CategoryBar(selectedIndex: Int) {
                 .padding(top = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            items(categories) { category ->
-                val index = categories.indexOf(category)
+            items(categories) { (category, icon) ->
+                val index = categories.indexOfFirst { it.first == category }
                 val isSelected = index == selectedCategoryIndex
                 CategoryItem(
-                    icon = category.second,
-                    title = category.first,
+                    icon = icon,
+                    title = category,
                     isSelected = isSelected,
                     modifier = Modifier
                         .padding(horizontal = 15.dp)
                         .clickable {
                             selectedCategoryIndex = index
+                            onCategorySelected(category)
                             if (index == 3) {
                                 coroutineScope.launch {
                                     listState.animateScrollToItem(index + 1)

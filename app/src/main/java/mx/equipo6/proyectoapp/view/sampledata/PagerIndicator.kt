@@ -12,6 +12,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+/**
+ * Composable que muestra un indicador de paginación con puntos.
+ * @author Ulises Jaramillo Portilla | A01798380.
+ * @param totalDots Número total de puntos a mostrar.
+ * @param selectedIndex Índice del punto actualmente seleccionado.
+ * @param modifier Modificador opcional para el contenedor del indicador.
+ * @param activeColor Color del punto activo.
+ * @param inactiveColor Color de los puntos inactivos.
+ */
 @Composable
 fun PagerIndicator(
     totalDots: Int,
@@ -29,7 +38,7 @@ fun PagerIndicator(
             val color = if (index == selectedIndex) activeColor else inactiveColor
             Canvas(
                 modifier = Modifier
-                    .padding(bottom = 10.dp, top = 10.dp,  start = 4.dp, end = 4.dp)
+                    .padding(bottom = 10.dp, top = 10.dp, start = 4.dp, end = 4.dp)
                     .size(8.dp)
             ) {
                 drawCircle(color = color)

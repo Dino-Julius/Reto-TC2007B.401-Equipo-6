@@ -29,7 +29,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,16 +48,16 @@ import mx.equipo6.proyectoapp.view.sampledata.Stepper
 import mx.equipo6.proyectoapp.viewmodel.ProductVM
 
 /**
- * ProductDetailView: Shows product details
- * @autor Julio Vivas
- * @param products Product to show.
- * @param navController navigation controller
- * @param productVM ViewModel.
+ * ProductDetailView: Muestra los detalles del producto.
+ * @author Julio Vivas; Ulises Jaramillo Portilla | A01798380.
+ * @param products Producto a mostrar.
+ * @param navController Controlador de navegación.
+ * @param productVM ViewModel de productos.
  */
 @Composable
 fun ProductDetailView(products: Products?, navController: NavHostController, productVM: ProductVM) {
     val context = LocalContext.current
-    val quantityToAdd = remember { mutableStateOf(1) } // Default is 1
+    val quantityToAdd = remember { mutableIntStateOf(1) } // Valor por defecto es 1
 
     LocalContext.current as Activity
     Column(
@@ -66,6 +66,7 @@ fun ProductDetailView(products: Products?, navController: NavHostController, pro
             .background(color = Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        // Fila superior con botón de retroceso y calificación del producto
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -74,10 +75,9 @@ fun ProductDetailView(products: Products?, navController: NavHostController, pro
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
-                onClick = {
-                    navController.popBackStack()
-                },
+                onClick = { navController.popBackStack() },
                 modifier = Modifier
+                    .size(36.dp)
                     .background(color = Color(0x8DE7E1E1), shape = CircleShape)
                     .clip(CircleShape)
             ) {
@@ -95,7 +95,7 @@ fun ProductDetailView(products: Products?, navController: NavHostController, pro
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = products!!.rating.toString(),
+                    text = products?.rating.toString(),
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )
@@ -105,12 +105,13 @@ fun ProductDetailView(products: Products?, navController: NavHostController, pro
             }
         }
 
+        // Imagen del producto
         Image(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .size(250.dp), painter = rememberAsyncImagePainter(
-                model = products!!.image_path, contentScale = ContentScale.Crop
-            ), contentDescription = products.name
+                .size(300.dp), painter = rememberAsyncImagePainter(
+                model = products?.image_path, contentScale = ContentScale.Crop
+            ), contentDescription = products?.name
         )
         Spacer(
             modifier = Modifier
@@ -125,6 +126,7 @@ fun ProductDetailView(products: Products?, navController: NavHostController, pro
                     Color.White, shape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp)
                 )
         ) {
+            // Sección de detalles del producto
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -141,7 +143,7 @@ fun ProductDetailView(products: Products?, navController: NavHostController, pro
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = products.name,
+                            text = products?.name ?: "Nombre no disponible",
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp
                         )
@@ -166,12 +168,13 @@ fun ProductDetailView(products: Products?, navController: NavHostController, pro
                     Spacer(modifier = Modifier.height(20.dp))
 
                     Text(
-                        text = products.description, fontSize = 16.sp, color = Color.Black
+                        text = products?.description ?: "Descripción no disponible", fontSize = 16.sp, color = Color.Black
                     )
                     Spacer(modifier = Modifier.height(20.dp))
                 }
             }
 
+            // Sección de cantidad y botón de agregar al carrito
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -184,7 +187,7 @@ fun ProductDetailView(products: Products?, navController: NavHostController, pro
                 contentAlignment = Alignment.Center
             ) {
                 Row{
-                    // Display the current quantity with a stepper
+                    // Mostrar la cantidad actual con un stepper
                     Column(
                         modifier = Modifier
                             .weight(1f)
@@ -194,16 +197,16 @@ fun ProductDetailView(products: Products?, navController: NavHostController, pro
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        // Stepper for choosing the quantity to add
+                        // Stepper para elegir la cantidad a agregar
                         Stepper(
-                            value = quantityToAdd.value,
-                            onValueChange = { quantityToAdd.value = it },
+                            value = quantityToAdd.intValue,
+                            onValueChange = { quantityToAdd.intValue = it },
                             minValue = 1,
                             maxValue = 100
                         )
                     }
 
-                    // Add to Cart Button
+                    // Botón de agregar al carrito
                     Button(
                         colors = ButtonDefaults.buttonColors(
                             contentColor = Color.White
@@ -214,10 +217,10 @@ fun ProductDetailView(products: Products?, navController: NavHostController, pro
                             .height(60.dp)
                             .clip(RoundedCornerShape(15.dp)),
                         onClick = {
-                            productVM.addItemToCart(products!!, quantityToAdd.value) // Pass the selected quantity
+                            productVM.addItemToCart(products!!, quantityToAdd.intValue) // Pasar la cantidad seleccionada
 
                             Toast.makeText(
-                                context, "${quantityToAdd.value} producto(s) agregado(s) al carrito", Toast.LENGTH_SHORT
+                                context, "${quantityToAdd.intValue} producto(s) agregado(s) al carrito", Toast.LENGTH_SHORT
                             ).show()
                         }
                     ) {

@@ -1,8 +1,6 @@
-// Update SearchBar.kt
 package mx.equipo6.proyectoapp.view.sampledata
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
@@ -25,7 +23,22 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import kotlinx.coroutines.delay
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.platform.LocalFocusManager
 
+/**
+ * Composable que muestra una barra de búsqueda con un ícono y un campo de texto.
+ * @author Ulises Jaramillo Portilla | A01798380.
+ * @param modifier Modificador opcional para la barra de búsqueda.
+ * @param height Altura de la barra de búsqueda.
+ * @param cornerRadius Radio de las esquinas de la barra de búsqueda.
+ * @param backgroundColor Color de fondo de la barra de búsqueda.
+ * @param icon ImageVector del ícono a mostrar en la barra de búsqueda.
+ * @param onValueChange Función lambda que se ejecuta cuando el valor del campo de texto cambia.
+ */
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier,
@@ -36,11 +49,19 @@ fun SearchBar(
     onValueChange: (TextFieldValue) -> Unit
 ) {
     var textState by remember { mutableStateOf(TextFieldValue("")) }
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(textState) {
+        delay(1000)
+        focusManager.clearFocus() // Clear focus after delay
+    }
 
     Box(
         modifier = modifier
             .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 6.dp)
-            .shadow(6.dp, shape = MaterialTheme.shapes.small.copy(all = CornerSize(cornerRadius)), clip = false) // Ensure shadow is not clipped
+            .shadow(6.dp, shape = MaterialTheme.shapes.small.copy(all = CornerSize(cornerRadius)), clip = false)
+            .clickable { focusManager.clearFocus() } // Clear focus when clicking outside
     ) {
         Surface(
             modifier = Modifier
@@ -52,16 +73,26 @@ fun SearchBar(
             SearchBarContent(icon, textState, onValueChange = {
                 textState = it
                 onValueChange(it)
-            })
+                focusRequester.requestFocus()
+            }, focusRequester)
         }
     }
 }
 
+/**
+ * Composable que muestra el contenido de la barra de búsqueda.
+ *
+ * @param icon ImageVector del ícono a mostrar en la barra de búsqueda.
+ * @param textState Estado del campo de texto.
+ * @param onValueChange Función lambda que se ejecuta cuando el valor del campo de texto cambia.
+ * @param focusRequester Objeto FocusRequester para gestionar el enfoque del campo de texto.
+ */
 @Composable
 fun SearchBarContent(
     icon: ImageVector,
     textState: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit
+    onValueChange: (TextFieldValue) -> Unit,
+    focusRequester: FocusRequester
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -81,7 +112,9 @@ fun SearchBarContent(
         BasicTextField(
             value = textState,
             onValueChange = onValueChange,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester),
             singleLine = true,
             textStyle = TextStyle(
                 color = Color.Black,

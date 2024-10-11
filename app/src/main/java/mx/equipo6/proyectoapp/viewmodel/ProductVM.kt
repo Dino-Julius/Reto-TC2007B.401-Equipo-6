@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 /**
  * ViewModel para mostrar el inverntario de productos
- * @author Julio Vivas
+ * @author Julio Vivas; Ulises Jaramillo Portilla | A01798380.
  * @param productRespository ProductRespository
  * @param context Context
  */
@@ -117,6 +117,10 @@ class ProductVM @Inject constructor(
                 }
             }
         }
+    }
+
+    fun refreshProducts() {
+        fetchProducts()
     }
 
     fun clearCart() {

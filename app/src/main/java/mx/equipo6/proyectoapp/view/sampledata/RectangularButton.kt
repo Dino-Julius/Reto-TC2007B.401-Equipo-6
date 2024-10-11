@@ -18,6 +18,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
+/**
+ * Composable que muestra un botón rectangular con un ícono y un texto.
+ * @author Ulises Jaramillo Portilla | A01798380.
+ * @param icon ImageVector del ícono a mostrar en el botón.
+ * @param text Texto a mostrar en el botón.
+ * @param onClick Función lambda que se ejecuta cuando se hace clic en el botón.
+ */
 @Composable
 fun RectangularButton(icon: ImageVector, text: String, onClick: () -> Unit) {
     Box(

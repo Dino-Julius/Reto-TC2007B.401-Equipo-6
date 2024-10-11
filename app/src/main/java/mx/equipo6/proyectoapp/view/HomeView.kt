@@ -29,6 +29,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import mx.equipo6.proyectoapp.view.sampledata.Carousel
 
+/**
+ * Composable que muestra la vista principal de la aplicación.
+ * @author Ulises Jaramillo Portilla | A01798380; Jesús Ángel Guzmán Ortega.
+ * @param homeVM ViewModel de la vista principal.
+ */
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HomeView(homeVM: HomeVM = viewModel()) {

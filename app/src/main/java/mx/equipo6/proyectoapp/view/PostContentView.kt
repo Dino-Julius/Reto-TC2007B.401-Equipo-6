@@ -49,14 +49,17 @@ import mx.equipo6.proyectoapp.viewmodel.PostVM
  * PostContentView: Muestra la vista de un post de la comunidad.
  * @autor Ulises Jaramillo Portilla | A01798380.
  * @param post Post a mostrar.
- * @param navController navigation controller
- * @param postVM ViewModel.
+ * @param navController Controlador de navegación.
+ * @param postVM ViewModel de los posts.
  */
 @Composable
 fun PostContentView(post: Post?, navController: NavHostController, postVM: PostVM) {
+    // Estado para el contenido del archivo
     var fileContent by remember { mutableStateOf("Cargando...") }
+    // Alcance de la corrutina
     val coroutineScope = rememberCoroutineScope()
 
+    // Efecto lanzado cuando cambia la ruta del archivo del post
     LaunchedEffect(post?.file_path) {
         post?.file_path?.let { path ->
             coroutineScope.launch {
@@ -66,12 +69,13 @@ fun PostContentView(post: Post?, navController: NavHostController, postVM: PostV
         }
     }
 
+    // Columna principal
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)
     ) {
-        // Code to be moved outside the vertical scroll
+        // Fila para el botón de regresar
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -96,15 +100,16 @@ fun PostContentView(post: Post?, navController: NavHostController, postVM: PostV
             )
         }
 
-        // Divider to separate the header from the scrollable content
+        // Divisor horizontal
         HorizontalDivider(color = Color.LightGray, thickness = 0.5.dp)
 
-        // Scrollable content
+        // Columna con contenido desplazable
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
+            // Título del post
             Title(
                 post?.title ?: "",
                 modifier = Modifier
@@ -113,8 +118,10 @@ fun PostContentView(post: Post?, navController: NavHostController, postVM: PostV
                 textAlign = TextAlign.Center
             )
 
+            // Divisor horizontal
             HorizontalDivider(color = Color.Gray, thickness = 1.dp)
 
+            // Imagen del post
             Image(
                 painter = rememberAsyncImagePainter(model = post?.image_path),
                 contentDescription = "Post Image",
@@ -124,14 +131,17 @@ fun PostContentView(post: Post?, navController: NavHostController, postVM: PostV
                     .height(250.dp)
             )
 
+            // Divisor horizontal
             HorizontalDivider(color = Color.Gray, thickness = 1.dp)
 
+            // Caja con información del post
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp)
             ) {
                 Column {
+                    // Fila con el autor y la fecha del post
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -150,8 +160,10 @@ fun PostContentView(post: Post?, navController: NavHostController, postVM: PostV
                         )
                     }
 
+                    // Divisor horizontal
                     HorizontalDivider(color = Color.LightGray, thickness = 0.5.dp)
 
+                    // Resumen del post
                     Text(
                         text = post?.summary ?: "",
                         style = MaterialTheme.typography.bodyMedium,
@@ -163,8 +175,10 @@ fun PostContentView(post: Post?, navController: NavHostController, postVM: PostV
                 }
             }
 
+            // Divisor horizontal
             HorizontalDivider(color = Color.Gray, thickness = 1.dp)
 
+            // Contenido del archivo del post
             Text(
                 text = fileContent,
                 style = MaterialTheme.typography.bodyMedium,

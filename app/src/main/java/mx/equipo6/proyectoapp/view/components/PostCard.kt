@@ -24,12 +24,12 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import mx.equipo6.proyectoapp.model.posts.Post
 import mx.equipo6.proyectoapp.view.Windows
-import mx.equipo6.proyectoapp.viewmodel.PostVM
 
 /**
  * Composable que muestra un post en forma de tarjeta.
@@ -37,7 +37,7 @@ import mx.equipo6.proyectoapp.viewmodel.PostVM
  * @param post Post a mostrar.
  */
 @Composable
-fun PostCard(post: Post, navController: NavHostController, postVM: PostVM) {
+fun PostCard(post: Post, navController: NavHostController) {
     val ctx = LocalContext.current
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -96,10 +96,20 @@ fun PostCard(post: Post, navController: NavHostController, postVM: PostVM) {
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = post.summary,
+                    text = limitTextWords(post.summary),
+                    textAlign = TextAlign.Justify,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
         }
+    }
+}
+
+fun limitTextWords(text: String): String {
+    val words = text.split(" ")
+    return if (words.size > 30) {
+        words.take(30).joinToString(" ") + "..."
+    } else {
+        text
     }
 }

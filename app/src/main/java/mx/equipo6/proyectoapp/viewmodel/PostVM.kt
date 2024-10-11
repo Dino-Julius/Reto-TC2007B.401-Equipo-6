@@ -115,6 +115,11 @@ class PostVM @Inject constructor(
         }
     }
 
+
+    fun refreshPosts() {
+        fetchPosts()
+    }
+
     // Se libera el receptor.
     override fun onCleared() {
         super.onCleared()

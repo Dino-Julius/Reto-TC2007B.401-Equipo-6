@@ -10,16 +10,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
-
 import androidx.compose.foundation.background
 
+/**
+ * Composable que muestra un ítem de categoría con un ícono y un título.
+ * @author Ulises Jaramillo Portilla | A01798380.
+ * @param icon ImageVector del ícono a mostrar.
+ * @param title Título de la categoría.
+ * @param isSelected Booleano que indica si la categoría está seleccionada.
+ * @param modifier Modificador opcional para el ítem de categoría.
+ */
 @Composable
 fun CategoryItem(icon: ImageVector, title: String, isSelected: Boolean, modifier: Modifier = Modifier) {
     val iconColor = if (isSelected) Color.Black else Color.LightGray
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.padding(8.dp)
+        modifier = modifier.padding(start = 8.dp, end = 8.dp)
     ) {
         Icon(
             imageVector = icon,

@@ -94,6 +94,9 @@ dependencies {
     implementation(libs.play.services.wallet)
     implementation("com.google.pay.button:compose-pay-button:0.1.3")
 
+    // Accompanist Swipe Refresh
+    implementation ("com.google.accompanist:accompanist-swiperefresh:0.24.13-rc")
+
     // Stripe Payments integration
     implementation(libs.stripe.android)
 
