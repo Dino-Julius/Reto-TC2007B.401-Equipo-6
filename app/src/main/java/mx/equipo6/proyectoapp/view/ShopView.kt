@@ -19,8 +19,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -114,6 +114,7 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
 
     LaunchedEffect(Unit) {
         categoryBarState.scrollToItem(0)
+        listState.scrollToItem(0)
     }
 
     LaunchedEffect(listState) {
@@ -263,7 +264,12 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
                                         SortOrder.DESCENDING -> -price
                                     }
                                 })
-                                noProductsInCategory = productList.none { product -> product.category.equals(selectedCategory, ignoreCase = true) }
+                                noProductsInCategory = productList.none { product ->
+                                    product.category.equals(
+                                        selectedCategory,
+                                        ignoreCase = true
+                                    )
+                                }
                                 if (filteredProducts.isEmpty()) {
                                     if (delayedSearchQuery.isNotEmpty()) {
                                         ShowNoProductMessage("No se encontraron resultados de la búsqueda")
@@ -271,15 +277,29 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
                                         ShowNoProductMessage("No hay productos en esta categoría")
                                     }
                                 } else {
-                                    LazyVerticalGrid(
-                                        columns = GridCells.Adaptive(150.dp),
-                                        content = {
-                                            items(filteredProducts.size) { index: Int ->
-                                                ProductsCardUI(filteredProducts[index], navController, productVM)
+                                    LazyColumn(
+                                        state = listState,
+                                        modifier = Modifier.fillMaxSize()
+                                    ) {
+                                        items(filteredProducts.chunked(2)) { rowItems ->
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(start = 10.dp, end = 10.dp),
+                                                horizontalArrangement = Arrangement.SpaceBetween
+                                            ) {
+                                                for (product in rowItems) {
+                                                    ProductsCardUI(
+                                                        product,
+                                                        navController,
+                                                        productVM
+                                                    )
+                                                }
                                             }
-                                        })
+                                        }
                                     }
                                 }
+                            }
 
                             is ViewState.Error -> {
                                 val errorMsg = (productListViewState as ViewState.Error).message
@@ -394,7 +414,8 @@ fun ProductsCardUI(products: Products, navController: NavHostController, product
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+        elevation = CardDefaults.cardElevation(8.dp)
     ) {
         Column(
             modifier = Modifier

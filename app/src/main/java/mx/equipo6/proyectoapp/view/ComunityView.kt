@@ -104,6 +104,7 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
     // Scroll CategoryBar a la maxima posición.
     LaunchedEffect(Unit) {
         categoryBarState.scrollToItem(0)
+        listState.scrollToItem(0)
     }
 
     // Efecto lanzado cuando se actualiza el estado de la lista
