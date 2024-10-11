@@ -82,6 +82,7 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
     var showSearchBar by remember { mutableStateOf(true) }
     var noPostsInCategory by remember { mutableStateOf(false) }
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
+    val categoryBarState = rememberLazyListState()
 
     // Categorías específicas para ShopView
     val postCategories = listOf(
@@ -98,6 +99,11 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
         delay(1000)
         delayedSearchQuery = searchQuery
         searchTriggered = true
+    }
+
+    // Scroll CategoryBar a la maxima posición.
+    LaunchedEffect(Unit) {
+        categoryBarState.scrollToItem(0)
     }
 
     // Efecto lanzado cuando se actualiza el estado de la lista
@@ -152,24 +158,29 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
                     modifier = Modifier.padding(bottom = 10.dp),
                     onValueChange = { query ->
                         searchQuery = query.text
-                        val matchedCategory = (postListViewState as? ViewState.Success)?.data
-                            ?.firstOrNull { post ->
-                                post.title.contains(
-                                    query.text,
-                                    ignoreCase = true
-                                ) || post.partner_email.contains(query.text, ignoreCase = true)
-                            }
-                            ?.category
-                            ?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-                        if (matchedCategory != null) {
-                            selectedCategory = matchedCategory
-                            selectedCategoryIndex = when (matchedCategory) {
-                                "Todo" -> 0
-                                "Salud" -> 1
-                                "Inspirate" -> 2
-                                "Bienestar" -> 3
-                                "Eco" -> 4
-                                else -> 0
+                        if (query.text.isEmpty()) {
+                            selectedCategory = "Todo"
+                            selectedCategoryIndex = 0
+                        } else {
+                            val matchedCategory = (postListViewState as? ViewState.Success)?.data
+                                ?.firstOrNull { post ->
+                                    post.title.contains(
+                                        query.text,
+                                        ignoreCase = true
+                                    ) && (selectedCategory == "Todo" || post.category.equals(selectedCategory, ignoreCase = true))
+                                }
+                                ?.category
+                                ?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+                            if (matchedCategory != null && matchedCategory != selectedCategory) {
+                                selectedCategory = matchedCategory
+                                selectedCategoryIndex = when (matchedCategory) {
+                                    "Todo" -> 0
+                                    "Salud" -> 1
+                                    "Inspirate" -> 2
+                                    "Bienestar" -> 3
+                                    "Eco" -> 4
+                                    else -> 0
+                                }
                             }
                         }
                     }
@@ -200,8 +211,9 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
                             "Eco" -> 4
                             else -> 0
                         }
-                        postVM.refreshPosts() // Reload posts when category changes
-                    })
+                        postVM.refreshPosts()
+                    },
+                    state = categoryBarState)
             }
 
             Box {

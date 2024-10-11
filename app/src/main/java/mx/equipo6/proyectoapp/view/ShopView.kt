@@ -94,6 +94,7 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
     var showSearchBar by remember { mutableStateOf(true) }
     var noProductsInCategory by remember { mutableStateOf(false) }
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
+    val categoryBarState = rememberLazyListState()
 
     // Categorías específicas para ShopView
     val shopCategories = listOf(
@@ -109,6 +110,10 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
         delay(1000)
         delayedSearchQuery = searchQuery
         searchTriggered = true
+    }
+
+    LaunchedEffect(Unit) {
+        categoryBarState.scrollToItem(0)
     }
 
     LaunchedEffect(listState) {
@@ -160,24 +165,29 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
                     modifier = Modifier.padding(bottom = 10.dp),
                     onValueChange = { query ->
                         searchQuery = query.text
-                        val matchedCategory = (productListViewState as? ViewState.Success)?.data
-                            ?.firstOrNull { post ->
-                                post.name.contains(
-                                    query.text,
-                                    ignoreCase = true
-                                )
-                            }
-                            ?.category
-                            ?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-                        if (matchedCategory != null) {
-                            selectedCategory = matchedCategory
-                            selectedCategoryIndex = when (matchedCategory) {
-                                "Todo" -> 0
-                                "Regulares" -> 1
-                                "Nocturnas" -> 2
-                                "Teen" -> 3
-                                "Pantiprotectores" -> 4
-                                else -> 0
+                        if (query.text.isEmpty()) {
+                            selectedCategory = "Todo"
+                            selectedCategoryIndex = 0
+                        } else {
+                            val matchedCategory = (productListViewState as? ViewState.Success)?.data
+                                ?.firstOrNull { post ->
+                                    post.name.contains(
+                                        query.text,
+                                        ignoreCase = true
+                                    ) && (selectedCategory == "Todo" || post.category.equals(selectedCategory, ignoreCase = true))
+                                }
+                                ?.category
+                                ?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+                            if (matchedCategory != null && matchedCategory != selectedCategory) {
+                                selectedCategory = matchedCategory
+                                selectedCategoryIndex = when (matchedCategory) {
+                                    "Todo" -> 0
+                                    "Regulares" -> 1
+                                    "Nocturnas" -> 2
+                                    "Teen" -> 3
+                                    "Pantiprotectores" -> 4
+                                    else -> 0
+                                }
                             }
                         }
                     }
@@ -208,8 +218,9 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
                             "Eco" -> 4
                             else -> 0
                         }
-                        productVM.refreshProducts() // Reload products when category changes
-                    })
+                        productVM.refreshProducts()
+                    },
+                    state = categoryBarState)
             }
 
             Box {

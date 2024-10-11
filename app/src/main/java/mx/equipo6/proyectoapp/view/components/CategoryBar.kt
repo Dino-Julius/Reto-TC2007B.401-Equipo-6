@@ -2,6 +2,7 @@ package mx.equipo6.proyectoapp.view.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -24,15 +25,20 @@ import mx.equipo6.proyectoapp.view.sampledata.CategoryItem
  * @param selectedIndex Índice de la categoría seleccionada.
  */
 @Composable
-fun CategoryBar(categories: List<Pair<String, ImageVector>>, selectedIndex: Int, onCategorySelected: (String) -> Unit) {
-    val listState = rememberLazyListState()
+fun CategoryBar(
+    categories: List<Pair<String, ImageVector>>,
+    selectedIndex: Int,
+    onCategorySelected: (String) -> Unit,
+    state: LazyListState
+    ) {
     var selectedCategoryIndex by remember { mutableIntStateOf(selectedIndex) }
     val coroutineScope = rememberCoroutineScope()
+
 
     // LazyRow con las categorías.
     Box {
         LazyRow(
-            state = listState,
+            state = state,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp),
@@ -52,12 +58,12 @@ fun CategoryBar(categories: List<Pair<String, ImageVector>>, selectedIndex: Int,
                             onCategorySelected(category)
                             if (index == 3) {
                                 coroutineScope.launch {
-                                    listState.animateScrollToItem(index + 1)
+                                    state.animateScrollToItem(index + 1)
                                 }
                             }
                             if (index == 1) {
                                 coroutineScope.launch {
-                                    listState.animateScrollToItem(0)
+                                    state.animateScrollToItem(0)
                                 }
                             }
                         }
