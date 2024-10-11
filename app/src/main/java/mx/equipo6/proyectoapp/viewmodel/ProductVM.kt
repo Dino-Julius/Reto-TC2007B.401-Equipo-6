@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 /**
  * ViewModel para mostrar el inverntario de productos
- * @author Julio Vivas; Ulises Jaramillo Portilla | A01798380.
+ * @author Julio Vivas; Ulises Jaramillo Portilla; Jesus Guzman Ortega.
  * @param productRespository ProductRespository
  * @param context Context
  */

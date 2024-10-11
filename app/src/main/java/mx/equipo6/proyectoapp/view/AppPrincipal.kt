@@ -111,10 +111,6 @@ fun AppNavHost(
             ShoppingCartView(productVM, navController)
         }
 
-        composable(Windows.ROUTE_CHECKOUT) {
-            CheckoutView(navController) // TODO: implementar vista checokut
-        }
-
         composable(Windows.ROUTE_CHATBOT) {
             ChatBotView(chatBotVM)
         }

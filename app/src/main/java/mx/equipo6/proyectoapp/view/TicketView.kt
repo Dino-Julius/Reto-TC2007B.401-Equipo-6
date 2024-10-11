@@ -36,6 +36,7 @@ import mx.equipo6.proyectoapp.viewmodel.ProductVM
  * @param modifier Modifier
  * @param productVM ProductVM
  */
+
 @Composable
 fun TicketView(navController: NavController, modifier: Modifier = Modifier, productVM: ProductVM) {
     val cartItems by productVM.cartItems.collectAsState()
@@ -71,7 +72,7 @@ fun TicketView(navController: NavController, modifier: Modifier = Modifier, prod
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 8.dp)
+                            .padding(bottom = 10.dp)
                     ) {
                         Text(text = "Producto: ${product.name}", style = TextStyle(fontWeight = FontWeight.Medium, fontSize = 16.sp))
                         Text(text = "Cantidad: $quantity", style = TextStyle(fontSize = 14.sp))
