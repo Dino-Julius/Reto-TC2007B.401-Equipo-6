@@ -38,7 +38,7 @@
 
         <!-- Payment Activity (Stripe) -->
         <activity
-            android:name=".stripeAPI.PaymentActivity"
+            android:name=".model.stripeAPI.PaymentActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:exported="true" />
 
