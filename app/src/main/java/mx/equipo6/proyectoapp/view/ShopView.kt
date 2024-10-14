@@ -102,7 +102,7 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
     val shopCategories = listOf(
         "Todo" to Icons.Default.Home,
         "Regulares" to Icons.Default.Favorite,
-        "Nocturnas" to Icons.Default.Lightbulb,
+        "nocturnas" to Icons.Default.Lightbulb,
         "Teens" to Icons.Default.EmojiEmotions,
         "Pantiprotectores" to Icons.Default.Forest
     )
@@ -152,7 +152,7 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
                 .padding(top = 15.dp)
         ) {
             Title(
-                "Comunidad",
+                "Tienda",
                 modifier = Modifier.padding(bottom = 10.dp),
                 textAlign = TextAlign.Start
             )
@@ -191,7 +191,7 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
                                 selectedCategoryIndex = when (matchedCategory) {
                                     "Todo" -> 0
                                     "Regulares" -> 1
-                                    "Nocturnas" -> 2
+                                    "nocturnas" -> 2
                                     "Teens" -> 3
                                     "Pantiprotectores" -> 4
                                     else -> 0
@@ -228,7 +228,7 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
                         selectedCategoryIndex = when (category) {
                             "Todo" -> 0
                             "Regulares" -> 1
-                            "Nocturnas" -> 2
+                            "nocturnas" -> 2
                             "Teens" -> 3
                             "Pantiprotectores" -> 4
                             else -> 0

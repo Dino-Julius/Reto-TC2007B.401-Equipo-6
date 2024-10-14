@@ -269,7 +269,12 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
                                         SortOrder.DESCENDING -> date?.let { -it.time }
                                     }
                                 })
-                                noPostsInCategory = postList.none { post -> post.category.equals(selectedCategory, ignoreCase = true) }
+                                noPostsInCategory = postList.none { post ->
+                                    post.category.equals(
+                                        selectedCategory,
+                                        ignoreCase = true
+                                    )
+                                }
                                 if (filteredPosts.isEmpty()) {
                                     if (delayedSearchQuery.isNotEmpty()) {
                                         ShowNoPostsMessage("No se encontraron resultados de la búsqueda")

@@ -1,44 +1,70 @@
 package mx.equipo6.proyectoapp.view
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import mx.equipo6.proyectoapp.R
+import mx.equipo6.proyectoapp.include.ViewState
+import mx.equipo6.proyectoapp.view.components.PostCard
+import mx.equipo6.proyectoapp.view.sampledata.Carousel
 import mx.equipo6.proyectoapp.view.sampledata.CircleButton
 import mx.equipo6.proyectoapp.view.sampledata.CircleButtonList
 import mx.equipo6.proyectoapp.view.sampledata.PagerIndicator
 import mx.equipo6.proyectoapp.view.sampledata.RectangularButton
-import mx.equipo6.proyectoapp.view.sampledata.SampleCard
 import mx.equipo6.proyectoapp.view.sampledata.Subtitle
 import mx.equipo6.proyectoapp.viewmodel.HomeVM
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
-import mx.equipo6.proyectoapp.view.sampledata.Carousel
 
-/**
- * Composable que muestra la vista principal de la aplicación.
- * @author Ulises Jaramillo Portilla | A01798380; Jesús Ángel Guzmán Ortega.
- * @param homeVM ViewModel de la vista principal.
- */
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun HomeView(homeVM: HomeVM = viewModel()) {
+fun HomeView(homeVM: HomeVM = viewModel(), navController: NavHostController) {
     val context = LocalContext.current
-    val adviceList = homeVM.adviceList.collectAsState().value
+    val isConnected by homeVM.isConnected.collectAsState()
+    val postListViewState by homeVM.posts.collectAsState()
     val pagerState = rememberPagerState()
     val allUserButtons = listOf(
         Icons.Default.Home to "Inicio",
@@ -54,6 +80,11 @@ fun HomeView(homeVM: HomeVM = viewModel()) {
     val availableUserButtons = remember { mutableStateListOf(*allUserButtons.toTypedArray()) }
     val availableShoppingButtons = remember { mutableStateListOf(*allShoppingButtons.toTypedArray()) }
     var showButtonList by remember { mutableStateOf(false) }
+
+    val postsByCategory = (postListViewState as? ViewState.Success)?.data?.groupBy { it.category } ?: emptyMap()
+    val selectedPosts = postsByCategory.flatMap { (_, posts) ->
+        posts.sortedByDescending { it.date }.take(5)
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -86,8 +117,8 @@ fun HomeView(homeVM: HomeVM = viewModel()) {
             if (selectedButtons.isNotEmpty()) {
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 15.dp, bottom = 4.dp),
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
                     selectedButtons.chunked(3).forEach { rowButtons ->
@@ -138,25 +169,37 @@ fun HomeView(homeVM: HomeVM = viewModel()) {
 
             HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)
 
-            Subtitle("Consejos del día")
+            Subtitle("Recomendados")
 
-            HorizontalPager(
-                count = adviceList.size,
-                state = pagerState,
-                modifier = Modifier.fillMaxWidth()
-            ) { page ->
-                SampleCard(
-                    texto = adviceList[page].text
-                )
+            if (isConnected) {
+                when (postListViewState) {
+                    is ViewState.Loading -> LoadingScreen()
+                    is ViewState.Error -> ShowErrorMessage((postListViewState as ViewState.Error).message)
+                    is ViewState.Success -> {
+                        if (selectedPosts.isEmpty()) {
+                            ShowNoPostsMessage("No posts available")
+                        } else {
+                            HorizontalPager(
+                                count = selectedPosts.size,
+                                state = pagerState,
+                                modifier = Modifier.fillMaxWidth()
+                            ) { page ->
+                                PostCard(selectedPosts[page], navController)
+                            }
+
+                            PagerIndicator(
+                                totalDots = selectedPosts.size,
+                                selectedIndex = pagerState.currentPage,
+                                modifier = Modifier
+                                    .align(Alignment.CenterHorizontally)
+                                    .padding(4.dp)
+                            )
+                        }
+                    }
+                }
+            } else {
+                ShowErrorMessage("Not Connected to Internet ...")
             }
-
-            PagerIndicator(
-                totalDots = adviceList.size,
-                selectedIndex = pagerState.currentPage,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(4.dp)
-            )
 
             HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)
 
@@ -168,14 +211,70 @@ fun HomeView(homeVM: HomeVM = viewModel()) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "\"Por cada producto que adquieras,\notra toalla es donada\"", // \n crea un salto de línea
+                    text = "\"Por cada producto que adquieras,\notra toalla es donada\"",
                     fontFamily = bellefair,
                     fontSize = 22.sp,
-                    textAlign = TextAlign.Center, // Asegura que el texto se centre correctamente
-                    modifier = Modifier.fillMaxWidth() // Añade este modificador para que el texto se ajuste al ancho disponible
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
             Carousel()
         }
+    }
+}
+
+@Composable
+private fun ShowNoPostsMessage(message: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        Column(
+            modifier = Modifier.align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(text = message)
+        }
+    }
+}
+
+@Composable
+private fun ShowErrorMessage(errorMsg: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        Column(
+            modifier = Modifier.align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.no_connection),
+                contentDescription = "img error",
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.Center,
+                modifier = Modifier
+                    .width(100.dp)
+                    .height(100.dp)
+            )
+            Text(text = errorMsg)
+        }
+    }
+}
+
+@Composable
+private fun LoadingScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
     }
 }
