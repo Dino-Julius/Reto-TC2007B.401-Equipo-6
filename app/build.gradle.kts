@@ -29,6 +29,10 @@ android {
         }
     }
 
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -82,6 +86,8 @@ dependencies {
 
     // Dependency Injection with Hilt
     implementation(libs.dagger.hilt.android)
+    implementation(libs.androidx.runner)
+    implementation(libs.ui.test.junit4.android)
     kapt(libs.dagger.hilt.android.compiler)
 
     // Networking: Retrofit, Gson, Volley
@@ -119,6 +125,9 @@ dependencies {
 
     // Testing dependencies
     testImplementation(libs.junit)
+    testImplementation("org.mockito:mockito-core:4.0.0")
+    testImplementation("org.mockito:mockito-inline:4.0.0")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

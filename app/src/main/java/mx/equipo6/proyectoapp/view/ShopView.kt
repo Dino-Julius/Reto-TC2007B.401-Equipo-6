@@ -19,8 +19,10 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -83,7 +85,7 @@ import java.util.Locale
 fun ShopView(productVM: ProductVM, navController: NavHostController) {
     val productListViewState by productVM.products.collectAsState()
     val isConnected by productVM.isConnected.collectAsState()
-    val listState = rememberLazyListState()
+    val listState = rememberLazyGridState()
     var searchQuery by remember { mutableStateOf("") }
     var delayedSearchQuery by remember { mutableStateOf("") }
     var searchTriggered by remember { mutableStateOf(false) }
@@ -101,10 +103,11 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
         "Todo" to Icons.Default.Home,
         "Regulares" to Icons.Default.Favorite,
         "Nocturnas" to Icons.Default.Lightbulb,
-        "Teen" to Icons.Default.EmojiEmotions,
+        "Teens" to Icons.Default.EmojiEmotions,
         "Pantiprotectores" to Icons.Default.Forest
     )
 
+    // Efecto lanzado cuando se realiza una búsqueda
     LaunchedEffect(searchQuery) {
         searchTriggered = false
         delay(1000)
@@ -112,11 +115,13 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
         searchTriggered = true
     }
 
+    // Scroll CategoryBar a la maxima posición.
     LaunchedEffect(Unit) {
         categoryBarState.scrollToItem(0)
         listState.scrollToItem(0)
     }
 
+    // Efecto lanzado cuando se actualiza el estado de la lista
     LaunchedEffect(listState) {
         var previousIndex = 0
         var previousScrollOffset = 0
@@ -135,6 +140,7 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
             }
     }
 
+    // Efecto lanzado cuando se carga la vista
     LaunchedEffect(Unit) {
         productVM.refreshProducts()
     }
@@ -146,12 +152,13 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
                 .padding(top = 15.dp)
         ) {
             Title(
-                "Tienda",
+                "Comunidad",
                 modifier = Modifier.padding(bottom = 10.dp),
                 textAlign = TextAlign.Start
             )
         }
 
+        // Barra de búsqueda.
         AnimatedVisibility(
             visible = showSearchBar,
             enter = fadeIn(),
@@ -171,11 +178,11 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
                             selectedCategoryIndex = 0
                         } else {
                             val matchedCategory = (productListViewState as? ViewState.Success)?.data
-                                ?.firstOrNull { post ->
-                                    post.name.contains(
+                                ?.firstOrNull { product ->
+                                    product.name.contains(
                                         query.text,
                                         ignoreCase = true
-                                    ) && (selectedCategory == "Todo" || post.category.equals(selectedCategory, ignoreCase = true))
+                                    ) && (selectedCategory == "Todo" || product.category.equals(selectedCategory, ignoreCase = true))
                                 }
                                 ?.category
                                 ?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
@@ -185,12 +192,19 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
                                     "Todo" -> 0
                                     "Regulares" -> 1
                                     "Nocturnas" -> 2
-                                    "Teen" -> 3
+                                    "Teens" -> 3
                                     "Pantiprotectores" -> 4
                                     else -> 0
                                 }
                             }
                         }
+                    },
+                    onClearClick = {
+                        searchQuery = ""
+                        delayedSearchQuery = ""
+                        selectedCategory = "Todo"
+                        selectedCategoryIndex = 0
+                        productVM.refreshProducts()
                     }
                 )
             }
@@ -213,10 +227,10 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
                         selectedCategory = category
                         selectedCategoryIndex = when (category) {
                             "Todo" -> 0
-                            "Salud" -> 1
-                            "Inspirate" -> 2
-                            "Bienestar" -> 3
-                            "Eco" -> 4
+                            "Regulares" -> 1
+                            "Nocturnas" -> 2
+                            "Teens" -> 3
+                            "Pantiprotectores" -> 4
                             else -> 0
                         }
                         productVM.refreshProducts()
@@ -235,6 +249,7 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
                 )
             }
 
+            // SwipeRefresh para actualizar la lista de productos
             SwipeRefresh(
                 state = swipeRefreshState,
                 onRefresh = {
@@ -277,35 +292,29 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
                                         ShowNoProductMessage("No hay productos en esta categoría")
                                     }
                                 } else {
-                                    LazyColumn(
+                                    LazyVerticalGrid(
+                                        columns = GridCells.Fixed(2),
                                         state = listState,
-                                        modifier = Modifier.fillMaxSize()
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(start = 12.dp, end = 12.dp),
+                                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                                        horizontalArrangement = Arrangement.spacedBy(10.dp)
                                     ) {
-                                        items(filteredProducts.chunked(2)) { rowItems ->
-                                            Row(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(start = 10.dp, end = 10.dp),
-                                                horizontalArrangement = Arrangement.SpaceBetween
-                                            ) {
-                                                for (product in rowItems) {
-                                                    ProductsCardUI(
-                                                        product,
-                                                        navController,
-                                                        productVM
-                                                    )
-                                                }
-                                            }
+                                        items(filteredProducts) { product ->
+                                            ProductsCardUI(
+                                                product,
+                                                navController,
+                                                productVM
+                                            )
                                         }
                                     }
                                 }
                             }
-
                             is ViewState.Error -> {
                                 val errorMsg = (productListViewState as ViewState.Error).message
                                 ShowErrorMessage(errorMsg)
                             }
-
                             is ViewState.Loading -> {
                                 LoadingScreen()
                             }
@@ -318,6 +327,7 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
         }
     }
 }
+
 
 /**
  * Composable que muestra un mensaje cuando no hay productos.
@@ -402,6 +412,7 @@ fun ProductsCardUI(products: Products, navController: NavHostController, product
     val quantityToAdd = remember { mutableIntStateOf(1) }
     val showDialog = remember { mutableStateOf(false) }
 
+
     Card(
         modifier = Modifier
             .height(270.dp)
@@ -483,6 +494,7 @@ fun ProductsCardUI(products: Products, navController: NavHostController, product
             }
         }
     }
+
 
     // Call the dialog function and pass necessary parameters
     ProductQuantityDialog(

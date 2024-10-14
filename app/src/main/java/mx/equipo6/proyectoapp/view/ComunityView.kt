@@ -84,7 +84,7 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
     val categoryBarState = rememberLazyListState()
 
-    // Categorías específicas para ShopView
+    // Categorías específicas para CommunityView
     val postCategories = listOf(
         "Todo" to Icons.Default.Home,
         "Salud" to Icons.Default.Favorite,
@@ -184,6 +184,13 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
                                 }
                             }
                         }
+                    },
+                    onClearClick = {
+                        searchQuery = ""
+                        delayedSearchQuery = ""
+                        selectedCategory = "Todo"
+                        selectedCategoryIndex = 0
+                        postVM.refreshPosts()
                     }
                 )
             }
