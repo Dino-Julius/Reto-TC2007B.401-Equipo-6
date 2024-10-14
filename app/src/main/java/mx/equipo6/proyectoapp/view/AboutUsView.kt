@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import mx.equipo6.proyectoapp.R
 import mx.equipo6.proyectoapp.model.stripeAPI.PaymentActivity
+import mx.equipo6.proyectoapp.model.validateCash
 import mx.equipo6.proyectoapp.view.sampledata.OSMDroidMapView
 import mx.equipo6.proyectoapp.viewmodel.AboutUsVM
 import java.io.File
@@ -194,11 +195,11 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                     value = donationAmount,
                     onValueChange = {
                         donationAmount = it
-                        isValidDonation = it.toIntOrNull() != null && it.toInt() > 0
+                        isValidDonation = validateCash(it) // Use validateNumber function
                     },
                     label = { Text("Cantidad a donar") },
                     isError = !isValidDonation,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), // Number keyboard
                     modifier = Modifier
                         .padding(16.dp)
                         .fillMaxWidth()
@@ -216,7 +217,7 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                 // Boton Donaciones
                 Button(
                     onClick = {
-                        val donationInCents = donationAmount.toIntOrNull()?.times(100)
+                        val donationInCents = donationAmount.toDoubleOrNull()?.times(100)?.toInt()
 
                         if (donationInCents != null && donationInCents > 0) {
                             val intent = Intent(context, PaymentActivity::class.java)
@@ -241,7 +242,8 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                         fontFamily = bellefair
                     )
                 }
-            Button(
+
+                Button(
                 onClick = {
                     // Open PDF from raw resources
                     val pdfFile = File(context.cacheDir, "aviso.pdf")
@@ -285,6 +287,7 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                     fontFamily = bellefair
                 )
             }
+                // Redes Sociales Section
                 Text(
                     text = "Visita nuestras redes sociales!",
                     fontFamily = bellefair,
@@ -295,80 +298,71 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                         .fillMaxWidth()
                         .padding(top = 8.dp)
                 )
+
                 // Enlaces a redes sociales
                 Row(
                     modifier = Modifier
                         .padding(16.dp)
-                        .fillMaxWidth(), // Asegura que el Row ocupe todo el ancho
-                    horizontalArrangement = Arrangement.SpaceEvenly // Distribuye el espacio uniformemente entre los iconos
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    // Imagen de Facebook
                     Image(
-                        painter = painterResource(id = R.drawable.ic_facebook), // Usa tu propio recurso de imagen
+                        painter = painterResource(id = R.drawable.ic_facebook),
                         contentDescription = "Facebook",
                         modifier = Modifier
-                            .size(40.dp) // Ajusta el tamaño de la imagen
+                            .size(40.dp)
                             .clickable {
                                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/FundacionTodasBrillamos"))
                                 context.startActivity(intent)
                             }
                     )
-
-                    // Imagen de TikTok
                     Image(
                         painter = painterResource(id = R.drawable.ic_tiktok),
                         contentDescription = "TikTok",
                         modifier = Modifier
-                            .size(40.dp) // Ajusta el tamaño de la imagen
+                            .size(40.dp)
                             .clickable {
                                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://vm.tiktok.com/ZMjKEqyJH"))
                                 context.startActivity(intent)
                             }
                     )
-
-                    // Imagen de Youtube
                     Image(
                         painter = painterResource(id = R.drawable.ic_youtube),
-                        contentDescription = "TikTok",
+                        contentDescription = "YouTube",
                         modifier = Modifier
-                            .size(40.dp) // Ajusta el tamaño de la imagen
+                            .size(40.dp)
                             .clickable {
                                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/@FundacionTodasBrillamos"))
                                 context.startActivity(intent)
                             }
                     )
-
-                    // Imagen de Instagram
                     Image(
-                        painter = painterResource(id = R.drawable.ic_instagram), // Usa tu propio recurso de imagen
+                        painter = painterResource(id = R.drawable.ic_instagram),
                         contentDescription = "Instagram",
                         modifier = Modifier
                             .size(40.dp)
                             .clickable {
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/fundaciontodasbrillamos/?igshid=NTc4MTIwNjQ2YQ%3D%3D"))
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/fundaciontodasbrillamos"))
                                 context.startActivity(intent)
                             }
                     )
                 }
-            }
 
-            Spacer(modifier = Modifier.height(80.dp))
-            // MAPS VIEW
-            Column(
-                modifier = Modifier.fillMaxSize()
-            ) {
+                Spacer(modifier = Modifier.height(170.dp))
+
+                // MAPS VIEW SECTION
                 Box(
                     modifier = Modifier
-                        .height(300.dp) // Set a fixed height for the map
+                        .height(300.dp)
                         .fillMaxWidth()
-
+                        .padding(16.dp)
                 ) {
                     OSMDroidMapView()
                 }
             }
 
 
-            Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(30.dp))
             // Informacion de contacto
             Box(
                 modifier = Modifier

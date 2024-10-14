@@ -77,7 +77,8 @@ fun OSMDroidMapView() {
         }
     }
 
-    Box(modifier = Modifier.height(300.dp).fillMaxWidth()) {
+    // Ensure the map height is fixed to avoid resizing
+    Box(modifier = Modifier.height(200.dp).fillMaxWidth()) {
         AndroidView(
             factory = { mapManager.mapView },
             update = {
