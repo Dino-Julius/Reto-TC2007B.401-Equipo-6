@@ -21,14 +21,20 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.AbsoluteCutCornerShape
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,12 +45,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import mx.equipo6.proyectoapp.R
+import mx.equipo6.proyectoapp.model.stripeAPI.PaymentActivity
 import mx.equipo6.proyectoapp.view.sampledata.OSMDroidMapView
 import mx.equipo6.proyectoapp.viewmodel.AboutUsVM
 import java.io.File
@@ -61,6 +69,8 @@ import java.io.InputStream
 fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM()) {
     val context = LocalContext.current // Obtener el contexto para abrir enlaces
     val bellefair = FontFamily(Font(R.font.bellefair_regular))
+    var donationAmount by remember { mutableStateOf("") }
+    var isValidDonation by remember { mutableStateOf(true) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -180,9 +190,42 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                         .fillMaxWidth()
                         .padding(14.dp)
                 )
-                //Boton Donaciones
+                OutlinedTextField(
+                    value = donationAmount,
+                    onValueChange = {
+                        donationAmount = it
+                        isValidDonation = it.toIntOrNull() != null && it.toInt() > 0
+                    },
+                    label = { Text("Cantidad a donar") },
+                    isError = !isValidDonation,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                )
+
+                if (!isValidDonation) {
+                    Text(
+                        text = "Ingrese una cantidad válida para donar",
+                        color = Color.Red,
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
+
+                // Boton Donaciones
                 Button(
-                    onClick = { /* TODO */ },
+                    onClick = {
+                        val donationInCents = donationAmount.toIntOrNull()?.times(100)
+
+                        if (donationInCents != null && donationInCents > 0) {
+                            val intent = Intent(context, PaymentActivity::class.java)
+                            intent.putExtra("totalPrice", donationInCents)
+                            context.startActivity(intent)
+                        } else {
+                            Toast.makeText(context, "Ingrese una cantidad válida para donar", Toast.LENGTH_SHORT).show()
+                        }
+                    },
                     colors = ButtonDefaults.buttonColors(Color(0xFFF4D0CB)),
                     modifier = Modifier
                         .padding(10.dp)
