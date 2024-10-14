@@ -28,27 +28,51 @@ fun ChatBotView(chatBotVM: ChatBotViewModel) {
     var userInput by remember { mutableStateOf("") }
     var chatHistory by remember { mutableStateOf(listOf<Pair<String, Boolean>>()) } // Almacena el historial de mensajes
     var isSending by remember { mutableStateOf(false) } // Estado para controlar si hay una solicitud en curso
+    var errorMessage by remember { mutableStateOf<String?>(null) } // Estado para el mensaje de error
 
     // State for coroutine scope
     val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
     val listState = rememberLazyListState() // State for scrolling
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        // Sección de chat
-        LazyColumn(
-            state = listState,
-            modifier = Modifier.weight(1f)
-        ) {
-            items(chatHistory.size) { index ->
-                val (message, isUser) = chatHistory[index]
-                ChatBubble(message = message, isUser = isUser)
+    Column(
+        modifier = Modifier.fillMaxSize().padding(16.dp),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        // Mostrar instrucciones si no hay mensajes en el historial
+        if (chatHistory.isEmpty()) {
+            Text(
+                text = "Este es el chatbot de Zazil para contestar cualquier pregunta sobre la menstruación. Pregúntame cualquier cosa cuando gustes.",
+                color = Color.Gray,
+                modifier = Modifier.padding(16.dp),
+                textAlign = TextAlign.Center
+            )
+        } else {
+            // Sección de chat
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.weight(1f)
+            ) {
+                items(chatHistory.size) { index ->
+                    val (message, isUser) = chatHistory[index]
+                    ChatBubble(message = message, isUser = isUser)
+                }
             }
         }
 
         // Mostrar animación de "escribiendo" si está enviando
         if (isSending) {
             TypingIndicator()
+        }
+
+        // Mostrar mensaje de error si existe
+        errorMessage?.let {
+            Text(
+                text = it,
+                color = Color.Red,
+                modifier = Modifier.padding(8.dp),
+                textAlign = TextAlign.Center
+            )
         }
 
         // Row para el campo de entrada y el botón de enviar
@@ -72,11 +96,13 @@ fun ChatBotView(chatBotVM: ChatBotViewModel) {
                             Log.d("ChatBotView", "User message: $userInput")
                             chatHistory = chatHistory + Pair("You: $userInput", true) // Agrega el mensaje del usuario
                             isSending = true
+                            errorMessage = null // Limpiar mensaje de error
                             chatBotVM.sendMessage2(
                                 content = userInput,
                                 onFailure = {
                                     Log.e("ChatBotView", "Failed to send message", it)
                                     isSending = false // Asegúrate de restablecer el estado aquí también
+                                    errorMessage = "Error: ${it.message}" // Mostrar mensaje de error
                                 },
                                 onResponse = { response ->
                                     Log.d("ChatBotView", "Bot response: $response")
@@ -88,7 +114,17 @@ fun ChatBotView(chatBotVM: ChatBotViewModel) {
                             focusManager.clearFocus() // Oculta el teclado
                         }
                     }
-                )
+                ),
+                decorationBox = { innerTextField ->
+                    if (userInput.isEmpty()) {
+                        Text(
+                            text = "Escribir...",
+                            color = Color.Gray,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
+                    innerTextField()
+                }
             )
         }
     }

@@ -17,9 +17,16 @@ class ChatBotViewModel : ViewModel() {
     var isSending: Boolean? = null // Inicializa isSending a false
 
     init {
-        enchatbot.initialize("http://10.48.93.227:5000/chat")
+        enchatbot.initialize("http://161.35.96.129:5000/chat")
     }
 
+    /**
+     * @autor: Manuel Olmos Antillón
+     * @param: content: String
+     * @param: onFailure: (IOException) -> Unit
+     * @param: onResponse: (String) -> Unit
+     * Función para enviar un mensaje al chatbot y manejar la respuesta
+     */
     fun sendMessage2(
         content: String,
         onFailure: (IOException) -> Unit,
@@ -51,5 +58,4 @@ class ChatBotViewModel : ViewModel() {
             )
         }
     }
-
 }
