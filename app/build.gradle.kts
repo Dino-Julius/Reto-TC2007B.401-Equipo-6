@@ -88,6 +88,14 @@ dependencies {
     implementation(libs.dagger.hilt.android)
     implementation(libs.androidx.runner)
     implementation(libs.ui.test.junit4.android)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.layout.android)
     kapt(libs.dagger.hilt.android.compiler)
 
     // Networking: Retrofit, Gson, Volley

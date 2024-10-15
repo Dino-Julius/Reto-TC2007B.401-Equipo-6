@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -25,6 +26,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.component1
+import androidx.core.graphics.component2
 import androidx.navigation.NavController
 import mx.equipo6.proyectoapp.model.stripeAPI.sendSoldItemsToServer
 import mx.equipo6.proyectoapp.viewmodel.ProductVM
@@ -40,9 +43,11 @@ import mx.equipo6.proyectoapp.viewmodel.ProductVM
 @Composable
 fun TicketView(navController: NavController, modifier: Modifier = Modifier, productVM: ProductVM) {
     val cartItems by productVM.cartItems.collectAsState()
+    var address = "Freak Avenue 123, Colonia Centro"
+    var email = "FreakyFranklin@gmail.com"
 
     LaunchedEffect(Unit) {
-        productVM.placeOrder("Freak Avenue 123, Colonia Centro", "FreakyFranklin@gmail.com")
+        productVM.placeOrder(address, email)
     }
 
     Column(
@@ -80,6 +85,21 @@ fun TicketView(navController: NavController, modifier: Modifier = Modifier, prod
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "Dirección de entrega: $address",
+                    style = TextStyle(fontSize = 14.sp),
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
+
+
+                Text(
+                    text = "Email: $email",
+                    style = TextStyle(fontSize = 14.sp),
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
 
                 Text(
                     text = "Recuerda tomar captura de pantalla de tu ticket",
