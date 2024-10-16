@@ -7,7 +7,7 @@ firebaseBom = "33.3.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
-#junitVersion = "1.4.0"
+junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.4"
 activityCompose = "1.9.1"
@@ -28,6 +28,9 @@ uiDesktop = "1.7.0"
 volley = "1.2.1"
 toolsCore = "1.0.0-alpha10"
 uiToolingPreviewAndroid = "1.7.3"
+runner = "1.6.2"
+uiTestJunit4AndroidVersion = "1.7.3"
+foundationLayoutAndroid = "1.6.6"
 androidxRunner = "1.4.0"
 uiTestJunit4 = "1.4.0"
 
@@ -45,7 +48,7 @@ dagger-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compil
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
-#androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
@@ -71,8 +74,9 @@ stripe-android = { module = "com.stripe:stripe-android", version.ref = "stripeAn
 volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 androidx-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-core", version.ref = "toolsCore" }
 androidx-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version.ref = "uiToolingPreviewAndroid" }
-androidx-runner = { group = "androidx.test", name = "runner", version.ref = "androidxRunner" }
-#ui-test-junit4-android = { group = "androidx.test.ext", name = "junit", version.ref = "uiTestJunit4" }
+androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
+ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4AndroidVersion" }
+androidx-foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

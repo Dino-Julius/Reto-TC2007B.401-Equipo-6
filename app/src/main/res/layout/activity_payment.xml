@@ -1,23 +1,66 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="#d5b4b0">
 
-    <!-- Stripe's Card Input Widget -->
+    <!-- ZAZIL App Title -->
+    <TextView
+        android:id="@+id/zazilAppText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="ZAZIL App"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#6a5b6c"
+        android:layout_marginTop="32dp" />
+
+    <!-- Fundación Todas Brillamos Text -->
+    <TextView
+        android:id="@+id/fundacionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/zazilAppText"
+        android:layout_centerHorizontal="true"
+        android:text="Fundación Todas Brillamos"
+        android:textSize="18sp"
+        android:textColor="#6a5b6c"
+        android:layout_marginTop="8dp" />
+
+    <!-- Stripe Card Input Widget -->
     <com.stripe.android.view.CardInputWidget
         android:id="@+id/cardInputWidget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp" />
+        android:layout_below="@id/fundacionText"
+        android:layout_marginTop="16dp" />
 
-    <!-- Pay Button -->
+    <!-- Pay Now Button -->
     <Button
         android:id="@+id/payButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardInputWidget"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:padding="16dp"
+        android:textSize="18sp"
+        android:background="#C8ACBC"
+        android:text="Paga ahora" />
+
+    <!-- Powered by Stripe Text -->
+    <TextView
+        android:id="@+id/poweredByText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pay Now"
-        android:layout_below="@id/cardInputWidget"
+        android:layout_below="@id/payButton"
+        android:layout_centerHorizontal="true"
+        android:text="Powered by Stripe"
+        android:textSize="16sp"
+        android:textColor="#000000"
         android:layout_marginTop="16dp" />
 
 </RelativeLayout>

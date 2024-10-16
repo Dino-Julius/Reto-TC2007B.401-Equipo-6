@@ -91,7 +91,7 @@ class NavigationBars {
                         },
                         alwaysShowLabel = true,
                         colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = Color(0xFFFFD700), // Color del ícono seleccionado
+                            selectedIconColor = Color(0xFF000000), // Color del ícono seleccionado
                             selectedTextColor = Color.White, // Color del texto seleccionado
                             indicatorColor = Color.White, // Color del indicador
                             unselectedIconColor = Color.White, // Color del ícono no seleccionado

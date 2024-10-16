@@ -5,6 +5,7 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -54,7 +55,7 @@ sealed class Windows(
     private data object AboutUsView : Windows(
         ROUTE_ABOUTUS,
         "Zazil",
-        Icons.Default.ThumbUp
+        Icons.Default.Info
     )
 
     private data object ComunityView : Windows(

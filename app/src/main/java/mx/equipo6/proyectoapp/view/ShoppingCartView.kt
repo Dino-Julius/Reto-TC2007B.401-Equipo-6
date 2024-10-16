@@ -141,7 +141,6 @@ fun ShoppingCartView(productVM: ProductVM, navController: NavHostController) {
             Button(
                 onClick = {
                     // Ensure totalPrice is non-null and non-zero
-                    Log.d("valores", totalPrice.toString())
                     val priceInCents = (totalPrice * 100).toInt()
 
                     if (priceInCents > 0) {

@@ -8,8 +8,6 @@ import kotlinx.coroutines.test.runTest
 import mx.equipo6.proyectoapp.viewmodel.HomeVM
 import org.junit.Before
 import org.junit.Test
-//import org.mockito.kotlin.mock
-//import org.mockito.kotlin.verify
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeVMTest {

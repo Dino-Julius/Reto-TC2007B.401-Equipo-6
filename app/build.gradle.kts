@@ -29,6 +29,10 @@ android {
         }
     }
 
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -83,6 +87,15 @@ dependencies {
     // Dependency Injection with Hilt
     implementation(libs.dagger.hilt.android)
     implementation(libs.androidx.runner)
+    implementation(libs.ui.test.junit4.android)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.layout.android)
     //implementation(libs.ui.test.junit4.android)
     kapt(libs.dagger.hilt.android.compiler)
 
@@ -124,7 +137,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:4.0.0")
     testImplementation("org.mockito:mockito-inline:4.0.0")
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2")
-    //androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
 
@@ -137,7 +150,4 @@ dependencies {
     // Debugging tools for Compose UI
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
-    implementation("com.wdullaer:materialdatetimepicker:4.2.3")
-
 }

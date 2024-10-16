@@ -21,14 +21,20 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.AbsoluteCutCornerShape
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,12 +45,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import mx.equipo6.proyectoapp.R
+import mx.equipo6.proyectoapp.model.stripeAPI.PaymentActivity
+import mx.equipo6.proyectoapp.model.validateCash
 import mx.equipo6.proyectoapp.view.sampledata.OSMDroidMapView
 import mx.equipo6.proyectoapp.viewmodel.AboutUsVM
 import java.io.File
@@ -61,6 +70,8 @@ import java.io.InputStream
 fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM()) {
     val context = LocalContext.current // Obtener el contexto para abrir enlaces
     val bellefair = FontFamily(Font(R.font.bellefair_regular))
+    var donationAmount by remember { mutableStateOf("") }
+    var isValidDonation by remember { mutableStateOf(true) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -180,9 +191,42 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                         .fillMaxWidth()
                         .padding(14.dp)
                 )
-                //Boton Donaciones
+                OutlinedTextField(
+                    value = donationAmount,
+                    onValueChange = {
+                        donationAmount = it
+                        isValidDonation = validateCash(it) // Use validateNumber function
+                    },
+                    label = { Text("Cantidad a donar") },
+                    isError = !isValidDonation,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), // Number keyboard
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                )
+
+                if (!isValidDonation) {
+                    Text(
+                        text = "Ingrese una cantidad válida para donar",
+                        color = Color.Red,
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
+
+                // Boton Donaciones
                 Button(
-                    onClick = { /* TODO */ },
+                    onClick = {
+                        val donationInCents = donationAmount.toDoubleOrNull()?.times(100)?.toInt()
+
+                        if (donationInCents != null && donationInCents > 0) {
+                            val intent = Intent(context, PaymentActivity::class.java)
+                            intent.putExtra("totalPrice", donationInCents)
+                            context.startActivity(intent)
+                        } else {
+                            Toast.makeText(context, "Ingrese una cantidad válida para donar", Toast.LENGTH_SHORT).show()
+                        }
+                    },
                     colors = ButtonDefaults.buttonColors(Color(0xFFF4D0CB)),
                     modifier = Modifier
                         .padding(10.dp)
@@ -198,7 +242,8 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                         fontFamily = bellefair
                     )
                 }
-            Button(
+
+                Button(
                 onClick = {
                     // Open PDF from raw resources
                     val pdfFile = File(context.cacheDir, "aviso.pdf")
@@ -242,6 +287,7 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                     fontFamily = bellefair
                 )
             }
+                // Redes Sociales Section
                 Text(
                     text = "Visita nuestras redes sociales!",
                     fontFamily = bellefair,
@@ -252,80 +298,71 @@ fun AboutUsView(modifier: Modifier = Modifier, aboutUsVM: AboutUsVM = AboutUsVM(
                         .fillMaxWidth()
                         .padding(top = 8.dp)
                 )
+
                 // Enlaces a redes sociales
                 Row(
                     modifier = Modifier
                         .padding(16.dp)
-                        .fillMaxWidth(), // Asegura que el Row ocupe todo el ancho
-                    horizontalArrangement = Arrangement.SpaceEvenly // Distribuye el espacio uniformemente entre los iconos
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    // Imagen de Facebook
                     Image(
-                        painter = painterResource(id = R.drawable.ic_facebook), // Usa tu propio recurso de imagen
+                        painter = painterResource(id = R.drawable.ic_facebook),
                         contentDescription = "Facebook",
                         modifier = Modifier
-                            .size(40.dp) // Ajusta el tamaño de la imagen
+                            .size(40.dp)
                             .clickable {
                                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/FundacionTodasBrillamos"))
                                 context.startActivity(intent)
                             }
                     )
-
-                    // Imagen de TikTok
                     Image(
                         painter = painterResource(id = R.drawable.ic_tiktok),
                         contentDescription = "TikTok",
                         modifier = Modifier
-                            .size(40.dp) // Ajusta el tamaño de la imagen
+                            .size(40.dp)
                             .clickable {
                                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://vm.tiktok.com/ZMjKEqyJH"))
                                 context.startActivity(intent)
                             }
                     )
-
-                    // Imagen de Youtube
                     Image(
                         painter = painterResource(id = R.drawable.ic_youtube),
-                        contentDescription = "TikTok",
+                        contentDescription = "YouTube",
                         modifier = Modifier
-                            .size(40.dp) // Ajusta el tamaño de la imagen
+                            .size(40.dp)
                             .clickable {
                                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/@FundacionTodasBrillamos"))
                                 context.startActivity(intent)
                             }
                     )
-
-                    // Imagen de Instagram
                     Image(
-                        painter = painterResource(id = R.drawable.ic_instagram), // Usa tu propio recurso de imagen
+                        painter = painterResource(id = R.drawable.ic_instagram),
                         contentDescription = "Instagram",
                         modifier = Modifier
                             .size(40.dp)
                             .clickable {
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/fundaciontodasbrillamos/?igshid=NTc4MTIwNjQ2YQ%3D%3D"))
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/fundaciontodasbrillamos"))
                                 context.startActivity(intent)
                             }
                     )
                 }
-            }
 
-            Spacer(modifier = Modifier.height(80.dp))
-            // MAPS VIEW
-            Column(
-                modifier = Modifier.fillMaxSize()
-            ) {
+                Spacer(modifier = Modifier.height(170.dp))
+
+                // MAPS VIEW SECTION
                 Box(
                     modifier = Modifier
-                        .height(300.dp) // Set a fixed height for the map
+                        .height(300.dp)
                         .fillMaxWidth()
-
+                        .padding(16.dp)
                 ) {
                     OSMDroidMapView()
                 }
             }
 
 
-            Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(30.dp))
             // Informacion de contacto
             Box(
                 modifier = Modifier

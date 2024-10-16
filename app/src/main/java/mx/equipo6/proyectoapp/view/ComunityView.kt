@@ -84,7 +84,7 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
     val categoryBarState = rememberLazyListState()
 
-    // Categorías específicas para ShopView
+    // Categorías específicas para CommunityView
     val postCategories = listOf(
         "Todo" to Icons.Default.Home,
         "Salud" to Icons.Default.Favorite,
@@ -184,6 +184,13 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
                                 }
                             }
                         }
+                    },
+                    onClearClick = {
+                        searchQuery = ""
+                        delayedSearchQuery = ""
+                        selectedCategory = "Todo"
+                        selectedCategoryIndex = 0
+                        postVM.refreshPosts()
                     }
                 )
             }
@@ -262,7 +269,12 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
                                         SortOrder.DESCENDING -> date?.let { -it.time }
                                     }
                                 })
-                                noPostsInCategory = postList.none { post -> post.category.equals(selectedCategory, ignoreCase = true) }
+                                noPostsInCategory = postList.none { post ->
+                                    post.category.equals(
+                                        selectedCategory,
+                                        ignoreCase = true
+                                    )
+                                }
                                 if (filteredPosts.isEmpty()) {
                                     if (delayedSearchQuery.isNotEmpty()) {
                                         ShowNoPostsMessage("No se encontraron resultados de la búsqueda")

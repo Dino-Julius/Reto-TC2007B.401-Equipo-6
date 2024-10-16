@@ -80,7 +80,7 @@ fun AppNavHost(
         }
 
         composable(Windows.ROUTE_HOME) {
-            HomeView(homeVM)
+            HomeView(homeVM, navController)
         }
 
         composable(Windows.ROUTE_COMUNITY) {

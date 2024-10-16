@@ -10,9 +10,9 @@ class NetworkChangeReceiver : BroadcastReceiver() {
 
     object NetworkChangeReceiver{
 
-        fun isNetworkConnected(context: Context): Boolean {
+        fun isNetworkConnected(context: Context?): Boolean {
             val connectivityManager =
-                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
             val networkCapabilities = connectivityManager.activeNetwork ?: return false
             val activeNetwork =

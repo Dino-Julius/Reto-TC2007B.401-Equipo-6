@@ -27,6 +27,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import kotlinx.coroutines.delay
 import androidx.compose.foundation.clickable
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.IconButton
 import androidx.compose.ui.platform.LocalFocusManager
 
 /**
@@ -46,7 +48,8 @@ fun SearchBar(
     cornerRadius: Dp = 32.dp,
     backgroundColor: Color = Color.White,
     icon: ImageVector = Icons.Default.Search,
-    onValueChange: (TextFieldValue) -> Unit
+    onValueChange: (TextFieldValue) -> Unit,
+    onClearClick: () -> Unit
 ) {
     var textState by remember { mutableStateOf(TextFieldValue("")) }
     val focusRequester = remember { FocusRequester() }
@@ -74,6 +77,9 @@ fun SearchBar(
                 textState = it
                 onValueChange(it)
                 focusRequester.requestFocus()
+            }, onClearClick = {
+                textState = TextFieldValue("")
+                onClearClick()
             }, focusRequester)
         }
     }
@@ -81,7 +87,7 @@ fun SearchBar(
 
 /**
  * Composable que muestra el contenido de la barra de búsqueda.
- *
+ * @author Ulises Jaramillo Portilla | A01798380.
  * @param icon ImageVector del ícono a mostrar en la barra de búsqueda.
  * @param textState Estado del campo de texto.
  * @param onValueChange Función lambda que se ejecuta cuando el valor del campo de texto cambia.
@@ -92,6 +98,7 @@ fun SearchBarContent(
     icon: ImageVector,
     textState: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
+    onClearClick: () -> Unit,
     focusRequester: FocusRequester
 ) {
     Row(
@@ -113,7 +120,7 @@ fun SearchBarContent(
             value = textState,
             onValueChange = onValueChange,
             modifier = Modifier
-                .fillMaxWidth()
+                .weight(1f)
                 .focusRequester(focusRequester),
             singleLine = true,
             textStyle = TextStyle(
@@ -122,5 +129,10 @@ fun SearchBarContent(
                 fontWeight = FontWeight.Normal
             )
         )
+        if (textState.text.isNotEmpty()) {
+            IconButton(onClick = onClearClick) {
+                Icon(imageVector = Icons.Default.Close, contentDescription = "Clear Search")
+            }
+        }
     }
 }
