@@ -31,6 +31,7 @@ import androidx.core.graphics.component2
 import androidx.navigation.NavController
 import mx.equipo6.proyectoapp.model.stripeAPI.sendSoldItemsToServer
 import mx.equipo6.proyectoapp.viewmodel.ProductVM
+import mx.equipo6.proyectoapp.viewmodel.SignUpViewModel
 
 /**
  * TicketView composable that displays the ticket information
@@ -41,10 +42,10 @@ import mx.equipo6.proyectoapp.viewmodel.ProductVM
  */
 
 @Composable
-fun TicketView(navController: NavController, modifier: Modifier = Modifier, productVM: ProductVM) {
+fun TicketView(navController: NavController, modifier: Modifier = Modifier, productVM: ProductVM, SignUpViewModel: SignUpViewModel) {
     val cartItems by productVM.cartItems.collectAsState()
-    var address = "Freak Avenue 123, Colonia Centro"
-    var email = "FreakyFranklin@gmail.com"
+    var address = SignUpViewModel.address.value
+    var email = SignUpViewModel.email.value
 
     LaunchedEffect(Unit) {
         productVM.placeOrder(address, email)

@@ -58,10 +58,11 @@ import mx.equipo6.proyectoapp.view.sampledata.PagerIndicator
 import mx.equipo6.proyectoapp.view.sampledata.RectangularButton
 import mx.equipo6.proyectoapp.view.sampledata.Subtitle
 import mx.equipo6.proyectoapp.viewmodel.HomeVM
+import mx.equipo6.proyectoapp.viewmodel.SignUpViewModel
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun HomeView(homeVM: HomeVM = viewModel(), navController: NavHostController) {
+fun HomeView(homeVM: HomeVM = viewModel(), navController: NavHostController, signUpViewModel: SignUpViewModel) {
     val context = LocalContext.current
     val isConnected by homeVM.isConnected.collectAsState()
     val postListViewState by homeVM.posts.collectAsState()
@@ -93,7 +94,7 @@ fun HomeView(homeVM: HomeVM = viewModel(), navController: NavHostController) {
                 .padding(top = 22.dp)
         ) {
             Subtitle(
-                "¡Bienvenido, @usuario!",
+                "¡Hola, ${signUpViewModel.firstName.value}!",
                 modifier = Modifier.padding(bottom = 10.dp)
             )
             HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)

@@ -23,6 +23,7 @@ import mx.equipo6.proyectoapp.viewmodel.ChatBotViewModel
 import mx.equipo6.proyectoapp.viewmodel.HomeVM
 import mx.equipo6.proyectoapp.viewmodel.PostVM
 import mx.equipo6.proyectoapp.viewmodel.ProductVM
+import mx.equipo6.proyectoapp.viewmodel.SignUpViewModel
 
 val bellefair = FontFamily(Font(R.font.bellefair_regular))
 
@@ -68,7 +69,8 @@ fun AppNavHost(
     postVM: PostVM,
     calenVM: CalenVM,
     chatBotVM: ChatBotViewModel,
-    navController: NavHostController
+    navController: NavHostController,
+    signUpViewModel: SignUpViewModel = viewModel()
 ) {
     NavHost(
         navController = navController,
@@ -80,7 +82,7 @@ fun AppNavHost(
         }
 
         composable(Windows.ROUTE_HOME) {
-            HomeView(homeVM, navController)
+            HomeView(homeVM, navController, signUpViewModel)
         }
 
         composable(Windows.ROUTE_COMUNITY) {
@@ -120,7 +122,7 @@ fun AppNavHost(
         }
 
         composable(Windows.ROUTE_TICKET) {
-            TicketView(navController, modifier, productVM)
+            TicketView(navController, modifier, productVM, signUpViewModel)
         }
     }
 }
