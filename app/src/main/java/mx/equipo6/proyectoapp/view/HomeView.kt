@@ -132,7 +132,7 @@ fun HomeView(homeVM: HomeVM = viewModel(), navController: NavHostController, pos
                                     icon = icon,
                                     onClick = {
                                         when (icon) {
-                                            Icons.Default.Favorite -> navController.navigate("Posts Favoritos")
+                                            Icons.Default.Favorite -> navController.navigate(Windows.ROUTE_FAVORITE_POSTS)
                                             // Agrega más casos para otros íconos y sus respectivas vistas
 
                                             else -> { /* Maneja el caso por defecto si es necesario */ }

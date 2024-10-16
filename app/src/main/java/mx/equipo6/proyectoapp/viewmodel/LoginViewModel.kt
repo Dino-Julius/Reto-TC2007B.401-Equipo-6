@@ -14,7 +14,7 @@ class LoginViewModel : ViewModel() {
     var errorMessage = mutableStateOf<String?>(null)
     var loggedIn = mutableStateOf(false)
 
-    fun login() {
+    fun passwordlogin() {
         if (email.value.isNotBlank() && password.value.isNotBlank()) {
             viewModelScope.launch {
                 try {

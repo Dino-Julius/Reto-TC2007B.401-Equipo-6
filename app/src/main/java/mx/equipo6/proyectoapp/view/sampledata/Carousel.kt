@@ -1,11 +1,8 @@
 package mx.equipo6.proyectoapp.view.sampledata
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,54 +17,20 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import mx.equipo6.proyectoapp.R
 
-
-val bellefair = FontFamily(Font(R.font.bellefair_regular))
-
 @Composable
 fun CarouselCard(
     title: String,
     description: String,
-    backgroundColor: Color = Color(0xFFFFFFFF)
 ) {
+    val combinedText = if (title.isNotEmpty()) "$title\n\n$description" else description
 
-    Card(
+    SampleCard(
+        texto = combinedText,
         modifier = Modifier
-            .width(250.dp)
+            .fillMaxWidth()
             .height(180.dp)
-            .padding(8.dp),
-        shape = RoundedCornerShape(16.dp),
-        colors = androidx.compose.material3.CardDefaults.cardColors(
-            containerColor = backgroundColor
-        )
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(10.dp),
-            verticalArrangement = Arrangement.SpaceBetween, // Distribute the space evenly
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // Only show title if it's not empty
-            if (title.isNotEmpty()) {
-                Text(
-                    text = title,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
-                    color = Color.White,
-                    modifier = Modifier
-                        .height(40.dp), // Fixed height for title
-                    textAlign = TextAlign.Center
-                )
-            }
-            Spacer(modifier = Modifier.height(4.dp)) // Space between title and description
-            Text(
-                text = description,
-                textAlign = TextAlign.Center,
-                color = Color.White,
-                fontFamily = bellefair
-            )
-        }
-    }
+            .padding(8.dp)
+    )
 }
 
 @OptIn(ExperimentalPagerApi::class)
@@ -83,18 +46,18 @@ fun Carousel() {
                     "toallas reutilizables."
         ),
         Pair(
-            "Cuentan con: ", "- Son elaboradas a mano con telas de algodón.\n" +
+            "Cuentan con:", "- Son elaboradas a mano con telas de algodón.\n" +
                     "- Son lavables y reutilizables.\n" +
                     "- Son fáciles de limpiar y secar.\n"
         ),
         Pair(
-            "Cuentan con: ", "- Cuentan con alta absorción.\n" +
+            "Cuentan con:", "- Cuentan con alta absorción.\n" +
                     "- Son hipoalergénicas.\n" +
                     "- Son impermeables.\n" +
                     "- Mantienen la piel fresca y libre de olores."
         ),
         Pair(
-            "", "Estamos comprometidas con el " +
+            "¿Qué esperar?", "Estamos comprometidas con el " +
                     "bienestar de las mujeres y el cuidado " +
                     "del planeta.\n" +
                     "Creamos productos de alta " +
@@ -113,7 +76,6 @@ fun Carousel() {
         CarouselCard(
             title = cards[page].first,
             description = cards[page].second,
-            backgroundColor = Color(0xFFF4D0CB) // card color
         )
     }
 
