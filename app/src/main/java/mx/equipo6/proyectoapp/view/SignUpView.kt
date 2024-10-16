@@ -1,13 +1,14 @@
+// SignUpView.kt
 package mx.equipo6.proyectoapp.view
 
 import android.app.DatePickerDialog
 import android.widget.DatePicker
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -24,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import java.util.*
 
 @Composable
-fun SignUpView(onSignUp: (String, String, String, String, String, String, String) -> Unit) {
+fun SignUpView(onSignUp: (String, String, String, String, String, String, String, String) -> Unit, onLogin: () -> Unit) {
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
     var birthDate by remember { mutableStateOf("") }
@@ -33,10 +34,13 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+    var expanded by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
+    val genderOptions = listOf("hombre", "mujer", "otro")
 
     val datePickerDialog = DatePickerDialog(
         context,
@@ -74,7 +78,7 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
             decorationBox = { innerTextField ->
                 if (firstName.isEmpty()) {
                     Text(
-                        text = "First Name",
+                        text = "Nombre",
                         color = Color.Gray,
                         modifier = Modifier.padding(start = 4.dp)
                     )
@@ -97,7 +101,7 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
             decorationBox = { innerTextField ->
                 if (lastName.isEmpty()) {
                     Text(
-                        text = "Last Name",
+                        text = "Apellido",
                         color = Color.Gray,
                         modifier = Modifier.padding(start = 4.dp)
                     )
@@ -120,7 +124,7 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
             decorationBox = { innerTextField ->
                 if (birthDate.isEmpty()) {
                     Text(
-                        text = "Birth Date (YYYY-MM-DD)",
+                        text = "Fecha de nacimiento (YYYY-MM-DD)",
                         color = Color.Gray,
                         modifier = Modifier.padding(start = 4.dp)
                     )
@@ -139,31 +143,34 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
         ) {
-            Text(text = "Select Birth Date")
+            Text(text = "Selecciona fecha de nacimiento")
         }
 
-        BasicTextField(
-            value = gender,
-            onValueChange = { gender = it },
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
                 .background(Color(0xFFE0E0E0), RoundedCornerShape(8.dp))
-                .padding(12.dp),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Next
-            ),
-            decorationBox = { innerTextField ->
-                if (gender.isEmpty()) {
-                    Text(
-                        text = "Gender",
-                        color = Color.Gray,
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
+                .clickable { expanded = true }
+                .padding(12.dp)
+        ) {
+            Text(
+                text = if (gender.isEmpty()) "Género" else gender,
+                color = if (gender.isEmpty()) Color.Gray else Color.Black,
+                modifier = Modifier.padding(start = 4.dp)
+            )
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                genderOptions.forEach { option ->
+                    DropdownMenuItem(onClick = {
+                        gender = option
+                        expanded = false
+                    }, text = {Text(text = option)})
                 }
-                innerTextField()
             }
-        )
+        }
 
         BasicTextField(
             value = phone,
@@ -179,7 +186,7 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
             decorationBox = { innerTextField ->
                 if (phone.isEmpty()) {
                     Text(
-                        text = "Phone",
+                        text = "Teléfono",
                         color = Color.Gray,
                         modifier = Modifier.padding(start = 4.dp)
                     )
@@ -202,7 +209,30 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
             decorationBox = { innerTextField ->
                 if (email.isEmpty()) {
                     Text(
-                        text = "Email",
+                        text = "Correo",
+                        color = Color.Gray,
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+                }
+                innerTextField()
+            }
+        )
+
+        BasicTextField(
+            value = address,
+            onValueChange = { address = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp)
+                .background(Color(0xFFE0E0E0), RoundedCornerShape(8.dp))
+                .padding(12.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Next
+            ),
+            decorationBox = { innerTextField ->
+                if (address.isEmpty()) {
+                    Text(
+                        text = "Dirección",
                         color = Color.Gray,
                         modifier = Modifier.padding(start = 4.dp)
                     )
@@ -225,7 +255,7 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
             decorationBox = { innerTextField ->
                 if (password.isEmpty()) {
                     Text(
-                        text = "Password",
+                        text = "Contraseña",
                         color = Color.Gray,
                         modifier = Modifier.padding(start = 4.dp)
                     )
@@ -248,7 +278,7 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
             decorationBox = { innerTextField ->
                 if (confirmPassword.isEmpty()) {
                     Text(
-                        text = "Confirm Password",
+                        text = "Confirma Contraseña",
                         color = Color.Gray,
                         modifier = Modifier.padding(start = 4.dp)
                     )
@@ -267,9 +297,9 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
 
         Button(
             onClick = {
-                if (firstName.isNotBlank() && lastName.isNotBlank() && birthDate.isNotBlank() && gender.isNotBlank() && phone.isNotBlank() && email.isNotBlank() && password.isNotBlank() && confirmPassword.isNotBlank()) {
+                if (firstName.isNotBlank() && lastName.isNotBlank() && birthDate.isNotBlank() && gender.isNotBlank() && phone.isNotBlank() && email.isNotBlank() && address.isNotBlank() && password.isNotBlank() && confirmPassword.isNotBlank()) {
                     if (password == confirmPassword) {
-                        onSignUp(firstName, lastName, birthDate, gender, phone, email, password)
+                        onSignUp(firstName, lastName, birthDate, gender, phone, email, address, password)
                     } else {
                         errorMessage = "Passwords do not match"
                     }
@@ -287,11 +317,19 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
         ) {
             Text(text = "Sign Up")
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = "Volver a Login",
+            color = Color.Blue,
+            modifier = Modifier.clickable { onLogin() }
+        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun SignUpViewPreview() {
-    SignUpView { _, _, _, _, _, _, _ -> }
+fun DefaultPreview() {
+    SignUpView(onSignUp = { _, _, _, _, _, _, _, _ -> }, onLogin = {})
 }

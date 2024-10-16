@@ -2,6 +2,7 @@ package mx.equipo6.proyectoapp.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
@@ -22,10 +23,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun LoginView(onLogin: (String, String) -> Unit) {
+fun LoginView(onLogin: (String, String) -> Unit, onSignUp: () -> Unit, errorMessage: String?) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = Modifier
@@ -39,10 +39,10 @@ fun LoginView(onLogin: (String, String) -> Unit) {
             contentDescription = "Zazil",
             modifier = Modifier
                 .clip(CircleShape)
-                .size(150.dp) // Tamaño de imagen más pequeño y consistente
+                .size(150.dp)
         )
 
-        Spacer(modifier = Modifier.height(16.dp)) // Standardized space
+        Spacer(modifier = Modifier.height(16.dp))
 
         BasicTextField(
             value = email,
@@ -58,7 +58,7 @@ fun LoginView(onLogin: (String, String) -> Unit) {
             decorationBox = { innerTextField ->
                 if (email.isEmpty()) {
                     Text(
-                        text = "Email",
+                        text = "Correo",
                         color = Color.Gray,
                         modifier = Modifier.padding(start = 4.dp)
                     )
@@ -82,15 +82,13 @@ fun LoginView(onLogin: (String, String) -> Unit) {
                 onDone = {
                     if (email.isNotBlank() && password.isNotBlank()) {
                         onLogin(email, password)
-                    } else {
-                        errorMessage = "Please fill in both fields"
                     }
                 }
             ),
             decorationBox = { innerTextField ->
                 if (password.isEmpty()) {
                     Text(
-                        text = "Password",
+                        text = "Contraseña",
                         color = Color.Gray,
                         modifier = Modifier.padding(start = 4.dp)
                     )
@@ -111,8 +109,6 @@ fun LoginView(onLogin: (String, String) -> Unit) {
             onClick = {
                 if (email.isNotBlank() && password.isNotBlank()) {
                     onLogin(email, password)
-                } else {
-                    errorMessage = "Please fill in both fields"
                 }
             },
             colors = ButtonDefaults.buttonColors(
@@ -125,11 +121,19 @@ fun LoginView(onLogin: (String, String) -> Unit) {
         ) {
             Text(text = "Login")
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = "Crear cuenta",
+            color = Color.Blue,
+            modifier = Modifier.clickable { onSignUp() }
+        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun LoginViewPreview() {
-    LoginView { _, _ -> }
+    LoginView(onLogin = { _, _ -> }, onSignUp = {}, errorMessage = null)
 }

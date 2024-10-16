@@ -17,5 +17,7 @@ class Constants {
         const val LIST_OF_POSTS = "posts"
         // Endpoint for chatbot
         const val CHATBOT_URL = "http://104.248.55.22:5000/"
+        // Endpoint for users
+        const val USERS_URL = "users"
     }
 }
