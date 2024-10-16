@@ -37,4 +37,7 @@ interface ApiService {
 
     @GET("users/{email}")
     suspend fun getUserByEmail(@Path("email") email: String): User
+
+    @POST("users/login/{email}")
+    suspend fun verifyPassword(@Path("email") email: String, @Body loginRequest: LoginRequest): LoginResponse
 }
