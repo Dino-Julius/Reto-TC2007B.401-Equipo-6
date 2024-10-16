@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -21,7 +22,6 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -46,7 +46,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import mx.equipo6.proyectoapp.R
 import mx.equipo6.proyectoapp.include.ViewState
@@ -54,31 +53,32 @@ import mx.equipo6.proyectoapp.view.components.PostCard
 import mx.equipo6.proyectoapp.view.sampledata.Carousel
 import mx.equipo6.proyectoapp.view.sampledata.CircleButton
 import mx.equipo6.proyectoapp.view.sampledata.CircleButtonList
-import mx.equipo6.proyectoapp.view.sampledata.PagerIndicator
 import mx.equipo6.proyectoapp.view.sampledata.RectangularButton
 import mx.equipo6.proyectoapp.view.sampledata.Subtitle
 import mx.equipo6.proyectoapp.viewmodel.HomeVM
+import mx.equipo6.proyectoapp.viewmodel.PostVM
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun HomeView(homeVM: HomeVM = viewModel(), navController: NavHostController) {
+fun HomeView(homeVM: HomeVM = viewModel(), navController: NavHostController, postVM: PostVM) {
     val context = LocalContext.current
     val isConnected by homeVM.isConnected.collectAsState()
     val postListViewState by homeVM.posts.collectAsState()
     val pagerState = rememberPagerState()
-    val allUserButtons = listOf(
+    val communityButtons = listOf(
         Icons.Default.Home to "Inicio",
-        Icons.Default.Settings to "Configuración",
-        Icons.Default.Favorite to "Favoritos"
-    )
-    val allShoppingButtons = listOf(
-        Icons.Default.Share to "Compartir",
-        Icons.Default.Search to "Buscar",
+        Icons.Default.Favorite to "Posts Favoritos",
         Icons.Default.Notifications to "Notificaciones"
     )
-    val selectedButtons = remember { mutableStateListOf(*homeVM.loadSelectedButtons(context, allUserButtons.map { it.first }, allShoppingButtons.map { it.first }).toTypedArray()) }
-    val availableUserButtons = remember { mutableStateListOf(*allUserButtons.toTypedArray()) }
-    val availableShoppingButtons = remember { mutableStateListOf(*allShoppingButtons.toTypedArray()) }
+    val storeButtons = listOf(
+        Icons.Default.Search to "Buscar",
+        Icons.Default.Favorite to "Favoritos",
+        Icons.Default.Share to "Compartir"
+    )
+
+    val selectedButtons = remember { mutableStateListOf(*homeVM.loadSelectedButtons(context, communityButtons.map { it.first }, storeButtons.map { it.first }).toTypedArray()) }
+    val availableUserButtons = remember { mutableStateListOf(*communityButtons.toTypedArray()) }
+    val availableShoppingButtons = remember { mutableStateListOf(*storeButtons.toTypedArray()) }
     var showButtonList by remember { mutableStateOf(false) }
 
     val postsByCategory = (postListViewState as? ViewState.Success)?.data?.groupBy { it.category } ?: emptyMap()
@@ -127,19 +127,28 @@ fun HomeView(homeVM: HomeVM = viewModel(), navController: NavHostController) {
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
                             rowButtons.forEach { icon ->
-                                CircleButton(icon = icon,
-                                    onClick = { /* Handle button click */ },
+                                CircleButton(
+                                    icon = icon,
+                                    onClick = {
+                                        when (icon) {
+                                            Icons.Default.Favorite -> navController.navigate("Posts Favoritos")
+                                            // Agrega más casos para otros íconos y sus respectivas vistas
+
+                                            else -> { /* Maneja el caso por defecto si es necesario */ }
+                                        }
+                                    },
                                     onRemove = if (showButtonList) {
                                         {
                                             selectedButtons.remove(icon)
                                             homeVM.saveSelectedButtons(context, selectedButtons)
-                                            if (allUserButtons.map { it.first }.contains(icon)) {
-                                                availableUserButtons.add(allUserButtons.first { it.first == icon })
+                                            if (communityButtons.map { it.first }.contains(icon)) {
+                                                availableUserButtons.add(communityButtons.first { it.first == icon })
                                             } else {
-                                                availableShoppingButtons.add(allShoppingButtons.first { it.first == icon })
+                                                availableShoppingButtons.add(storeButtons.first { it.first == icon })
                                             }
                                         }
-                                    } else null)
+                                    } else null
+                                )
                             }
                         }
                     }
@@ -156,8 +165,8 @@ fun HomeView(homeVM: HomeVM = viewModel(), navController: NavHostController) {
                     contentAlignment = Alignment.Center
                 ) {
                     CircleButtonList(
-                        userButtons = allUserButtons.filter { it.first !in selectedButtons },
-                        shoppingButtons = allShoppingButtons.filter { it.first !in selectedButtons }
+                        userButtons = communityButtons.filter { it.first !in selectedButtons },
+                        shoppingButtons = storeButtons.filter { it.first !in selectedButtons }
                     ) { icon ->
                         if (selectedButtons.size < 6) {
                             selectedButtons.add(icon)
@@ -179,21 +188,18 @@ fun HomeView(homeVM: HomeVM = viewModel(), navController: NavHostController) {
                         if (selectedPosts.isEmpty()) {
                             ShowNoPostsMessage("No posts available")
                         } else {
-                            HorizontalPager(
-                                count = selectedPosts.size,
-                                state = pagerState,
-                                modifier = Modifier.fillMaxWidth()
-                            ) { page ->
-                                PostCard(selectedPosts[page], navController)
+                            LazyRow(
+                                modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)
+                            ) {
+                                items(selectedPosts.size) { page ->
+                                    PostCard(
+                                        post = selectedPosts[page],
+                                        navController = navController,
+                                        postVM = postVM,
+                                        cardWidth = 380.dp,
+                                    )
+                                }
                             }
-
-                            PagerIndicator(
-                                totalDots = selectedPosts.size,
-                                selectedIndex = pagerState.currentPage,
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(4.dp)
-                            )
                         }
                     }
                 }

@@ -3,6 +3,7 @@ package mx.equipo6.proyectoapp.view
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +20,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -58,6 +61,8 @@ fun PostContentView(post: Post?, navController: NavHostController, postVM: PostV
     var fileContent by remember { mutableStateOf("Cargando...") }
     // Alcance de la corrutina
     val coroutineScope = rememberCoroutineScope()
+    // Estado para el favorito
+    var isFavorite by remember { mutableStateOf(post?.favorite ?: false) }
 
     // Efecto lanzado cuando cambia la ruta del archivo del post
     LaunchedEffect(post?.file_path) {
@@ -121,15 +126,36 @@ fun PostContentView(post: Post?, navController: NavHostController, postVM: PostV
             // Divisor horizontal
             HorizontalDivider(color = Color.Gray, thickness = 1.dp)
 
-            // Imagen del post
-            Image(
-                painter = rememberAsyncImagePainter(model = post?.image_path),
-                contentDescription = "Post Image",
-                contentScale = ContentScale.Crop,
+            // Caja que contiene la imagen y el icono de favorito superpuestos
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(250.dp)
-            )
+            ) {
+                // Imagen del post
+                Image(
+                    painter = rememberAsyncImagePainter(model = post?.image_path),
+                    contentDescription = "Post Image",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(250.dp)
+                )
+                // Icono de favorito
+                Icon(
+                    imageVector = Icons.Default.Favorite,
+                    contentDescription = "Favorite",
+                    tint = if (isFavorite) Color.Red else Color.Gray,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .size(48.dp)
+                        .padding(8.dp)
+                        .clickable {
+                            isFavorite = !isFavorite
+                            post?.favorite = isFavorite
+                        }
+                )
+            }
 
             // Divisor horizontal
             HorizontalDivider(color = Color.Gray, thickness = 1.dp)
@@ -150,12 +176,12 @@ fun PostContentView(post: Post?, navController: NavHostController, postVM: PostV
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Por: ${post?.partner_email}",
+                            text = "Por: ${post?.partner_email ?: "Desconocido"}",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = post?.date ?: "",
+                            text = post?.date ?: "Fecha desconocida",
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
@@ -165,7 +191,7 @@ fun PostContentView(post: Post?, navController: NavHostController, postVM: PostV
 
                     // Resumen del post
                     Text(
-                        text = post?.summary ?: "",
+                        text = post?.summary ?: "Sin resumen",
                         style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Justify,
                         modifier = Modifier

@@ -80,7 +80,7 @@ fun AppNavHost(
         }
 
         composable(Windows.ROUTE_HOME) {
-            HomeView(homeVM, navController)
+            HomeView(homeVM, navController, postVM)
         }
 
         composable(Windows.ROUTE_COMUNITY) {
@@ -121,6 +121,14 @@ fun AppNavHost(
 
         composable(Windows.ROUTE_TICKET) {
             TicketView(navController, modifier, productVM)
+        }
+
+        composable(Windows.ROUTE_FAVORITE_POSTS) {
+            FavoritePostsView(postVM, navController)
+        }
+
+        composable(Windows.ROUTE_FAVORITE_PRODUCTS) {
+            FavoriteProductsView(productVM, navController)
         }
     }
 }

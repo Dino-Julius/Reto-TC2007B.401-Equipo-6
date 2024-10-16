@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -38,49 +39,70 @@ class PostVM @Inject constructor(
     @ApplicationContext private val context: Context
 ): ViewModel() {
 
-    // Se inicializa el estado de la lista de posts.
+    private val sharedPreferences: SharedPreferences = context.getSharedPreferences("favorite_posts", Context.MODE_PRIVATE)
+
     private val _post = MutableStateFlow<ViewState<PostList>>(ViewState.Loading)
     val posts : StateFlow<ViewState<PostList>> get() = _post
 
-    // Se revisa si hay conexión a internet.
     private val _isConnected = MutableStateFlow(isNetworkConnected(context))
     val isConnected : StateFlow<Boolean> get() = _isConnected
 
-    // Registra el receptor de transmisión.
     private val networkChangeReceiver = object :BroadcastReceiver(){
         override fun onReceive(context: Context?, intent: Intent?) {
             _isConnected.value = isNetworkConnected(context = context!!)
 
             if (_isConnected.value) {
-                // Si hay conexión, se realiza la llamada a la API.
                 fetchPosts()
             } else {
-                // Si no hay conexión, se restablece la llamada a la API.
                 _post.value = ViewState.Error("Network error..., Please check your internet connection")
             }
         }
     }
 
     init {
-        // Registra el receptor en el contexto.
         val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         context.registerReceiver(networkChangeReceiver, intentFilter)
         fetchPosts()
     }
 
-    // Se obtienen los posts.
+    fun onFavoriteButtonClicked(postId: Int, isFavorite: Boolean) {
+        saveFavoritePost(postId, isFavorite)
+    }
+
     private fun fetchPosts() {
         viewModelScope.launch {
             _post.value = ViewState.Loading
             try {
                 val results = postRespository.getPosts()
+                loadFavoritePosts(results)
                 _post.value = ViewState.Success(results)
-                Log.e("TAG_SUCCESS", "fetchProducts: ")
             } catch (e: Exception) {
-                Log.e("TAG_ERROR", "fetchProducts: ")
                 _post.value = ViewState.Error("An Error Occurred. Please try Again")
             }
         }
+    }
+
+    fun refreshPosts() {
+        fetchPosts()
+    }
+
+    private fun loadFavoritePosts(posts: PostList) {
+        val favoritePosts = sharedPreferences.getStringSet("favorites", emptySet()) ?: emptySet()
+        posts.forEach { post ->
+            post.favorite = favoritePosts.contains(post.post_id.toString())
+        }
+    }
+
+    fun saveFavoritePost(postId: Int, isFavorite: Boolean) {
+        val editor = sharedPreferences.edit()
+        val favoritePosts = sharedPreferences.getStringSet("favorites", mutableSetOf()) ?: mutableSetOf()
+        if (isFavorite) {
+            favoritePosts.add(postId.toString())
+        } else {
+            favoritePosts.remove(postId.toString())
+        }
+        editor.putStringSet("favorites", favoritePosts)
+        editor.apply()
     }
 
     // Función para leer texto desde un archivo dado el file path
@@ -115,19 +137,11 @@ class PostVM @Inject constructor(
         }
     }
 
-
-    fun refreshPosts() {
-        fetchPosts()
-    }
-
-    // Se libera el receptor.
     override fun onCleared() {
         super.onCleared()
-        // unRegister
         context.unregisterReceiver(networkChangeReceiver)
     }
 
-    // Se obtiene un post por su ID.
     fun getPostById(postId: Int?): Post? {
         return (posts.value as? ViewState.Success)?.data?.find { it.post_id == postId }
     }

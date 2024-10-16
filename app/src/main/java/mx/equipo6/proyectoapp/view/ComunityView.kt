@@ -8,26 +8,32 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.EmojiEmotions
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Forest
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Lightbulb
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,6 +53,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
 import mx.equipo6.proyectoapp.R
 import mx.equipo6.proyectoapp.include.ViewState
@@ -55,8 +63,6 @@ import mx.equipo6.proyectoapp.view.components.PostCard
 import mx.equipo6.proyectoapp.view.sampledata.FilterMenu
 import mx.equipo6.proyectoapp.view.sampledata.SearchBar
 import mx.equipo6.proyectoapp.view.sampledata.Title
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import mx.equipo6.proyectoapp.viewmodel.PostVM
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -84,7 +90,6 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
     val categoryBarState = rememberLazyListState()
 
-    // Categorías específicas para CommunityView
     val postCategories = listOf(
         "Todo" to Icons.Default.Home,
         "Salud" to Icons.Default.Favorite,
@@ -93,7 +98,6 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
         "Eco" to Icons.Default.Forest
     )
 
-    // Efecto lanzado cuando se realiza una búsqueda
     LaunchedEffect(searchQuery) {
         searchTriggered = false
         delay(1000)
@@ -101,13 +105,11 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
         searchTriggered = true
     }
 
-    // Scroll CategoryBar a la maxima posición.
     LaunchedEffect(Unit) {
         categoryBarState.scrollToItem(0)
         listState.scrollToItem(0)
     }
 
-    // Efecto lanzado cuando se actualiza el estado de la lista
     LaunchedEffect(listState) {
         var previousIndex = 0
         var previousScrollOffset = 0
@@ -126,7 +128,6 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
             }
     }
 
-    // Efecto lanzado cuando se carga la vista
     LaunchedEffect(Unit) {
         postVM.refreshPosts()
     }
@@ -144,7 +145,6 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
             )
         }
 
-        // Barra de búsqueda.
         AnimatedVisibility(
             visible = showSearchBar,
             enter = fadeIn(),
@@ -224,8 +224,28 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
                     state = categoryBarState)
             }
 
-            Box {
-                FilterButton(onClick = { showFilterMenu = true })
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                Row {
+                    Button(
+                        modifier = Modifier
+                            .padding(start = 260.dp),
+                        onClick = { navController.navigate(Windows.ROUTE_FAVORITE_POSTS) },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF1D1F8)),
+                        shape = CircleShape,
+                        contentPadding = PaddingValues(0.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Save,
+                            contentDescription = "Guardar",
+                            tint = Color.Black,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                    FilterButton(onClick = { showFilterMenu = true })
+                }
                 FilterMenu(
                     showFilterMenu = showFilterMenu,
                     onDismissRequest = { showFilterMenu = false },
@@ -235,7 +255,6 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
                 )
             }
 
-            // SwipeRefresh para actualizar la lista de posts
             SwipeRefresh(
                 state = swipeRefreshState,
                 onRefresh = {
@@ -287,7 +306,12 @@ fun CommunityView(postVM: PostVM, navController: NavHostController) {
                                         modifier = Modifier.fillMaxSize()
                                     ) {
                                         itemsIndexed(filteredPosts) { _, post ->
-                                            PostCard(post, navController)
+                                            PostCard(
+                                                post = post,
+                                                navController = navController,
+                                                postVM = postVM,
+                                                cardWidth = 445.dp
+                                            )
                                         }
                                     }
                                 }

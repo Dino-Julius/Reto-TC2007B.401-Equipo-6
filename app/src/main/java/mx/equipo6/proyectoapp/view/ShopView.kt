@@ -10,6 +10,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,6 +33,10 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Forest
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Lightbulb
+import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -238,14 +243,34 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
                     state = categoryBarState)
             }
 
-            Box {
-                FilterButton(onClick = { showFilterMenu = true })
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                Row {
+                    Button(
+                        modifier = Modifier
+                            .padding(start = 260.dp),
+                        onClick = { navController.navigate(Windows.ROUTE_FAVORITE_PRODUCTS) },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF1D1F8)),
+                        shape = CircleShape,
+                        contentPadding = PaddingValues(0.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Save,
+                            contentDescription = "Guardar",
+                            tint = Color.Black,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                    FilterButton(onClick = { showFilterMenu = true })
+                }
                 FilterMenu(
                     showFilterMenu = showFilterMenu,
                     onDismissRequest = { showFilterMenu = false },
                     sortOrder = sortOrder,
                     onSortOrderChange = { newSortOrder -> sortOrder = newSortOrder },
-                    menuText = "Ordenar por precio"
+                    menuText = "Ordenar por fecha"
                 )
             }
 
@@ -409,9 +434,9 @@ private fun LoadingScreen() {
 @Composable
 fun ProductsCardUI(products: Products, navController: NavHostController, productVM: ProductVM) {
     val ctx = LocalContext.current
+    var isFavorite by remember { mutableStateOf(products.favorite) }
     val quantityToAdd = remember { mutableIntStateOf(1) }
     val showDialog = remember { mutableStateOf(false) }
-
 
     Card(
         modifier = Modifier
@@ -428,73 +453,88 @@ fun ProductsCardUI(products: Products, navController: NavHostController, product
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(8.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            Image(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(135.dp), // Half of the card height
-                painter = rememberAsyncImagePainter(model = products.image_path),
-                contentScale = ContentScale.Crop,
-                contentDescription = ""
-            )
+        Box {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = 15.dp, end = 15.dp, top = 10.dp)
             ) {
-                Text(
-                    text = products.name,
-                    fontFamily = FontFamily.SansSerif,
-                    fontSize = 15.sp,
-                    color = Color.Black,
-                    maxLines = 1
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(135.dp), // Half of the card height
+                    painter = rememberAsyncImagePainter(model = products.image_path),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = ""
                 )
-                Text(
-                    text = products.description,
-                    modifier = Modifier.padding(top = 3.dp),
-                    fontFamily = FontFamily.SansSerif,
-                    fontSize = 15.sp,
-                    color = Color.Black,
-                    maxLines = 1
-                )
-                Row(
+                Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = 15.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                        .padding(start = 15.dp, end = 15.dp, top = 10.dp)
                 ) {
                     Text(
-                        text = "${products.price}",
+                        text = products.name,
                         fontFamily = FontFamily.SansSerif,
                         fontSize = 15.sp,
-                        color = Color.Black
+                        color = Color.Black,
+                        maxLines = 1
                     )
-                    Box(
+                    Text(
+                        text = products.description,
+                        modifier = Modifier.padding(top = 3.dp),
+                        fontFamily = FontFamily.SansSerif,
+                        fontSize = 15.sp,
+                        color = Color.Black,
+                        maxLines = 1
+                    )
+                    Row(
                         modifier = Modifier
-                            .size(30.dp)
-                            .clickable {
-                                showDialog.value = true // Trigger dialog
-                            }
-                            .clip(shape = CircleShape)
-                            .background(Color(0xFFC7A8BC)),
-                        contentAlignment = Alignment.Center
+                            .fillMaxSize()
+                            .padding(top = 15.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_cart),
-                            contentDescription = "",
-                            modifier = Modifier.size(18.dp),
-                            tint = Color.White
+                        Text(
+                            text = "${products.price}",
+                            fontFamily = FontFamily.SansSerif,
+                            fontSize = 15.sp,
+                            color = Color.Black
                         )
+                        Box(
+                            modifier = Modifier
+                                .size(30.dp)
+                                .clickable {
+                                    showDialog.value = true // Trigger dialog
+                                }
+                                .clip(shape = CircleShape)
+                                .background(Color(0xFFC7A8BC)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_cart),
+                                contentDescription = "",
+                                modifier = Modifier.size(18.dp),
+                                tint = Color.White
+                            )
+                        }
                     }
                 }
             }
+            Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = "Favorite",
+                tint = if (isFavorite) Color(0xFFFFD83C) else Color.LightGray,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .size(48.dp)
+                    .padding(8.dp)
+                    .clickable {
+                        isFavorite = !isFavorite
+                        products.favorite = isFavorite
+                        productVM.onFavoriteButtonClicked(products.sku, isFavorite)
+                    }
+            )
         }
     }
-
 
     // Call the dialog function and pass necessary parameters
     ProductQuantityDialog(
