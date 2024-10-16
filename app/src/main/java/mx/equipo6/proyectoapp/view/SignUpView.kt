@@ -1,4 +1,3 @@
-// SignUpView.kt
 package mx.equipo6.proyectoapp.view
 
 import android.app.DatePickerDialog
@@ -22,22 +21,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import mx.equipo6.proyectoapp.viewmodel.SignUpViewModel
 import java.util.*
 
 @Composable
-fun SignUpView(onSignUp: (String, String, String, String, String, String, String, String) -> Unit, onLogin: () -> Unit) {
-    var firstName by remember { mutableStateOf("") }
-    var lastName by remember { mutableStateOf("") }
-    var birthDate by remember { mutableStateOf("") }
-    var gender by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-    var address by remember { mutableStateOf("") }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
-    var expanded by remember { mutableStateOf(false) }
-
+fun SignUpView(onLogin: () -> Unit, viewModel: SignUpViewModel = viewModel()) {
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
     val genderOptions = listOf("hombre", "mujer", "otro")
@@ -45,7 +34,7 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
     val datePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            birthDate = "$year-${month + 1}-$dayOfMonth"
+            viewModel.birthDate.value = "$year-${month + 1}-$dayOfMonth"
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
     )
 
@@ -65,8 +54,8 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
         )
 
         BasicTextField(
-            value = firstName,
-            onValueChange = { firstName = it },
+            value = viewModel.firstName.value,
+            onValueChange = { viewModel.firstName.value = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
@@ -76,20 +65,22 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
                 imeAction = ImeAction.Next
             ),
             decorationBox = { innerTextField ->
-                if (firstName.isEmpty()) {
-                    Text(
-                        text = "Nombre",
-                        color = Color.Gray,
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
+                Box {
+                    if (viewModel.firstName.value.isEmpty()) {
+                        Text(
+                            text = "Nombre",
+                            color = Color.Gray,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
+                    innerTextField()
                 }
-                innerTextField()
             }
         )
 
         BasicTextField(
-            value = lastName,
-            onValueChange = { lastName = it },
+            value = viewModel.lastName.value,
+            onValueChange = { viewModel.lastName.value = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
@@ -99,20 +90,22 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
                 imeAction = ImeAction.Next
             ),
             decorationBox = { innerTextField ->
-                if (lastName.isEmpty()) {
-                    Text(
-                        text = "Apellido",
-                        color = Color.Gray,
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
+                Box {
+                    if (viewModel.lastName.value.isEmpty()) {
+                        Text(
+                            text = "Apellido",
+                            color = Color.Gray,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
+                    innerTextField()
                 }
-                innerTextField()
             }
         )
 
         BasicTextField(
-            value = birthDate,
-            onValueChange = { birthDate = it },
+            value = viewModel.birthDate.value,
+            onValueChange = { viewModel.birthDate.value = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
@@ -122,14 +115,16 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
                 imeAction = ImeAction.Next
             ),
             decorationBox = { innerTextField ->
-                if (birthDate.isEmpty()) {
-                    Text(
-                        text = "Fecha de nacimiento (YYYY-MM-DD)",
-                        color = Color.Gray,
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
+                Box {
+                    if (viewModel.birthDate.value.isEmpty()) {
+                        Text(
+                            text = "Fecha de nacimiento",
+                            color = Color.Gray,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
+                    innerTextField()
                 }
-                innerTextField()
             }
         )
 
@@ -151,30 +146,30 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
                 .background(Color(0xFFE0E0E0), RoundedCornerShape(8.dp))
-                .clickable { expanded = true }
+                .clickable { viewModel.expanded.value = true }
                 .padding(12.dp)
         ) {
             Text(
-                text = if (gender.isEmpty()) "Género" else gender,
-                color = if (gender.isEmpty()) Color.Gray else Color.Black,
+                text = if (viewModel.gender.value.isEmpty()) "Género" else viewModel.gender.value,
+                color = if (viewModel.gender.value.isEmpty()) Color.Gray else Color.Black,
                 modifier = Modifier.padding(start = 4.dp)
             )
             DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
+                expanded = viewModel.expanded.value,
+                onDismissRequest = { viewModel.expanded.value = false }
             ) {
                 genderOptions.forEach { option ->
                     DropdownMenuItem(onClick = {
-                        gender = option
-                        expanded = false
-                    }, text = {Text(text = option)})
+                        viewModel.gender.value = option
+                        viewModel.expanded.value = false
+                    }, text = { Text(text = option) })
                 }
             }
         }
 
         BasicTextField(
-            value = phone,
-            onValueChange = { phone = it },
+            value = viewModel.phone.value,
+            onValueChange = { viewModel.phone.value = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
@@ -184,20 +179,22 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
                 imeAction = ImeAction.Next
             ),
             decorationBox = { innerTextField ->
-                if (phone.isEmpty()) {
-                    Text(
-                        text = "Teléfono",
-                        color = Color.Gray,
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
+                Box {
+                    if (viewModel.phone.value.isEmpty()) {
+                        Text(
+                            text = "Teléfono",
+                            color = Color.Gray,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
+                    innerTextField()
                 }
-                innerTextField()
             }
         )
 
         BasicTextField(
-            value = email,
-            onValueChange = { email = it },
+            value = viewModel.email.value,
+            onValueChange = { viewModel.email.value = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
@@ -207,20 +204,22 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
                 imeAction = ImeAction.Next
             ),
             decorationBox = { innerTextField ->
-                if (email.isEmpty()) {
-                    Text(
-                        text = "Correo",
-                        color = Color.Gray,
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
+                Box {
+                    if (viewModel.email.value.isEmpty()) {
+                        Text(
+                            text = "Correo",
+                            color = Color.Gray,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
+                    innerTextField()
                 }
-                innerTextField()
             }
         )
 
         BasicTextField(
-            value = address,
-            onValueChange = { address = it },
+            value = viewModel.address.value,
+            onValueChange = { viewModel.address.value = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
@@ -230,20 +229,22 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
                 imeAction = ImeAction.Next
             ),
             decorationBox = { innerTextField ->
-                if (address.isEmpty()) {
-                    Text(
-                        text = "Dirección",
-                        color = Color.Gray,
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
+                Box {
+                    if (viewModel.address.value.isEmpty()) {
+                        Text(
+                            text = "Dirección",
+                            color = Color.Gray,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
+                    innerTextField()
                 }
-                innerTextField()
             }
         )
 
         BasicTextField(
-            value = password,
-            onValueChange = { password = it },
+            value = viewModel.password.value,
+            onValueChange = { viewModel.password.value = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
@@ -253,20 +254,22 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
                 imeAction = ImeAction.Next
             ),
             decorationBox = { innerTextField ->
-                if (password.isEmpty()) {
-                    Text(
-                        text = "Contraseña",
-                        color = Color.Gray,
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
+                Box {
+                    if (viewModel.password.value.isEmpty()) {
+                        Text(
+                            text = "Contraseña",
+                            color = Color.Gray,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
+                    innerTextField()
                 }
-                innerTextField()
             }
         )
 
         BasicTextField(
-            value = confirmPassword,
-            onValueChange = { confirmPassword = it },
+            value = viewModel.confirmPassword.value,
+            onValueChange = { viewModel.confirmPassword.value = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
@@ -276,20 +279,22 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
                 imeAction = ImeAction.Next
             ),
             decorationBox = { innerTextField ->
-                if (confirmPassword.isEmpty()) {
-                    Text(
-                        text = "Confirma Contraseña",
-                        color = Color.Gray,
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
+                Box {
+                    if (viewModel.confirmPassword.value.isEmpty()) {
+                        Text(
+                            text = "Confirmar contraseña",
+                            color = Color.Gray,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
+                    innerTextField()
                 }
-                innerTextField()
             }
         )
 
-        errorMessage?.let {
+        viewModel.errorMessage.value?.let { errorMessage ->
             Text(
-                text = it,
+                text = errorMessage,
                 color = Color.Red,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
@@ -297,15 +302,7 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
 
         Button(
             onClick = {
-                if (firstName.isNotBlank() && lastName.isNotBlank() && birthDate.isNotBlank() && gender.isNotBlank() && phone.isNotBlank() && email.isNotBlank() && address.isNotBlank() && password.isNotBlank() && confirmPassword.isNotBlank()) {
-                    if (password == confirmPassword) {
-                        onSignUp(firstName, lastName, birthDate, gender, phone, email, address, password)
-                    } else {
-                        errorMessage = "Passwords do not match"
-                    }
-                } else {
-                    errorMessage = "Please fill in all fields"
-                }
+                viewModel.signUp()
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFC7A8BC),
@@ -331,5 +328,5 @@ fun SignUpView(onSignUp: (String, String, String, String, String, String, String
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    SignUpView(onSignUp = { _, _, _, _, _, _, _, _ -> }, onLogin = {})
+    SignUpView(onLogin = {})
 }

@@ -3,8 +3,8 @@ package mx.equipo6.proyectoapp.api
 import mx.equipo6.proyectoapp.include.Constants.Companion.LIST_OF_POSTS
 import mx.equipo6.proyectoapp.include.Constants.Companion.LIST_OF_PRODUCTS
 import mx.equipo6.proyectoapp.include.Constants.Companion.USERS_URL
-import mx.equipo6.proyectoapp.model.auth.User
 import mx.equipo6.proyectoapp.model.auth.LoginRequest
+import mx.equipo6.proyectoapp.model.auth.User
 import mx.equipo6.proyectoapp.model.auth.LoginResponse
 import mx.equipo6.proyectoapp.model.posts.PostList
 import mx.equipo6.proyectoapp.model.products.ProductList

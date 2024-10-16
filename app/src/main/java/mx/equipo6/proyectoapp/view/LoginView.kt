@@ -21,12 +21,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import mx.equipo6.proyectoapp.viewmodel.LoginViewModel
 
 @Composable
-fun LoginView(onLogin: (String, String) -> Unit, onSignUp: () -> Unit, errorMessage: String?) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-
+fun LoginView(onSignUp: () -> Unit, viewModel: LoginViewModel = viewModel()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -45,8 +44,8 @@ fun LoginView(onLogin: (String, String) -> Unit, onSignUp: () -> Unit, errorMess
         Spacer(modifier = Modifier.height(16.dp))
 
         BasicTextField(
-            value = email,
-            onValueChange = { email = it },
+            value = viewModel.email.value,
+            onValueChange = { viewModel.email.value = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
@@ -56,20 +55,22 @@ fun LoginView(onLogin: (String, String) -> Unit, onSignUp: () -> Unit, errorMess
                 imeAction = ImeAction.Next
             ),
             decorationBox = { innerTextField ->
-                if (email.isEmpty()) {
-                    Text(
-                        text = "Correo",
-                        color = Color.Gray,
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
+                Box {
+                    if (viewModel.email.value.isEmpty()) {
+                        Text(
+                            text = "Correo",
+                            color = Color.Gray,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
+                    innerTextField()
                 }
-                innerTextField()
             }
         )
 
         BasicTextField(
-            value = password,
-            onValueChange = { password = it },
+            value = viewModel.password.value,
+            onValueChange = { viewModel.password.value = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
@@ -80,24 +81,24 @@ fun LoginView(onLogin: (String, String) -> Unit, onSignUp: () -> Unit, errorMess
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
-                    if (email.isNotBlank() && password.isNotBlank()) {
-                        onLogin(email, password)
-                    }
+                    viewModel.login()
                 }
             ),
             decorationBox = { innerTextField ->
-                if (password.isEmpty()) {
-                    Text(
-                        text = "Contraseña",
-                        color = Color.Gray,
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
+                Box {
+                    if (viewModel.password.value.isEmpty()) {
+                        Text(
+                            text = "Contraseña",
+                            color = Color.Gray,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
+                    innerTextField()
                 }
-                innerTextField()
             }
         )
 
-        errorMessage?.let {
+        viewModel.errorMessage.value?.let {
             Text(
                 text = it,
                 color = Color.Red,
@@ -107,9 +108,7 @@ fun LoginView(onLogin: (String, String) -> Unit, onSignUp: () -> Unit, errorMess
 
         Button(
             onClick = {
-                if (email.isNotBlank() && password.isNotBlank()) {
-                    onLogin(email, password)
-                }
+                viewModel.login()
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFC7A8BC),
@@ -135,5 +134,5 @@ fun LoginView(onLogin: (String, String) -> Unit, onSignUp: () -> Unit, errorMess
 @Preview(showBackground = true)
 @Composable
 fun LoginViewPreview() {
-    LoginView(onLogin = { _, _ -> }, onSignUp = {}, errorMessage = null)
+    LoginView(onSignUp = {})
 }
