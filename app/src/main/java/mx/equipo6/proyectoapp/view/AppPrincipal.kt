@@ -118,7 +118,7 @@ fun AppNavHost(
         }
 
         composable(Windows.ROUTE_CONFIG) {
-            ConfigView(modifier)
+            ConfigView(signUpViewModel)
         }
 
         composable(Windows.ROUTE_TICKET) {
