@@ -83,7 +83,7 @@ fun AppNavHost(
 
         composable(Windows.ROUTE_HOME) {
             //HomeView(homeVM, navController, postVM)
-            HomeView(homeVM, navController, signUpViewModel)
+            HomeView(homeVM, navController, postVM ,signUpViewModel)
         }
 
         composable(Windows.ROUTE_COMUNITY) {

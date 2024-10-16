@@ -32,8 +32,7 @@ sealed class Windows(
             ChatBotView, ShopView,
             ComunityView, CalenView,
             CartView, CheckoutView, ConfigView,
-            TicketView, ForgotPasswordView)
-            TicketView, FavoritePostsView, FavoriteProductsView)
+            TicketView, ForgotPasswordView, FavoritePostsView, FavoriteProductsView)
         const val ROUTE_HOME = "Inicio"
         const val ROUTE_ABOUTUS = "Zazil"
         const val ROUTE_COMUNITY = "Comunidad"
@@ -113,6 +112,7 @@ sealed class Windows(
         ROUTE_FORGOT_PASSWORD,
         "ForgotPassword",
         Icons.Default.ThumbUp
+    )
     private data object FavoritePostsView : Windows(
         ROUTE_FAVORITE_POSTS,
         "Posts favoritos",
