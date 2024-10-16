@@ -33,7 +33,7 @@ sealed class Windows(
             ChatBotView, ShopView,
             ComunityView, CalenView,
             CartView, CheckoutView, ConfigView,
-            TicketView)
+            TicketView, ForgotPasswordView)
         const val ROUTE_HOME = "Inicio"
         const val ROUTE_ABOUTUS = "Zazil"
         const val ROUTE_COMUNITY = "Comunidad"
@@ -44,6 +44,7 @@ sealed class Windows(
         const val ROUTE_CART = "Carrito"
         const val ROUTE_CHECKOUT = "Checkout"
         const val ROUTE_TICKET = "Ticket"
+        const val ROUTE_FORGOT_PASSWORD = "ForgotPassword"
     }
 
     private data object HomeView : Windows(
@@ -104,5 +105,11 @@ sealed class Windows(
         ROUTE_TICKET,
         "Ticket",
         Icons.Default.CheckCircle
+    )
+
+    private data object ForgotPasswordView : Windows(
+        ROUTE_FORGOT_PASSWORD,
+        "ForgotPassword",
+        Icons.Default.ThumbUp
     )
 }

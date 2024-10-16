@@ -5,7 +5,13 @@ import android.content.SharedPreferences
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import mx.equipo6.proyectoapp.model.profileData.createJsonData
+import mx.equipo6.proyectoapp.model.profileData.sendDataToServer
+import java.net.HttpURLConnection
+import java.net.URL
 
 class SignUpViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -55,6 +61,21 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
             putString("password", password.value)
             apply()
         }
+        val jsonData = createJsonData(
+            firstName.value,
+            lastName.value,
+            birthDate.value,
+            gender.value,
+            phone.value,
+            email.value,
+            address.value,
+            password.value
+        )
+
+        viewModelScope.launch {
+            val result = sendDataToServer(jsonData)
+            println(result)
+        }
     }
 
     private fun loadUserData() {
@@ -79,5 +100,62 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
         password.value = ""
         confirmPassword.value = ""
         address.value = ""
+    }
+
+    fun sendResetLink() {
+        if (email.value.isBlank()) {
+            errorMessage.value = "Por favor, ingresa tu correo electrónico"
+            return
+        }
+
+        errorMessage.value = null
+
+        viewModelScope.launch {
+            val jsonData = createResetLinkJson(email.value)
+            val response = sendResetLinkToServer(jsonData)
+
+            if (response.startsWith("Error")) {
+                errorMessage.value = response
+            } else {
+                errorMessage.value = "Enlace de restablecimiento enviado correctamente"
+            }
+        }
+    }
+
+    private fun createResetLinkJson(email: String): String {
+        return """
+            {
+                "email": "$email"
+            }
+        """.trimIndent()
+    }
+
+    private suspend fun sendResetLinkToServer(jsonData: String): String {
+        return withContext(context = Dispatchers.IO) {
+            try {
+                val url = URL("http://yourserver.com/api/reset-password") //TODO Replace with your server URL
+                val connection = (url.openConnection() as HttpURLConnection).apply {
+                    requestMethod = "POST"
+                    doOutput = true
+                    setRequestProperty("Content-Type", "application/json")
+                }
+
+                // Write JSON data to the output stream
+                connection.outputStream.use { outputStream ->
+                    outputStream.write(jsonData.toByteArray())
+                }
+
+                // Check response code from the server
+                val responseCode = connection.responseCode
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    "Enlace de restablecimiento enviado correctamente."
+                } else {
+                    "Error al enviar el enlace: $responseCode"
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                "Error: ${e.message}"
+            }
+        }
     }
 }
