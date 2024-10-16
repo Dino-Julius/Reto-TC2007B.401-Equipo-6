@@ -11,6 +11,7 @@ import mx.equipo6.proyectoapp.model.products.ProductList
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 /**
  * Define el servicio de la API para Retrofit
@@ -33,4 +34,7 @@ interface ApiService {
 
     @POST("signup")
     suspend fun signUp(@Body user: User): LoginResponse
+
+    @GET("users/{email}")
+    suspend fun getUserByEmail(@Path("email") email: String): User
 }
