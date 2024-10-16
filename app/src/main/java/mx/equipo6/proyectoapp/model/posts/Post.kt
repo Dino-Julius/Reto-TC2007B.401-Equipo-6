@@ -34,4 +34,5 @@ class Post(
     val file_path: String,
     @SerializedName("image_path")
     val image_path: String,
+    var favorite: Boolean = false
 ) : Parcelable

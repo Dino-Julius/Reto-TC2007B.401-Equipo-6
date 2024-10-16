@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -32,6 +33,8 @@ class ProductVM @Inject constructor(
     private val productRespository: ProductRespository,
     @ApplicationContext private val context: Context
 ): ViewModel() {
+
+    private val sharedPreferences: SharedPreferences = context.getSharedPreferences("favorite_products", Context.MODE_PRIVATE)
 
     private val _product = MutableStateFlow<ViewState<ProductList>>(ViewState.Loading)
     val products : StateFlow<ViewState<ProductList>> get() = _product
@@ -69,19 +72,42 @@ class ProductVM @Inject constructor(
         fetchProducts()
     }
 
+    fun onFavoriteButtonClicked(productId: String, isFavorite: Boolean) {
+        saveFavoriteProduct(productId, isFavorite)
+    }
+
     private fun fetchProducts() {
         viewModelScope.launch {
             _product.value = ViewState.Loading
             try {
                 val results = productRespository.getProducts()
+                loadFavoriteProducts(results)
                 _product.value = ViewState.Success(results)
-                Log.e("TAG_SUCCESS", "fetchProducts: ")
             } catch (e: Exception) {
-                Log.e("TAG_ERROR", "fetchProducts: ")
                 _product.value = ViewState.Error("An Error Occurred. Please try Again")
             }
         }
     }
+
+    private fun loadFavoriteProducts(products: ProductList) {
+        val favoriteProducts = sharedPreferences.getStringSet("favorites", emptySet()) ?: emptySet()
+        products.forEach { product ->
+            product.favorite = favoriteProducts.contains(product.sku)
+        }
+    }
+
+    fun saveFavoriteProduct(productId: String, isFavorite: Boolean) {
+        val editor = sharedPreferences.edit()
+        val favoriteProducts = sharedPreferences.getStringSet("favorites", mutableSetOf()) ?: mutableSetOf()
+        if (isFavorite) {
+            favoriteProducts.add(productId.toString())
+        } else {
+            favoriteProducts.remove(productId.toString())
+        }
+        editor.putStringSet("favorites", favoriteProducts)
+        editor.apply()
+    }
+
 
     override fun onCleared() {
         super.onCleared()

@@ -5,7 +5,6 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -33,7 +32,7 @@ sealed class Windows(
             ChatBotView, ShopView,
             ComunityView, CalenView,
             CartView, CheckoutView, ConfigView,
-            TicketView)
+            TicketView, FavoritePostsView, FavoriteProductsView)
         const val ROUTE_HOME = "Inicio"
         const val ROUTE_ABOUTUS = "Zazil"
         const val ROUTE_COMUNITY = "Comunidad"
@@ -44,6 +43,8 @@ sealed class Windows(
         const val ROUTE_CART = "Carrito"
         const val ROUTE_CHECKOUT = "Checkout"
         const val ROUTE_TICKET = "Ticket"
+        const val ROUTE_FAVORITE_POSTS = "Posts favoritos"
+        const val ROUTE_FAVORITE_PRODUCTS = "Productos favoritos"
     }
 
     private data object HomeView : Windows(
@@ -55,7 +56,7 @@ sealed class Windows(
     private data object AboutUsView : Windows(
         ROUTE_ABOUTUS,
         "Zazil",
-        Icons.Default.Info
+        Icons.Default.ThumbUp
     )
 
     private data object ComunityView : Windows(
@@ -104,5 +105,17 @@ sealed class Windows(
         ROUTE_TICKET,
         "Ticket",
         Icons.Default.CheckCircle
+    )
+
+    private data object FavoritePostsView : Windows(
+        ROUTE_FAVORITE_POSTS,
+        "Posts favoritos",
+        Icons.Default.Star
+    )
+
+    private data object FavoriteProductsView : Windows(
+        ROUTE_FAVORITE_PRODUCTS,
+        "Productos favoritos",
+        Icons.Default.Star
     )
 }

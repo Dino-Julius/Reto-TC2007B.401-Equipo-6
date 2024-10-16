@@ -37,7 +37,7 @@ fun CircleButtonList(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Título de la sección de usuario
-        Text("Usuario", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold))
+        Text("Comunidad", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold))
         if (userButtons.isEmpty()) {
             // Texto a mostrar si no hay botones de usuario
             Text("Accesos en uso", style = MaterialTheme.typography.bodyLarge)
@@ -53,7 +53,7 @@ fun CircleButtonList(
                         modifier = Modifier.weight(buttonWidth),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        CircleButton(icon = icon, onClick = { onButtonSelected(icon) })
+                        CircleButton(icon = icon, onClick = { onButtonSelected(icon)})
                         // Texto debajo del botón
                         Text(text = name, modifier = Modifier.padding(top = 12.dp))
                     }
