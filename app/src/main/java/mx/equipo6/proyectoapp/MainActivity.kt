@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()  // Initialize NavController
 
-            var showSignUp by remember { mutableStateOf(false) }
+            val showSignUp by remember { mutableStateOf(false) }
             var loggedIn by remember { mutableStateOf(isLoggedIn) }
 
             if (isFirstRun) {

@@ -1,5 +1,6 @@
 package mx.equipo6.proyectoapp.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,14 +18,18 @@ class LoginViewModel : ViewModel() {
         if (email.value.isNotBlank() && password.value.isNotBlank()) {
             viewModelScope.launch {
                 try {
-                    val loginRequest = LoginRequest(email.value, password.value)
+                    // val loginRequest = LoginRequest(email.value, password.value)
+                    val loginRequest = LoginRequest(password.value)
                     val response = RetrofitClient.apiService.verifyPassword(email.value, loginRequest)
                     if (response != null) {
                         loggedIn.value = true
+                        Log.d("LoginViewModel", "${response}")
                     } else {
+                        Log.d("LoginViewModel", "Invalid email or password")
                         errorMessage.value = "Invalid email or password"
                     }
                 } catch (e: Exception) {
+                    Log.d("LoginViewModel", e.message.toString())
                     errorMessage.value = "Invalid email or password"
                 }
             }

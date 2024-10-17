@@ -2,52 +2,46 @@ package mx.equipo6.proyectoapp.model.profileData
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.net.HttpURLConnection
-import java.net.URL
+import mx.equipo6.proyectoapp.api.RetrofitClient
 
-fun createJsonData(
-    firstName: String,
-    lastName: String,
-    birthDate: String,
-    gender: String,
-    phone: String,
-    email: String,
-    address: String,
-    password: String
-): String {
-    return """
-        {
-            "first_name": "$firstName",
-            "last_name": "$lastName",
-            "birth_date": "$birthDate",
-            "gender": "$gender",
-            "phone": "$phone",
-            "email": "$email",
-            "address": "$address",
-            "password": "$password"
-        }
-    """.trimIndent()
-}
+data class SignUpRequest(
+    val first_name: String,
+    val last_name: String,
+    val birth_date: String,
+    val gender: String,
+    val phone: String,
+    val email: String,
+    val password: String,
+    val shipping_address: String
+)
 
-suspend fun sendDataToServer(jsonData: String): String {
+data class SignUpResponse(
+    val success: Boolean,
+    val message: String,
+    val user: User
+)
+
+data class User(
+    val user_id: String,
+    val first_name: String,
+    val last_name: String,
+    val birth_date: String,
+    val gender: String,
+    val phone: String,
+    val email: String,
+    val password: String,
+    val profile_pic: String,
+    val shipping_address: String
+)
+
+suspend fun sendDataToServer(signUpRequest: SignUpRequest): String {
     return withContext(Dispatchers.IO) {
         try {
-            val url = URL("http://104.248.55.22:3000/api/users")
-            val connection = (url.openConnection() as HttpURLConnection).apply {
-                requestMethod = "POST"
-                doOutput = true
-                setRequestProperty("Content-Type", "application/json")
-            }
-
-            connection.outputStream.use { outputStream ->
-                outputStream.write(jsonData.toByteArray())
-            }
-
-            val responseCode = connection.responseCode
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                "Data sent successfully."
+            val response = RetrofitClient.apiService.signUp(signUpRequest)
+            if (response.success) {
+                "Data sent successfully: ${response.message}"
             } else {
-                "Error sending data: $responseCode"
+                "Error sending data: ${response.message}"
             }
         } catch (e: Exception) {
             e.printStackTrace()

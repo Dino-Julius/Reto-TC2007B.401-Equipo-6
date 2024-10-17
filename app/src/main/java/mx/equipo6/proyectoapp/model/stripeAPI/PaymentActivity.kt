@@ -11,14 +11,17 @@ import com.stripe.android.Stripe
 import com.stripe.android.model.ConfirmPaymentIntentParams
 import com.stripe.android.view.CardInputWidget
 import mx.equipo6.proyectoapp.R
-import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaType
-import org.json.JSONObject
-import java.io.IOException
+import mx.equipo6.proyectoapp.api.RetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
+data class PaymentIntentRequest(val amount: Int, val payment_method: String)
+data class PaymentIntentResponse(val clientSecret: String)
 
 class PaymentActivity : AppCompatActivity() {
 
@@ -76,32 +79,13 @@ class PaymentActivity : AppCompatActivity() {
         // Log the amount being sent to the server
         Log.d("Amount", "Total Price (in cents): $totalPrice")
 
-        // JSON to send to the server
-        val jsonBody = JSONObject().apply {
-            put("amount", totalPrice)
-            put("payment_method", paymentMethodId)
-        }
+        val request = PaymentIntentRequest(amount = totalPrice, payment_method = paymentMethodId)
 
-        val body = RequestBody.create("application/json; charset=utf-8".toMediaType(), jsonBody.toString())
-        val request = Request.Builder()
-            .url("http://104.248.55.22:3000/api/create-payment-intent") // Replace with your server URL
-            .post(body)
-            .build()
-
-        val client = OkHttpClient()
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                runOnUiThread {
-                    showToast("Failed to create payment intent")
-                }
-            }
-
-            override fun onResponse(call: Call, response: Response) {
+        RetrofitClient.apiService.createPaymentIntent(request).enqueue(object : Callback<PaymentIntentResponse> {
+            override fun onResponse(call: Call<PaymentIntentResponse>, response: Response<PaymentIntentResponse>) {
                 if (response.isSuccessful) {
-                    response.body?.let { responseBody ->
-                        val responseString = responseBody.string()
-                        val jsonResponse = JSONObject(responseString)
-                        val clientSecret = jsonResponse.getString("clientSecret")
+                    response.body()?.let { paymentIntentResponse ->
+                        val clientSecret = paymentIntentResponse.clientSecret
 
                         runOnUiThread {
                             // Confirm the payment
@@ -121,10 +105,18 @@ class PaymentActivity : AppCompatActivity() {
                     }
                 } else {
                     runOnUiThread {
-                        showToast("Server error: ${response.message}")
+                        showToast("Server error: ${response.message()}")
                         setResult(Activity.RESULT_CANCELED)
                         finish()
                     }
+                }
+            }
+
+            override fun onFailure(call: Call<PaymentIntentResponse>, t: Throwable) {
+                runOnUiThread {
+                    showToast("Failed to create payment intent")
+                    setResult(Activity.RESULT_CANCELED)
+                    finish()
                 }
             }
         })

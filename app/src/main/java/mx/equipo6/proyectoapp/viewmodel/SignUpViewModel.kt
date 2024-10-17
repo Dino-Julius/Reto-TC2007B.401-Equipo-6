@@ -8,10 +8,12 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import mx.equipo6.proyectoapp.model.profileData.createJsonData
+import mx.equipo6.proyectoapp.api.RetrofitClient
+import mx.equipo6.proyectoapp.model.profileData.SignUpRequest
 import mx.equipo6.proyectoapp.model.profileData.sendDataToServer
-import java.net.HttpURLConnection
-import java.net.URL
+
+data class EmailRequest(val email: String)
+data class ResetLinkResponse(val success: Boolean, val message: String)
 
 class SignUpViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -78,6 +80,28 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    private fun createJsonData(
+        firstName: String,
+        lastName: String,
+        birthDate: String,
+        gender: String,
+        phone: String,
+        email: String,
+        address: String,
+        password: String
+    ): SignUpRequest {
+        return SignUpRequest(
+            first_name = firstName,
+            last_name = lastName,
+            birth_date = birthDate,
+            gender = gender,
+            phone = phone,
+            email = email,
+            password = password,
+            shipping_address = address
+        )
+    }
+
     private fun loadUserData() {
         firstName.value = sharedPreferences.getString("first_name", "") ?: ""
         lastName.value = sharedPreferences.getString("last_name", "") ?: ""
@@ -111,50 +135,24 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
         errorMessage.value = null
 
         viewModelScope.launch {
-            val jsonData = createResetLinkJson(email.value)
-            val response = sendResetLinkToServer(jsonData)
+            val emailRequest = EmailRequest(email.value)
+            val response = sendResetLinkToServer(emailRequest)
 
-            if (response.startsWith("Error")) {
-                errorMessage.value = response
-            } else {
+            if (response.success) {
                 errorMessage.value = "Enlace de restablecimiento enviado correctamente"
+            } else {
+                errorMessage.value = response.message
             }
         }
     }
 
-    private fun createResetLinkJson(email: String): String {
-        return """
-            {
-                "email": "$email"
-            }
-        """.trimIndent()
-    }
-
-    private suspend fun sendResetLinkToServer(jsonData: String): String {
+    private suspend fun sendResetLinkToServer(emailRequest: EmailRequest): ResetLinkResponse {
         return withContext(context = Dispatchers.IO) {
             try {
-                val url = URL("http://yourserver.com/api/reset-password") //TODO Replace with your server URL
-                val connection = (url.openConnection() as HttpURLConnection).apply {
-                    requestMethod = "POST"
-                    doOutput = true
-                    setRequestProperty("Content-Type", "application/json")
-                }
-
-                // Write JSON data to the output stream
-                connection.outputStream.use { outputStream ->
-                    outputStream.write(jsonData.toByteArray())
-                }
-
-                // Check response code from the server
-                val responseCode = connection.responseCode
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    "Enlace de restablecimiento enviado correctamente."
-                } else {
-                    "Error al enviar el enlace: $responseCode"
-                }
+                RetrofitClient.apiService.sendResetLink(emailRequest)
             } catch (e: Exception) {
                 e.printStackTrace()
-                "Error: ${e.message}"
+                ResetLinkResponse(false, "Error: ${e.message}")
             }
         }
     }

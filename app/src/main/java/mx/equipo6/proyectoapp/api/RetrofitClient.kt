@@ -1,10 +1,11 @@
 package mx.equipo6.proyectoapp.api
 
+import mx.equipo6.proyectoapp.include.Constants.Companion.API_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "http://104.248.55.22:3000/api/"
+    private const val BASE_URL = API_URL
 
     val apiService: ApiService by lazy {
         Retrofit.Builder()
