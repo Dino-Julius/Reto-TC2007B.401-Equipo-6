@@ -119,7 +119,11 @@ fun AppNavHost(
         }
 
         composable(Windows.ROUTE_CONFIG) {
-            ConfigView(signUpViewModel)
+            ConfigView(signUpViewModel, navController)
+        }
+
+        composable(Windows.ROUTE_CONFIG_MENU) {
+            ConfigMenuView(navController)
         }
 
         composable(Windows.ROUTE_TICKET) {
@@ -132,6 +136,10 @@ fun AppNavHost(
 
         composable(Windows.ROUTE_FAVORITE_PRODUCTS) {
             FavoriteProductsView(productVM, navController)
+        }
+
+        composable(Windows.ROUTE_DEV_TEAM) {
+            DevTeamView(navController)
         }
     }
 }

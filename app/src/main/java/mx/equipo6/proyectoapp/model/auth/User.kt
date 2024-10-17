@@ -9,7 +9,7 @@ data class User(
     @SerializedName("gender") val gender: String,
     @SerializedName("phone") val phone: String,
     @SerializedName("email") val email: String,
-    //@SerializedName("profile_pic") val profilePic: String,
-    @SerializedName("address") val address: String,
+    @SerializedName("profile_pic") val profilePic: String,
+    @SerializedName("shipping_address") val address: String,
     @SerializedName("password") val password: String
 )

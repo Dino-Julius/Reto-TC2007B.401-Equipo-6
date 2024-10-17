@@ -250,7 +250,7 @@ fun ShopView(productVM: ProductVM, navController: NavHostController) {
                 Row {
                     Button(
                         modifier = Modifier
-                            .padding(start = 260.dp),
+                            .padding(start = 20.dp),
                         onClick = { navController.navigate(Windows.ROUTE_FAVORITE_PRODUCTS) },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF1D1F8)),
                         shape = CircleShape,

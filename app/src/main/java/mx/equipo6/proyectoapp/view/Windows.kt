@@ -5,6 +5,7 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -31,12 +32,13 @@ sealed class Windows(
         var listaPantallas = listOf(HomeView, AboutUsView,
             ChatBotView, ShopView,
             ComunityView, CalenView,
-            CartView, CheckoutView, ConfigView,
-            TicketView, ForgotPasswordView, FavoritePostsView, FavoriteProductsView)
+            CartView, CheckoutView, ConfigView, ConfigMenuView,
+            TicketView, ForgotPasswordView, FavoritePostsView, FavoriteProductsView, DevTeamView)
         const val ROUTE_HOME = "Inicio"
         const val ROUTE_ABOUTUS = "Zazil"
         const val ROUTE_COMUNITY = "Comunidad"
         const val ROUTE_CONFIG = "Configuración"
+        const val ROUTE_CONFIG_MENU = "Menu config"
         const val ROUTE_CHATBOT = "ChatBot"
         const val ROUTE_CALENDAR = "Calendario"
         const val ROUTE_STORE = "Tienda"
@@ -46,6 +48,7 @@ sealed class Windows(
         const val ROUTE_FORGOT_PASSWORD = "ForgotPassword"
         const val ROUTE_FAVORITE_POSTS = "Posts favoritos"
         const val ROUTE_FAVORITE_PRODUCTS = "Productos favoritos"
+        const val ROUTE_DEV_TEAM = "Equipo desarrollador"
     }
 
     private data object HomeView : Windows(
@@ -69,6 +72,12 @@ sealed class Windows(
     private data object ConfigView : Windows(
         ROUTE_CONFIG,
         "Configuración",
+        Icons.Default.Person
+    )
+
+    private data object ConfigMenuView : Windows(
+        ROUTE_CONFIG_MENU,
+        "Menu config",
         Icons.Default.Person
     )
 
@@ -123,5 +132,11 @@ sealed class Windows(
         ROUTE_FAVORITE_PRODUCTS,
         "Productos favoritos",
         Icons.Default.Star
+    )
+
+    private data object DevTeamView : Windows(
+        ROUTE_DEV_TEAM,
+        "Equipo desarrollador",
+        Icons.Default.Info
     )
 }

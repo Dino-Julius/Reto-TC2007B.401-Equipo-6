@@ -235,7 +235,7 @@ class NavigationBars {
                     }
                     IconButton(onClick = {
                         // onRightButtonClick()
-                        navController.navigate(Windows.ROUTE_CONFIG)
+                        navController.navigate(Windows.ROUTE_CONFIG_MENU)
                         // Toast.makeText(act, "Configuración", Toast.LENGTH_SHORT).show()
                     }) {
                         Icon(
