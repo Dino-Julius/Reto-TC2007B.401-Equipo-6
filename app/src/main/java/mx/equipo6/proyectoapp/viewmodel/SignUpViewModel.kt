@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import mx.equipo6.proyectoapp.api.RetrofitClient
+import mx.equipo6.proyectoapp.model.auth.User
 import mx.equipo6.proyectoapp.model.profileData.SignUpRequest
 import mx.equipo6.proyectoapp.model.profileData.sendDataToServer
 
@@ -28,12 +29,15 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
     var password = mutableStateOf("")
     var confirmPassword = mutableStateOf("")
     var address = mutableStateOf("")
+    var profilePic = mutableStateOf("")
     var errorMessage = mutableStateOf<String?>(null)
     var signedUp = mutableStateOf(false)
     var expanded = mutableStateOf(false)
 
     init {
         loadUserData()
+        // Save this instance to the companion object so it can be accessed statically
+        Companion.instance = this
     }
 
     fun signUp() {
@@ -153,6 +157,36 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
             } catch (e: Exception) {
                 e.printStackTrace()
                 ResetLinkResponse(false, "Error: ${e.message}")
+            }
+        }
+    }
+
+    fun copyUserData(user: User) {
+        firstName.value = user.firstName
+        lastName.value = user.lastName
+        birthDate.value = user.birthDate
+        gender.value = user.gender
+        phone.value = user.phone
+        email.value = user.email
+        address.value = user.address
+        profilePic.value = user.profilePic
+    }
+
+    companion object {
+        private var instance: SignUpViewModel? = null
+
+        fun copyUserData(user: User) {
+            instance?.let {
+                it.firstName.value = user.firstName
+                it.lastName.value = user.lastName
+                it.birthDate.value = user.birthDate
+                it.gender.value = user.gender
+                it.phone.value = user.phone
+                it.email.value = user.email
+                it.address.value = user.address
+                it.profilePic.value = user.profilePic
+            } ?: run {
+                println("SignUpViewModel instance is null")
             }
         }
     }

@@ -14,11 +14,16 @@ class LoginViewModel : ViewModel() {
     var errorMessage = mutableStateOf<String?>(null)
     var loggedIn = mutableStateOf(false)
 
-    fun passwordlogin() {
+    private var signUpViewModel: SignUpViewModel? = null
+
+    fun setSignUpViewModel(viewModel: SignUpViewModel) {
+        signUpViewModel = viewModel
+    }
+
+    fun passwordLogin() {
         if (email.value.isNotBlank() && password.value.isNotBlank()) {
             viewModelScope.launch {
                 try {
-                    // val loginRequest = LoginRequest(email.value, password.value)
                     val loginRequest = LoginRequest(password.value)
                     val response = RetrofitClient.apiService.verifyPassword(email.value, loginRequest)
                     if (response != null) {
@@ -37,17 +42,19 @@ class LoginViewModel : ViewModel() {
         }
     }
 
-    private fun getUserByEmail(value: String) {
+    fun getUserByEmail(email: String) {
         viewModelScope.launch {
             try {
-                val user = RetrofitClient.apiService.getUserByEmail(value)
-                Log.d("LoginViewModel", "${user}")
+                val user = RetrofitClient.apiService.getUserByEmail(email)
+                if (user != null) {
+                    SignUpViewModel.copyUserData(user)
+                    Log.d("LoginViewModel", "User fetched: ${user}")
+                } else {
+                    Log.d("LoginViewModel", "User not found")
+                }
             } catch (e: Exception) {
                 Log.d("LoginViewModel", e.message.toString())
             }
         }
-
     }
-
-
 }

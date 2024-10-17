@@ -1,5 +1,6 @@
 package mx.equipo6.proyectoapp.view
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -27,11 +28,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.launch
 import mx.equipo6.proyectoapp.R
+import mx.equipo6.proyectoapp.api.RetrofitClient
 import mx.equipo6.proyectoapp.include.ViewState
 import mx.equipo6.proyectoapp.view.components.PostCard
 import mx.equipo6.proyectoapp.view.sampledata.Carousel
@@ -40,6 +44,7 @@ import mx.equipo6.proyectoapp.view.sampledata.CircleButtonList
 import mx.equipo6.proyectoapp.view.sampledata.RectangularButton
 import mx.equipo6.proyectoapp.view.sampledata.Subtitle
 import mx.equipo6.proyectoapp.viewmodel.HomeVM
+import mx.equipo6.proyectoapp.viewmodel.LoginViewModel
 import mx.equipo6.proyectoapp.viewmodel.PostVM
 import mx.equipo6.proyectoapp.viewmodel.SignUpViewModel
 
@@ -49,7 +54,8 @@ fun HomeView(
     homeVM: HomeVM = viewModel(),
     navController: NavHostController,
     postVM: PostVM,
-    loginViewModel: SignUpViewModel = viewModel()
+    loginViewModel: SignUpViewModel = viewModel(),
+    LoginVM : LoginViewModel = viewModel()
 ) {
     val context = LocalContext.current
     val isConnected by homeVM.isConnected.collectAsState()
@@ -75,6 +81,8 @@ fun HomeView(
     val selectedPosts = postsByCategory.flatMap { (_, posts) ->
         posts.sortedByDescending { it.date }.take(5)
     }
+    Log.d("email", LoginVM.email.value)
+    LoginVM.getUserByEmail(LoginVM.email.value)
 
     Column(modifier = Modifier.fillMaxSize()) {
         Column(

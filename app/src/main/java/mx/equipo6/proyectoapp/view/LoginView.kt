@@ -85,7 +85,7 @@ fun LoginView(
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
-                    viewModel.passwordlogin()
+                    viewModel.passwordLogin()
                 }
             ),
             decorationBox = { innerTextField ->
@@ -112,7 +112,7 @@ fun LoginView(
 
         Button(
             onClick = {
-                viewModel.passwordlogin()
+                viewModel.passwordLogin()
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFC7A8BC),
