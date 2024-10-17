@@ -23,6 +23,7 @@ class LoginViewModel : ViewModel() {
                     val response = RetrofitClient.apiService.verifyPassword(email.value, loginRequest)
                     if (response != null) {
                         loggedIn.value = true
+                        getUserByEmail(email.value)
                         Log.d("LoginViewModel", "${response}")
                     } else {
                         Log.d("LoginViewModel", "Invalid email or password")
@@ -35,4 +36,18 @@ class LoginViewModel : ViewModel() {
             }
         }
     }
+
+    private fun getUserByEmail(value: String) {
+        viewModelScope.launch {
+            try {
+                val user = RetrofitClient.apiService.getUserByEmail(value)
+                Log.d("LoginViewModel", "${user}")
+            } catch (e: Exception) {
+                Log.d("LoginViewModel", e.message.toString())
+            }
+        }
+
+    }
+
+
 }
