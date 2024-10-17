@@ -2,19 +2,29 @@ package mx.equipo6.proyectoapp.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import mx.equipo6.proyectoapp.api.RetrofitClient
 import mx.equipo6.proyectoapp.model.auth.LoginRequest
+import android.app.Application
+import android.content.Context
+import androidx.lifecycle.AndroidViewModel
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val sharedPreferences = application.getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
+
     var email = mutableStateOf("")
     var password = mutableStateOf("")
     var errorMessage = mutableStateOf<String?>(null)
     var loggedIn = mutableStateOf(false)
 
     private var signUpViewModel: SignUpViewModel? = null
+
+    init {
+        // Load email from SharedPreferences when the ViewModel is created
+        email.value = getEmailFromPreferences()
+    }
 
     fun setSignUpViewModel(viewModel: SignUpViewModel) {
         signUpViewModel = viewModel
@@ -29,6 +39,7 @@ class LoginViewModel : ViewModel() {
                     if (response != null) {
                         loggedIn.value = true
                         getUserByEmail(email.value)
+                        saveEmailToPreferences(email.value)  // Save email when login is successful
                         Log.d("LoginViewModel", "${response}")
                     } else {
                         Log.d("LoginViewModel", "Invalid email or password")
@@ -56,5 +67,15 @@ class LoginViewModel : ViewModel() {
                 Log.d("LoginViewModel", e.message.toString())
             }
         }
+    }
+
+    // Save email to SharedPreferences
+    private fun saveEmailToPreferences(email: String) {
+        sharedPreferences.edit().putString("email", email).apply()
+    }
+
+    // Retrieve email from SharedPreferences
+    private fun getEmailFromPreferences(): String {
+        return sharedPreferences.getString("email", "") ?: ""
     }
 }
