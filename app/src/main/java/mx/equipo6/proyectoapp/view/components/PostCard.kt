@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import mx.equipo6.proyectoapp.model.posts.Post
@@ -88,8 +89,9 @@ fun PostCard(post: Post, navController: NavHostController, postVM: PostVM, cardW
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = post.title,
-                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
+                            text = limitTextWords(post.title, 5),
+                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                            fontSize = 18.sp
                         )
                         Text(
                             text = post.date,
@@ -103,7 +105,7 @@ fun PostCard(post: Post, navController: NavHostController, postVM: PostVM, cardW
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = limitTextWords(post.summary),
+                        text = limitTextWords(post.summary, 20),
                         textAlign = TextAlign.Justify,
                         style = MaterialTheme.typography.bodyMedium
                     )
@@ -127,10 +129,10 @@ fun PostCard(post: Post, navController: NavHostController, postVM: PostVM, cardW
     }
 }
 
-fun limitTextWords(text: String): String {
+fun limitTextWords(text: String, wordLimit: Int = 5): String {
     val words = text.split(" ")
-    return if (words.size > 20) {
-        words.take(20).joinToString(" ") + "..."
+    return if (words.size > wordLimit) {
+        words.take(wordLimit).joinToString(" ") + "..."
     } else {
         text
     }
