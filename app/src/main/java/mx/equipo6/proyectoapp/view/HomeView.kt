@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -68,7 +69,7 @@ fun HomeView(
     )
     val storeButtons = listOf(
         Icons.Default.Search to "Buscar",
-        Icons.Default.Favorite to "Favoritos",
+        Icons.Default.Star to "Favoritos",
         Icons.Default.Share to "Compartir"
     )
 
@@ -130,6 +131,7 @@ fun HomeView(
                                     onClick = {
                                         when (icon) {
                                             Icons.Default.Favorite -> navController.navigate(Windows.ROUTE_FAVORITE_POSTS)
+                                            Icons.Default.Star -> navController.navigate(Windows.ROUTE_FAVORITE_PRODUCTS)
                                             // Agrega más casos para otros íconos y sus respectivas vistas
 
                                             else -> { /* Maneja el caso por defecto si es necesario */ }
