@@ -33,7 +33,3 @@ Esta aplicación móvil tiene como objetivo proporcionar información sobre la f
 
 1. Ejecuta la aplicación en un emulador o dispositivo físico.
 2. Navega a través de las diferentes secciones.
-
-## Licencia
-
-Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
