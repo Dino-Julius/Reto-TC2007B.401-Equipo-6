@@ -17,70 +17,70 @@ import mx.equipo6.proyectoapp.model.saveSexualActivityDate
 import java.util.*
 
 /**
- * @author: Sebastian Espinoza
+ * @author Sebastian Espinoza | A01750311
  * Clase para el ViewModel del calendario
  */
 class CalenVM : ViewModel() {
 
     /**
-     * @author: Sebastian Espinoza
+     * @author Sebastian Espinoza | A01750311
      * Variable para almacenar la fecha seleccionada en milisegundos
      */
     private var selectedDateInMillis = mutableLongStateOf(0L)
         private set
 
     /**
-     * @author: Sebastian Espinoza
+     * @author Sebastian Espinoza | A01750311
      * Variable para almacenar la fecha seleccionada en formato de cadena
      */
     var selectedDate = mutableStateOf("")
         private set
 
     /**
-     * @author: Sebastian Espinoza
+     * @author Sebastian Espinoza | A01750311
      * Variable para almacenar la fecha estimada del siguiente ciclo menstrual en formato de cadena
      */
     var calculatedDate = mutableStateOf("")
         private set
 
     /**
-     * @author: Sebastian Espinoza
+     * @author Sebastian Espinoza | A01750311
      * Variable para almacenar las fechas guardadas en formato de cadena
      */
     var savedDates = mutableStateOf(listOf<String>())
         private set
 
     /**
-     * @author: Sebastian Espinoza
+     * @author Sebastian Espinoza | A01750311
      * Variable para controlar la animación de la fecha estimada del siguiente ciclo menstrual
      */
     var showAnimation = mutableStateOf(false)
         private set
 
     /**
-     * @author: Sebastian Espinoza
+     * @author Sebastian Espinoza | A01750311
      * Variable para almacenar las fechas guardadas con su respectiva clave en formato de cadena
      */
     var savedDatesWithKeys = mutableStateOf(listOf<Pair<Long, String>>())
         private set
 
     /**
-     * @author: Sebastian Espinoza
+     * @author Sebastian Espinoza | A01750311
      * Variable para almacenar los días fértiles en formato de cadena
      */
     private val _fertileWindow = MutableStateFlow<Pair<String, String>?>(null)
     val fertileWindow: StateFlow<Pair<String, String>?> = _fertileWindow
 
     /**
-     * @author: Sebastian Espinoza
+     * @author Sebastian Espinoza | A01750311
      * Variable para almacenar las fechas de pastilla de emergencia en formato de cadena
      */
     var savedEmergencyPillDates = mutableStateOf(listOf<Pair<Long, String>>())
         private set
 
     /**
-     * @author: Sebastian Espinoza
-     * @param: dateInMillis: Long
+     * @author Sebastian Espinoza | A01750311
+     * @param dateInMillis: Long
      * Funcion para actualizar la fecha seleccionada
      */
     fun updateSelectedDate(dateInMillis: Long) {
@@ -90,7 +90,7 @@ class CalenVM : ViewModel() {
     }
 
     /**
-     * @author: Sebastian Espinoza
+     * @author Sebastian Espinoza | A01750311
      * Funcion para calcular la fecha estimada del siguiente ciclo menstrual
      */
     fun calculateNextCycle() {
@@ -112,8 +112,8 @@ class CalenVM : ViewModel() {
     }
 
     /**
-     * @author: Sebastian Espinoza
-     * @param: context: Context
+     * @author Sebastian Espinoza | A01750311
+     * @param context: Context
      * Funcion para guardar la fecha de actividad sexual
      */
     fun saveDate(context: Context) {
@@ -127,9 +127,9 @@ class CalenVM : ViewModel() {
     }
 
     /**
-     * @author: Sebastian Espinoza
-     * @param: context: Context
-     * @param: dateInMillis: Long
+     * @author Sebastian Espinoza | A01750311
+     * @param context: Context
+     * @param dateInMillis: Long
      * funcion para eliminar la fecha de actividad sexual
      */
     fun deleteDate(context: Context, dateInMillis: Long) {
@@ -142,8 +142,8 @@ class CalenVM : ViewModel() {
     }
 
     /**
-     * @author: Sebastian Espinoza
-     * @param: context: Context
+     * @author Sebastian Espinoza | A01750311
+     * @param context: Context
      * funcion para cargar las fechas guardadas
      */
     fun loadSavedDatesWithKeys(context: Context) {
@@ -153,8 +153,8 @@ class CalenVM : ViewModel() {
     }
 
     /**
-     * @author: Sebastian Espinoza
-     * @param: startDate: String
+     * @author Sebastian Espinoza | A01750311
+     * @param startDate: String
      * Funcion para calcular los días fértiles
      */
     fun calculateFertileWindow(startDate: String) {
@@ -163,9 +163,9 @@ class CalenVM : ViewModel() {
     }
 
     /**
-     * @author: Sebastian Espinoza
-     * @param: lastPillDate: String
-     * @return: String
+     * @author Sebastian Espinoza | A01750311
+     * @param lastPillDate: String
+     * @return String
      * Funcion para calcular la fecha de la próxima pastilla de emergencia
      */
     fun calculateNextEmergencyPillDate(lastPillDate: String): String {
@@ -191,9 +191,9 @@ class CalenVM : ViewModel() {
     }
 
     /**
-     * @author: Sebastian Espinoza
-     * @param: context: Context
-     * @param: dateInMillis: Long
+     * @author Sebastian Espinoza | A01750311
+     * @param context: Context
+     * @param dateInMillis: Long
      * Funcion para guardar la fecha de la próxima pastilla de emergencia
      */
     fun saveEmergencyPillDate(context: Context, dateInMillis: Long) {
@@ -207,8 +207,8 @@ class CalenVM : ViewModel() {
     }
 
     /**
-     * @author: Sebastian Espinoza
-     * @param: context: Context
+     * @author Sebastian Espinoza | A01750311
+     * @param context: Context
      * Funcion para cargar las fechas de pastilla de emergencia
      */
     fun loadSavedEmergencyPillDates(context: Context) {
@@ -231,9 +231,9 @@ class CalenVM : ViewModel() {
     }
 
     /**
-     * @author: Sebastian Espinoza
-     * @param: context: Context
-     * @param: dateInMillis: Long
+     * @author Sebastian Espinoza | A01750311
+     * @param context: Context
+     * @param dateInMillis: Long
      * Funcion para eliminar la fecha de la próxima pastilla de emergencia
      */
     fun deleteEmergencyPillDate(context: Context, dateInMillis: Long) {

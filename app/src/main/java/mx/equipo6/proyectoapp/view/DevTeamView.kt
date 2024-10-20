@@ -38,6 +38,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import mx.equipo6.proyectoapp.R
 
+/**
+ * DevTeamView: Composable que muestra la información de los integrantes del equipo de desarrollo.
+ * @param navController Controlador de navegación.
+ * @author Ulises Jaramillo Portilla | A01798380.
+ */
 @Composable
 fun DevTeamView(navController: NavHostController) {
     val students = listOf(

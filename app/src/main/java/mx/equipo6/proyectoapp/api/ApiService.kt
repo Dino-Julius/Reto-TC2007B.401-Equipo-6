@@ -23,8 +23,7 @@ import retrofit2.http.Path
 
 /**
  * Define el servicio de la API para Retrofit
- * @author Julio Vivas
- * @property getProducts Define una petición GET para obtener la lista de productos
+ * @author Julio Vivas | A01749879
  */
 interface ApiService {
     // Obtener todos los productos

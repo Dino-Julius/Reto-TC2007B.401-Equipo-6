@@ -38,6 +38,12 @@ import mx.equipo6.proyectoapp.view.sampledata.Subtitle
 import mx.equipo6.proyectoapp.view.sampledata.Title
 import mx.equipo6.proyectoapp.viewmodel.PostVM
 
+/**
+ * FavoritePostsView: Composable que muestra los posts favoritos del usuario.
+ * @param postVM ViewModel de los posts.
+ * @param navController Controlador de navegación.
+ * @author Ulises Jaramillo Portilla | A01798380.
+ */
 @Composable
 fun FavoritePostsView(postVM: PostVM, navController: NavHostController) {
     val postListViewState by postVM.posts.collectAsState()

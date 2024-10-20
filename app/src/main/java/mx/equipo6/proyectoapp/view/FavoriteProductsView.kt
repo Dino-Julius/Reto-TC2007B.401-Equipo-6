@@ -39,6 +39,12 @@ import mx.equipo6.proyectoapp.view.sampledata.Subtitle
 import mx.equipo6.proyectoapp.view.sampledata.Title
 import mx.equipo6.proyectoapp.viewmodel.ProductVM
 
+/**
+ * Composable que muestra la vista de los productos favoritos.
+ * @param productVM ViewModel de los productos.
+ * @param navController Controlador de navegación.
+ * @author Ulises Jaramillo Portilla | A01798380.
+ */
 @Composable
 fun FavoriteProductsView(productVM: ProductVM, navController: NavHostController) {
     val productListViewState by productVM.products.collectAsState()

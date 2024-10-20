@@ -7,6 +7,10 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 import android.util.Log
 
+/**
+ * @author: Manuel Olmos Antillón | A01750748
+ * Clase para manejar la comunicación con el chatbot
+ */
 class NSChatBot {
     private var apiUrl: String = ""
     private val chatBotMessages = mutableListOf<Map<String, String>>()
@@ -17,7 +21,7 @@ class NSChatBot {
         .build()
 
     /**
-     * @autor: Manuel Olmos Antillón
+     * @author: Manuel Olmos Antillón | A01750748
      * @param apiUrl: String
      * Función para inicializar el chatbot con la URL de la API
      */
@@ -26,7 +30,7 @@ class NSChatBot {
     }
 
     /**
-     * @autor Manuel Olmos Antillón
+     * @author Manuel Olmos Antillón | A01750748
      * @param message: String
      * @param onStream: (String) -> Unit
      * @param onFailure: (IOException) -> Unit
@@ -48,7 +52,7 @@ class NSChatBot {
     }
 
     /**
-     * @autor Manuel Olmos Antillón
+     * @author Manuel Olmos Antillón | A01750748
      * @param role: String
      * @param content: String
      * Función para agregar un mensaje a la lista de mensajes del chatbot
@@ -58,7 +62,7 @@ class NSChatBot {
     }
 
     /**
-     * @autor Manuel Olmos Antillón
+     * @author Manuel Olmos Antillón | A01750748
      * @return okhttp3.Request
      * Función para construir la solicitud HTTP para enviar al chatbot
      */
@@ -72,20 +76,20 @@ class NSChatBot {
     }
 
     /**
-     * @autor Manuel Olmos Antillón
+     * Función para ejecutar la solicitud HTTP
+     * @author Manuel Olmos Antillón | A01750748
      * @param request: okhttp3.Request
      * @return okhttp3.Response
-     * Función para ejecutar la solicitud HTTP
      */
     private fun executeRequest(request: okhttp3.Request): okhttp3.Response {
         return client.newCall(request).execute()
     }
 
     /**
-     * @autor Manuel Olmos Antillón
-     * @param response: okhttp3.Response
-     * @param onStream: (String) -> Unit
-     * @param onCompleted: () -> Unit
+     * @author Manuel Olmos Antillón | A01750748
+     * @param response okhttp3.Response
+     * @param onStream (String) -> Unit
+     * @param onCompleted () -> Unit
      * Función para manejar la respuesta del chatbot
      */
     private suspend fun handleResponse(response: okhttp3.Response, onStream: (String) -> Unit, onCompleted: () -> Unit) {
@@ -105,7 +109,7 @@ class NSChatBot {
     }
 
     /**
-     * @autor Manuel Olmos Antillón
+     * @author Manuel Olmos Antillón | A01750748
      * @param e: IOException
      * @param onFailure: (IOException) -> Unit
      * Función para manejar fallos en la solicitud HTTP

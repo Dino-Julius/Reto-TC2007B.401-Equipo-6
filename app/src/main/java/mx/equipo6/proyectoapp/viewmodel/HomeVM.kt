@@ -22,6 +22,10 @@ import mx.equipo6.proyectoapp.model.posts.PostRepository
 import mx.equipo6.proyectoapp.network_di.NetworkChangeReceiver.NetworkChangeReceiver.isNetworkConnected
 import javax.inject.Inject
 
+/**
+ * ViewModel para la pantalla de bienvenida de la aplicación.
+ * @author Ulises Jaramillo | A01798380
+ */
 @HiltViewModel
 class HomeVM @Inject constructor(
     private val postRepository: PostRepository,

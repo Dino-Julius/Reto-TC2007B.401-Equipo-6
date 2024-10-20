@@ -3,10 +3,10 @@ package mx.equipo6.proyectoapp.model
 import android.content.Context
 import java.util.Calendar
 /**
- *@author: Sebastian Espinoza
- * @param: context: Context
- * @param: dateInMillis: Long
+ * @author Sebastian Espinoza | A01750311
  * Función para guardar la fecha de actividad sexual en SharedPreferences
+ * @param context: Context
+ * @param dateInMillis: Long
  */
 fun saveSexualActivityDate(context: Context, dateInMillis: Long) {
     val sharedPreferences = context.getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
@@ -16,9 +16,8 @@ fun saveSexualActivityDate(context: Context, dateInMillis: Long) {
     }
 }
 /**
- * @author: Sebastian Espinoza
- * @param: context: Context
- * @return: List<String>
+ * @author Sebastian Espinoza  | A01750311
+ * @param context: Context
  * Función para obtener las fechas guardadas de actividad sexual
  */
 fun getSavedDates(context: Context): List<String> {
@@ -37,9 +36,9 @@ fun getSavedDates(context: Context): List<String> {
 }
 
 /**
- * @author: Sebastian Espinoza
- * @param: context: Context
- * @param: dateInMillis: Long
+ * @author Sebastian Espinoza | A01750311
+ * @param context: Context
+ * @param dateInMillis: Long
  * Función para eliminar una fecha de actividad sexual
  */
 fun deleteSexualActivityDate(context: Context, dateInMillis: Long) {
@@ -51,9 +50,8 @@ fun deleteSexualActivityDate(context: Context, dateInMillis: Long) {
 }
 
 /**
- * @author: Sebastian Espinoza
- * @param: context: Context
- * @return: List<Pair<Long, String>>
+ * @author Sebastian Espinoza | A01750311
+ * @param context: Context
  * Función para obtener las fechas guardadas con su clave
  */
 fun getSavedDatesWithKeys(context: Context): List<Pair<Long, String>> {
@@ -72,9 +70,8 @@ fun getSavedDatesWithKeys(context: Context): List<Pair<Long, String>> {
 }
 
 /**
- * @author: Sebastian Espinoza
- * @param: startDate: String
- * @return: Pair<String, String>?
+ * @author: Sebastian Espinoza | A01750311
+ * @param startDate: String
  * Función para calcular los días fértiles a partir de una fecha
  */
 fun calculateFertileWindowFromModel(startDate: String): Pair<String, String>? {

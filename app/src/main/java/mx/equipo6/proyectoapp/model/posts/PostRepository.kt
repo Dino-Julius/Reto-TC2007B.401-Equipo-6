@@ -10,6 +10,10 @@ import javax.inject.Inject
  * @constructor Crea un repositorio de productos
  */
 class PostRepository @Inject constructor(private val apiService: ApiService) {
+    /**
+     * Función que obtiene la lista de productos
+     * @return Lista de productos
+     */
     suspend fun getPosts(): PostList {
         return apiService.getPosts()
     }

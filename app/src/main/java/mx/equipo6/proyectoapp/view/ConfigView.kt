@@ -38,6 +38,12 @@ import mx.equipo6.proyectoapp.R
 import mx.equipo6.proyectoapp.view.sampledata.bellefair
 import mx.equipo6.proyectoapp.viewmodel.SignUpViewModel
 
+/**
+ * Composable que define la vista de la página "Configuración" de la aplicación.
+ * @param viewModel ViewModel de la página de registro.
+ * @param navController Controlador de navegación.
+ * @author Ulises Jaramillo Portilla | A01798380.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConfigView(viewModel: SignUpViewModel = viewModel(), navController: NavHostController) {

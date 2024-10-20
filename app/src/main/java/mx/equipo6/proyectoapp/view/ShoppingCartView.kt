@@ -39,15 +39,13 @@ import androidx.navigation.NavHostController
 import mx.equipo6.proyectoapp.model.products.CartItem
 import mx.equipo6.proyectoapp.model.stripeAPI.PaymentActivity
 import mx.equipo6.proyectoapp.viewmodel.ProductVM
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import java.io.IOException
 
-private const val REQUEST_CODE_PAYMENT = 1001
-
+/**
+ * ShoppingCartView: Composable que define la vista del carrito de compras.
+ * @param productVM ViewModel de los productos.
+ * @param navController Controlador de navegación.
+ * @author Jesús Guzmán | A01799257
+ */
 @Composable
 fun ShoppingCartView(productVM: ProductVM, navController: NavHostController) {
     val cartItems = productVM.cartItems.collectAsState().value // List of the items in the cart

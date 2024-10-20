@@ -62,7 +62,7 @@ import java.io.InputStream
 
 /**
  * AboutUsView: Muestra la información de la organización.
- * @autor Jesus Guzman Ortega
+ * @author Jesús Guzmán | A01799257
  */
 
 @Preview(showBackground = true, widthDp = 400)

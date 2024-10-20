@@ -10,6 +10,10 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 
+/**
+ * ViewModel para la pantalla de login
+ * @author Jesús Guzmán | A01799257
+ */
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     private val sharedPreferences = application.getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
@@ -22,7 +26,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private var signUpViewModel: SignUpViewModel? = null
 
     init {
-        // Load email from SharedPreferences when the ViewModel is created
+        // Cargar el email de las SharedPreferences cuando se crea el ViewModel
         email.value = getEmailFromPreferences()
     }
 
@@ -69,12 +73,12 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    // Save email to SharedPreferences
+    // Guardar el email en las SharedPreferences
     private fun saveEmailToPreferences(email: String) {
         sharedPreferences.edit().putString("email", email).apply()
     }
 
-    // Retrieve email from SharedPreferences
+    // Obtener el email de las SharedPreferences
     private fun getEmailFromPreferences(): String {
         return sharedPreferences.getString("email", "") ?: ""
     }

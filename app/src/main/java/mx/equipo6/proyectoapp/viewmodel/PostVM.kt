@@ -29,9 +29,7 @@ import javax.inject.Inject
 
 /**
  * ViewModel para mostrar la lista de posts de la comunidad.
- * @author Ulises Jaramillo Portilla | A01798380.
- * @param postRespository ProductRespository
- * @param context Context
+ * @author Ulises Jaramillo | A01798380.
  */
 @HiltViewModel
 class PostVM @Inject constructor(

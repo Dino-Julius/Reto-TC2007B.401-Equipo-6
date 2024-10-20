@@ -28,18 +28,17 @@ import coil.compose.rememberAsyncImagePainter
 import mx.equipo6.proyectoapp.view.sampledata.Stepper
 
 /**
- * author: Jesus Guzman Ortega
- * CartItem: Shows the items in the cart.
  * @param products: Product
-*  @param quantity: Int
- *  @param onRemoveItem: (Products, Int) -> Unit
- **/
-
+ * @param quantity: Int
+ * @param onRemoveItem: (Products, Int) -> Unit
+ * @author Jesús Guzmán | A01799257
+ */
 @Composable
 fun CartItem(products: Products, quantity: Int, onRemoveItem: (Products, Int) -> Unit) {
     // State variables for dialog and quantity to remove
     val showDialog = remember { mutableStateOf(false) }
-    val quantityToRemove = remember { mutableStateOf(1) } // Default to removing 1 item
+    // Default to removing 1 item
+    val quantityToRemove = remember { mutableStateOf(1) }
 
     Card(
         modifier = Modifier
@@ -115,7 +114,7 @@ fun CartItem(products: Products, quantity: Int, onRemoveItem: (Products, Int) ->
                 TextButton(
                     onClick = {
                         val quantityToRemoveValue = quantityToRemove.value // Get the value
-                        if (quantityToRemoveValue > 0 && quantityToRemoveValue <= quantity) {
+                        if (quantityToRemoveValue in 1..quantity) {
                             onRemoveItem(products, quantityToRemoveValue) // Pass product and quantity to remove
                             showDialog.value = false // Close the dialog
                         }

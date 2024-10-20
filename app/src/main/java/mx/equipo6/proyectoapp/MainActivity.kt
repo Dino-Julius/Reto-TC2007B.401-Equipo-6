@@ -20,6 +20,16 @@ import mx.equipo6.proyectoapp.view.Windows
 import mx.equipo6.proyectoapp.viewmodel.LoginViewModel
 import mx.equipo6.proyectoapp.viewmodel.SignUpViewModel
 
+/**
+ * Main Activity
+ * Es AndroidEnteryPoint para que Hilt pueda inyectar dependencias
+ * Integrantes:
+ * Julio Cesar Vivas Medina............................. | A1749879
+ * Ulises Jaramillo Portilla............................ | A01798380
+ * Jesús Ángel Guzmán Ortega............................ | A01799257
+ * Sebastián Espinoza Farías............................ | A01750311
+ * Manuel Olmos Antillón................................ | A01750748
+ */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

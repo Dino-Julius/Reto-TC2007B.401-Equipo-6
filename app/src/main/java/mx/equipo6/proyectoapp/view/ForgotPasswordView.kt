@@ -22,6 +22,12 @@ import androidx.compose.ui.unit.dp
 
 import androidx.navigation.NavController
 
+/**
+ * ForgotPasswordView: Composable que define la vista de la pantalla de recuperación de contraseña.
+ * @param navController Controlador de navegación.
+ * @param signUpViewModel ViewModel de registro.
+ * @author Ulises Jaramillo Portilla | A01798380.
+ */
 @Composable
 fun ForgotPasswordView(navController: NavController, signUpViewModel: SignUpViewModel) {
     Column(

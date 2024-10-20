@@ -5,13 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.EmojiEmotions
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Forest
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -23,6 +16,7 @@ import mx.equipo6.proyectoapp.view.sampledata.CategoryItem
  * Composable que muestra una barra de categorías.
  * @param categories Lista de categorías a mostrar.
  * @param selectedIndex Índice de la categoría seleccionada.
+ * @author Ulises Jaramillo Portilla | A01798380.
  */
 @Composable
 fun CategoryBar(

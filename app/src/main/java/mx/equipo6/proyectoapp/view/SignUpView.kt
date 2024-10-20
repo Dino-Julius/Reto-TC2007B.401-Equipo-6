@@ -25,6 +25,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import mx.equipo6.proyectoapp.viewmodel.SignUpViewModel
 import java.util.*
 
+/**
+ * SignUpView: Composable que define la vista de registro de usuario.
+ * @param onLogin Función que se ejecuta al presionar el botón de "Volver a Login".
+ * @author Jesús Guzmán | A01799257
+ */
 @Composable
 fun SignUpView(onLogin: () -> Unit, viewModel: SignUpViewModel = viewModel()) {
     val context = LocalContext.current

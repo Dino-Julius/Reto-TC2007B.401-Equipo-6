@@ -15,6 +15,7 @@ import kotlinx.parcelize.Parcelize
  * @param partner_email ID del partner que publicó el post.
  * @param file_path Ruta del archivo del post.
  * @param image_path Ruta de la imagen del post.
+ * @param favorite Indica si el post es favorito o no.
  */
 @Parcelize
 class Post(

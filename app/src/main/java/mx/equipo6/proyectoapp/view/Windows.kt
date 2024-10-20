@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 /**
  * Clase sellada que contiene las pantallas de la aplicación.
- * @author Equipo 6
+ * @author Julio Vivas | A01749879
  * @property route Ruta de la pantalla.
  * @property etiqueta Etiqueta de la pantalla.
  * @property icono Icono de la pantalla.

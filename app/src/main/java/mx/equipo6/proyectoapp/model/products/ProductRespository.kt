@@ -6,11 +6,15 @@ import javax.inject.Inject
 
 /**
  * Clase que declara un repositorio de productos que extiende de [PostList]
- * @author Julio Vivas
+ * @author Julio Vivas | A01749879
  * @param apiService Servicio de la API
  * @constructor Crea un repositorio de productos
  */
 class ProductRespository @Inject constructor(private val apiService: ApiService) {
+    /**
+     * Función que obtiene los productos
+     * @return Lista de productos
+     */
     suspend fun getProducts(): ProductList {
         return apiService.getProducts()
     }

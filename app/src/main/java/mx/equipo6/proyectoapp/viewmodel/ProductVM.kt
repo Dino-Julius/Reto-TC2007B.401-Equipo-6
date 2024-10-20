@@ -24,9 +24,7 @@ import javax.inject.Inject
 
 /**
  * ViewModel para mostrar el inverntario de productos
- * @author Julio Vivas; Ulises Jaramillo Portilla; Jesus Guzman Ortega.
- * @param productRespository ProductRespository
- * @param context Context
+ * @author Julio Vivas | A01749879 ; Ulises Jaramillo | A01798380 ; Jesús Guzmán | A01799257
  */
 @HiltViewModel
 class ProductVM @Inject constructor(
@@ -39,34 +37,34 @@ class ProductVM @Inject constructor(
     private val _product = MutableStateFlow<ViewState<ProductList>>(ViewState.Loading)
     val products : StateFlow<ViewState<ProductList>> get() = _product
 
-    // Map to store products and their quantities
+    // Mapa para almacenar productos y sus cantidades
     private val _cartItems = MutableStateFlow<Map<Products, Int>>(emptyMap())
     val cartItems: StateFlow<Map<Products, Int>> get() = _cartItems
 
     var soldItems: List<Map.Entry<Products, Int>> = listOf()
     var isPaymentSuccessful: Boolean = false
 
-    // LiveData for observ network connection
+    // LiveData para observar la conexión de red
     private val _isConnected = MutableStateFlow(isNetworkConnected(context))
     val isConnected : StateFlow<Boolean> get() = _isConnected
 
-    // Register the broadcast Receiver
+    // Registro del receptor de difusión
     private val networkChangeReceiver = object :BroadcastReceiver(){
         override fun onReceive(context: Context?, intent: Intent?) {
             _isConnected.value = isNetworkConnected(context = context!!)
 
             if (_isConnected.value) {
-                // If Connected make API Call
+                // Si está conectado a la red, se realiza la llamada a la API
                 fetchProducts()
             } else {
-                // If Not Connected reset the API Call
+                // Si no, se muestra un mensaje de error
                 _product.value = ViewState.Error("Network error..., Please check your internet connection")
             }
         }
     }
 
     init {
-        // Register the receiver in the init block
+        // Registrar el receptor en el bloque init
         val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         context.registerReceiver(networkChangeReceiver, intentFilter)
         fetchProducts()
@@ -111,34 +109,31 @@ class ProductVM @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        // unRegister
         context.unregisterReceiver(networkChangeReceiver)
     }
 
-
-    // Function to add a product or increase its quantity
+    // Función para agregar un producto o aumentar su cantidad
     fun addItemToCart(product: Products, quantityToAdd: Int) {
-        // Get the current quantity of the product in the cart
+        // Obtiene la cantidad actual del producto en el carrito
         val currentQuantity = _cartItems.value[product] ?: 0
 
-        // Update the cart items state
+        // Actualiza el estado de los elementos del carrito
         _cartItems.value = _cartItems.value.toMutableMap().apply {
             this[product] = currentQuantity + quantityToAdd
         }
     }
 
-
-    // Function to remove a product or decrease its quantity
+    // Funcione para eliminar un producto o disminuir su cantidad
     fun removeItemFromCart(product: Products, quantityToRemove: Int) {
-        // Get the current quantity of the product in the cart
+        // Obtiene la cantidad actual del producto en el carrito
         val currentQuantity = _cartItems.value[product] ?: 0
 
         if (currentQuantity > 0) {
             if (currentQuantity <= quantityToRemove) {
-                // Remove the product completely if quantity to remove is greater or equal
+                // Elimina el producto completamente si la cantidad a eliminar es mayor o igual
                 _cartItems.value = _cartItems.value - product
             } else {
-                // Decrease the quantity
+                // Actualiza el estado de los elementos del carrito
                 _cartItems.value = _cartItems.value.toMutableMap().apply {
                     this[product] = currentQuantity - quantityToRemove
                 }
@@ -154,22 +149,19 @@ class ProductVM @Inject constructor(
         _cartItems.value = mapOf()
     }
 
-
     fun getProductById(productId: String?): Products? {
         return (products.value as? ViewState.Success)?.data?.find { it.sku == productId }
     }
 
     fun placeOrder(address: String, email: String) {
-        // Launch a coroutine in the ViewModel scope
+        // Inicializa la variable soldItems con los elementos del carrito
         viewModelScope.launch {
             try {
-                // Log soldItems to check if they are correct
                 Log.d("placeOrder", "Preparing to send the following sold items:")
                 soldItems.forEach { entry ->
                     Log.d("placeOrder", "SKU: ${entry.key.sku}, Quantity: ${entry.value}")
                 }
 
-                // Call the sendSoldItemsToServer suspend function
                 sendSoldItemsToServer(soldItems, address, email)
                 Log.d("placeOrder", "Order placed successfully")
             } catch (e: Exception) {

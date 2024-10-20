@@ -14,7 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 
 /**
  * Composable que muestra una lista de botones circulares organizados en categorías.
- * @author Ulises Jaramillo Portilla | A01798380.
+ * @author Ulises Jaramillo Portilla | A01798380
  * @param userButtons Lista de pares de íconos y nombres para los botones de usuario.
  * @param shoppingButtons Lista de pares de íconos y nombres para los botones de compras.
  * @param onButtonSelected Función lambda que se ejecuta cuando se selecciona un botón.

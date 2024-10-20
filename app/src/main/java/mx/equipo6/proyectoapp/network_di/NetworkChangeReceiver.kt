@@ -6,6 +6,12 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 
+/**
+ * Clase que se encarga de detectar si el dispositivo tiene conexión a internet
+ * @param context Contexto de la aplicación
+ * @param intent Intento de la aplicación
+ * @author Julio Vivas | A01749879
+ */
 class NetworkChangeReceiver : BroadcastReceiver() {
 
     object NetworkChangeReceiver{
@@ -28,19 +34,5 @@ class NetworkChangeReceiver : BroadcastReceiver() {
 
     }
 
-    override fun onReceive(context: Context, intent: Intent) {
-        /*
-                if (NetworkChangeReceiver.isNetworkConnected(context)) {
-                    Toast
-                        .makeText(context, "Internet Connected", Toast.LENGTH_SHORT)
-                        .show()
-                    Log.d("NetworkChangeReceiver", "Internet Connected")
-                } else {
-                    Toast
-                        .makeText(context, "Internet Disconnected", Toast.LENGTH_SHORT)
-                        .show()
-                    Log.d("NetworkChangeReceiver", "Internet Disconnected")
-                }
-        */
-    }
+    override fun onReceive(context: Context, intent: Intent) {}
 }

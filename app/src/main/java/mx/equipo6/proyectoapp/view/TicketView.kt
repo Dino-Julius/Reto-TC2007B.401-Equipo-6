@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -26,16 +25,17 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.component1
-import androidx.core.graphics.component2
 import androidx.navigation.NavController
-import mx.equipo6.proyectoapp.model.stripeAPI.sendSoldItemsToServer
 import mx.equipo6.proyectoapp.viewmodel.ProductVM
 import mx.equipo6.proyectoapp.viewmodel.SignUpViewModel
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.forEach
+import kotlin.collections.isNotEmpty
 
 /**
  * TicketView composable that displays the ticket information
- * @author Jesus Guzman
+ * @author Jesús Guzmán | A01799257
  * @param navController NavController
  * @param modifier Modifier
  * @param productVM ProductVM
@@ -44,8 +44,8 @@ import mx.equipo6.proyectoapp.viewmodel.SignUpViewModel
 @Composable
 fun TicketView(navController: NavController, modifier: Modifier = Modifier, productVM: ProductVM, SignUpViewModel: SignUpViewModel) {
     val cartItems by productVM.cartItems.collectAsState()
-    var address = SignUpViewModel.address.value
-    var email = SignUpViewModel.email.value
+    val address = SignUpViewModel.address.value
+    val email = SignUpViewModel.email.value
 
     LaunchedEffect(Unit) {
         productVM.placeOrder(address, email)

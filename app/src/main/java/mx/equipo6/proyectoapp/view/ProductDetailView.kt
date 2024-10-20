@@ -51,7 +51,7 @@ import mx.equipo6.proyectoapp.viewmodel.ProductVM
 
 /**
  * ProductDetailView: Muestra los detalles del producto.
- * @author Julio Vivas; Ulises Jaramillo Portilla | A01798380.
+ * @author Julio Vivas | A01749879; Ulises Jaramillo Portilla | A01798380.
  * @param products Producto a mostrar.
  * @param navController Controlador de navegación.
  * @param productVM ViewModel de productos.

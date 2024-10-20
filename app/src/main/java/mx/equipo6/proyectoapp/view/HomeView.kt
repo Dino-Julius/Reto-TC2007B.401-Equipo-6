@@ -49,6 +49,15 @@ import mx.equipo6.proyectoapp.viewmodel.LoginViewModel
 import mx.equipo6.proyectoapp.viewmodel.PostVM
 import mx.equipo6.proyectoapp.viewmodel.SignUpViewModel
 
+/**
+ * HomeView: Composable que define la vista principal de la aplicación.
+ * @param homeVM ViewModel de la página principal.
+ * @param navController Controlador de navegación.
+ * @param postVM ViewModel de los posts.
+ * @param loginViewModel ViewModel de la página de registro.
+ * @param LoginVM ViewModel de la página de inicio de sesión.
+ * @author Ulises Jaramillo Portilla | A01798380.
+ */
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HomeView(

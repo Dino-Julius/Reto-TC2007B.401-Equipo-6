@@ -13,9 +13,40 @@ import mx.equipo6.proyectoapp.model.auth.User
 import mx.equipo6.proyectoapp.model.profileData.SignUpRequest
 import mx.equipo6.proyectoapp.model.profileData.sendDataToServer
 
+/**
+ * Data class que contiene la información del correo electrónico
+ * @param email Correo electrónico
+ * @author Jesús Guzmán | A01799257
+ */
 data class EmailRequest(val email: String)
+
+/**
+ * Data class que contiene la información de la respuesta al enviar el enlace de restablecimiento
+ * @param success Indica si la operación fue exitosa
+ * @param message Mensaje de la respuesta
+ * @author Jesús Guzmán | A01799257
+ */
 data class ResetLinkResponse(val success: Boolean, val message: String)
 
+/**
+ * ViewModel para la pantalla de registro
+ * @param application Aplicación de Android
+ * @property sharedPreferences SharedPreferences para guardar la información del usuario
+ * @property firstName Nombre del usuario
+ * @property lastName Apellido del usuario
+ * @property birthDate Fecha de nacimiento del usuario
+ * @param gender Género del usuario
+ * @param phone Teléfono del usuario
+ * @param email Correo electrónico del usuario
+ * @param password Contraseña del usuario
+ * @param confirmPassword Confirmación de la contraseña del usuario
+ * @param address Dirección del usuario
+ * @param profilePic Foto de perfil del usuario
+ * @param errorMessage Mensaje de error
+ * @param signedUp Indica si el usuario se ha registrado
+ * @param expanded Indica si el formulario de registro está expandido
+ * @author Jesús Guzmán | A01799257
+ */
 class SignUpViewModel(application: Application) : AndroidViewModel(application) {
 
     private val sharedPreferences: SharedPreferences = application.getSharedPreferences("user_prefs", Application.MODE_PRIVATE)
@@ -36,7 +67,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
 
     init {
         loadUserData()
-        // Save this instance to the companion object so it can be accessed statically
+        // Guarda esta instancia en el objeto companion para que pueda ser accedida estáticamente
         Companion.instance = this
     }
 
@@ -44,7 +75,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
         if (firstName.value.isNotBlank() && lastName.value.isNotBlank() && birthDate.value.isNotBlank() && gender.value.isNotBlank() && phone.value.isNotBlank() && email.value.isNotBlank() && address.value.isNotBlank() && password.value.isNotBlank() && confirmPassword.value.isNotBlank()) {
             if (password.value == confirmPassword.value) {
                 viewModelScope.launch {
-                    saveUserData() // Save user data on sign up
+                    saveUserData()
                     signedUp.value = true
                 }
             } else {

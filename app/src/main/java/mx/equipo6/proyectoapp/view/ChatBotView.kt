@@ -23,6 +23,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.draw.clip
 import mx.equipo6.proyectoapp.viewmodel.ChatBotViewModel
 
+/**
+ * ChatBotView: Composable que define la vista del chatbot de Zazil.
+ * @param chatBotVM ViewModel del chatbot.
+ * @author Manuel Olmos Antillón | A01750748
+ */
 @Composable
 fun ChatBotView(chatBotVM: ChatBotViewModel) {
     var userInput by remember { mutableStateOf("") }
@@ -130,7 +135,12 @@ fun ChatBotView(chatBotVM: ChatBotViewModel) {
     }
 }
 
-
+/**
+ * ChatBubble: Composable que define una burbuja de chat.
+ * @param message Mensaje a mostrar.
+ * @param isUser Booleano que indica si el mensaje es del usuario.
+ * @author Manuel Olmos Antillón | A01750748
+ */
 @Composable
 fun ChatBubble(message: String, isUser: Boolean) {
     Row(
@@ -156,6 +166,10 @@ fun ChatBubble(message: String, isUser: Boolean) {
     }
 }
 
+/**
+ * TypingIndicator: Composable que define un indicador de carga para mostrar que el bot está escribiendo.
+ * @autor Manuel Olmos Antillón | A01750748
+ */
 @Composable
 fun TypingIndicator() {
     Row(modifier = Modifier.padding(vertical = 8.dp), horizontalArrangement = Arrangement.Start) {

@@ -17,6 +17,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import mx.equipo6.proyectoapp.view.sampledata.Title
 
+/**
+ * ConfigMenuView: Composable que define la vista de la configuración de la aplicación.
+ * @param navController Controlador de navegación.
+ * @author Ulises Jaramillo Portilla | A01798380.
+ */
 @Composable
 fun ConfigMenuView(
     navController: NavHostController

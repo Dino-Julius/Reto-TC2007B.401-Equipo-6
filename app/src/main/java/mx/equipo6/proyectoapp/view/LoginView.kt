@@ -23,7 +23,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import mx.equipo6.proyectoapp.viewmodel.LoginViewModel
 
-
+/**
+ * LoginView: Composable que define la vista de inicio de sesión.
+ * @param onSignUp Función para navegar a SignUpView.
+ * @param onForgotPassword Función para navegar a ForgotPasswordView.
+ * @param viewModel ViewModel de la vista de inicio de sesión.
+ * @author Manuel Olmos Antillón | A01750748
+ */
 @Composable
 fun LoginView(
     onSignUp: () -> Unit,

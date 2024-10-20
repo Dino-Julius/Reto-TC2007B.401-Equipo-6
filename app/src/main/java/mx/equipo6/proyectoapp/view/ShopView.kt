@@ -82,7 +82,7 @@ import java.util.Locale
 
 /**
  * ShopView: Vista principal de la tienda, muestra los productos en una vista de cuadrícula.
- * @author Julio Vivas; Ulises Jaramillo Portilla | A01798380.
+ * @author Julio Vivas | A01749879; Ulises Jaramillo Portilla | A01798380.
  * @param productVM ViewModel de los productos.
  * @param navController Controlador de navegación.
  */
@@ -379,7 +379,7 @@ private fun ShowNoProductMessage(message: String) {
 
 /**
  * Composable que muestra un mensaje de error.
- * @author Julio Vivas.
+ * @author Julio Vivas | A01749879
  * @param errorMsg Mensaje de error a mostrar.
  */
 @Composable
@@ -408,7 +408,7 @@ private fun ShowErrorMessage(errorMsg: String) {
 
 /**
  * Composable que muestra una pantalla de carga.
- * @author Julio Vivas.
+ * @author Julio Vivas | A01749879
  */
 @Composable
 private fun LoadingScreen() {
@@ -426,7 +426,7 @@ private fun LoadingScreen() {
 
 /**
  * Composable que muestra la tarjeta de un producto.
- * @author Julio Vivas.
+ * @author Julio Vivas | A01749879
  * @param products Producto a mostrar.
  * @param navController Controlador de navegación.
  * @param productVM ViewModel de los productos.
@@ -536,7 +536,7 @@ fun ProductsCardUI(products: Products, navController: NavHostController, product
         }
     }
 
-    // Call the dialog function and pass necessary parameters
+    // Llama a la función del diálogo y pasa los parámetros necesarios
     ProductQuantityDialog(
         showDialog = showDialog,
         product = products,
